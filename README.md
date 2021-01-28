@@ -2,4 +2,4 @@
 Team members:
 1. Suraj Gupta Gudla 
 2. Sravya Garaga
-3. Sai Prudhvi krishna
+3. Sai Prudhvi krishna Sannidhi
