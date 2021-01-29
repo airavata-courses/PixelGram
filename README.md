@@ -3,5 +3,5 @@ Members:
 1. Suraj Gupta Gudla 
 2. Sravya Garaga
 3. Sai Prudvi krishna Sannidhi
-# Project Name: Smart Complaints
+# Application Name: Smart Complaints
 
