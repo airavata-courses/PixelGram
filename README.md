@@ -2,7 +2,7 @@
 Authors:
 1. [Suraj Gupta Gudla](https://github.com/surajgupta-git)
 2. [Sravya Garaga](https://github.com/sravya160597)
-3. [Sai Prudvi krishna Sannidhi](https://github.com/sannidhi09)# Application Name: Smart Complaints
+3. [Sai Prudvi krishna Sannidhi](https://github.com/sannidhi09)
 
 ![Goals and Actions](https://user-images.githubusercontent.com/29830913/106647414-e5b25b80-655c-11eb-8c96-d008511033bf.jpg)
 
