@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+option py_generic_services = true;
+
+enum Format {
+    JPEG = 0;
+    PNG = 1;
+    WEBP = 2;
+}
+
+message MetadataRequest {
+    string userId = 1;
+    string imageId = 2;
+    bytes imageData = 3;
+}
+
+message MetadataResponse {
+    string userId = 1;
+    string imageId = 2;
+    Format format = 3;
+    google.protobuf.Timestamp dateTime = 4;
+    double latitude = 5;
+    double longitude = 6;
+    string locationName = 7;
+}
+
+service MetadataService {
+    rpc getMetaData (MetadataRequest) returns (MetadataResponse);
+}
