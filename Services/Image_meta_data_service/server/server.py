@@ -4,8 +4,8 @@ import numpy as np
 from geopy.geocoders import GoogleV3
 from concurrent import futures
 import time
-import metaData_pb2 as pb2
-import metaData_pb2_grpc as pb2_grpc
+import proto.metaData_pb2 as pb2
+import proto.metaData_pb2_grpc as pb2_grpc
 import extract_image_data
 
 
