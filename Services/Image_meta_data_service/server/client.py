@@ -13,7 +13,7 @@ class MetadataClient:
         self.stub = grpc_pb2.MetadataServiceStub(self.channel)
 
     def getMetaData(self, request):
-        return self.stub.getMetaData(pb2.MetadataRequest(**request))
+        return self.stub.getMetaData(request)
 
 def get_image_byte_data():
     image = Image.open("./Image/sample.jpeg")
