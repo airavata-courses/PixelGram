@@ -6,7 +6,7 @@ import numpy as np
 
 
 class meta_data_extraction:
-    def __init__(self, image_data, **meta_data_dict):
+    def __init__(self, image_data, meta_data_dict):
         self.meta_data_dict = dict((k.lower(), meta_data_dict[k]) for k in meta_data_dict)
         self.meta_data = dict((meta_data_dict[k], None) for k in meta_data_dict)
         self.image_data = image_data
@@ -89,7 +89,6 @@ class meta_data_extraction:
     def getlocation(self, latitude, longitude):
         geolocator = Nominatim(user_agent="myGeocoder")
         address = geolocator.reverse('{}, {}'.format(latitude,longitude), language='en')
-        address = geolocator.reverse('{}, {}'.format(latitude,longitude))
         return str(address)
 
     

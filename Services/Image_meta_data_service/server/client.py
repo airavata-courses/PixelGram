@@ -18,8 +18,9 @@ class MetadataClient:
 def get_image_byte_data():
     image = Image.open("./Image/sample.jpeg")
     exif_data = image.getexif()
+    exif = image.info['exif']
     img_byte_arr = io.BytesIO()
-    roi_img.save(img_byte_arr, format='JPG', exit=exif)
+    image.save(img_byte_arr, format='JPEG', exit=exif)
     return img_byte_arr.getvalue()
 
 
