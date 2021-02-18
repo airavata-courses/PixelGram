@@ -20,7 +20,7 @@ def get_image_byte_data():
     exif_data = image.getexif()
     exif = image.info['exif']
     img_byte_arr = io.BytesIO()
-    image.save(img_byte_arr, format='JPEG', exit=exif)
+    image.save(img_byte_arr, format='JPEG', exif=exif)
     return img_byte_arr.getvalue()
 
 
