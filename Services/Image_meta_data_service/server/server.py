@@ -15,9 +15,9 @@ class MetadataServiceService(pb2_grpc.MetadataServiceServicer):
         pass
 
     def getMetaData(self, request, context):
-        extraction = extract_image_data.meta_data_extraction(request.image_data,{
+        extraction = extract_image_data.meta_data_extraction(request.imageData,{
             'latitude':'latitude',
-            'logitude':'logitude',
+            'longitude':'longitude',
             'timestamp':'dateTime',
             'location':'locationName'
         })
@@ -30,6 +30,7 @@ def start_server():
     pb2_grpc.add_MetadataServiceServicer_to_server(MetadataServiceService(), server)
     server.add_insecure_port('[::]:50051')
     server.start()
+    print("Server started at {}:{}".format('localhost',50051))
     server.wait_for_termination()
 
 if __name__ == '__main__':

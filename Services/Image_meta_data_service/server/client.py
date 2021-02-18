@@ -4,7 +4,7 @@ import proto.metaData_pb2_grpc as grpc_pb2
 import io
 from PIL import Image
 
-class MetadataClient(Object):
+class MetadataClient:
     def __init__(self):
         self.host = 'localhost'
         self.server_port = 50051
@@ -17,17 +17,19 @@ class MetadataClient(Object):
 
 def get_image_byte_data():
     image = Image.open("./Image/sample.jpg")
+    exif_data = image.getexif()
     img_byte_arr = io.BytesIO()
-    roi_img.save(img_byte_arr, format='JPG')
-    return img_byte_arr
+    roi_img.save(img_byte_arr, format='JPG', exit=exif)
+    return img_byte_arr.getvalue()
 
 
 if __name__ == '__main__':
     client = MetadataClient()
     imageData = get_image_byte_data()
-    print(imageData)
-    result = client.getMetaData({
+    request = pb2.MetadataRequest(**{
         'userId': 'ssannid',
         'imageId': '1234',
         'imageData': imageData
     })
+    result = client.getMetaData(request)
+    print(result)
