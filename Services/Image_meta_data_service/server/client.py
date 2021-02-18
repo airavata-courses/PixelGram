@@ -12,7 +12,7 @@ class MetadataClient:
         self.channel = grpc.insecure_channel('{}:{}'.format(self.host,self.server_port))
         self.stub = grpc_pb2.MetadataServiceStub(self.channel)
 
-    def getMetaData(request):
+    def getMetaData(self, request):
         return self.stub.getMetaData(pb2.MetadataRequest(**request))
 
 def get_image_byte_data():
