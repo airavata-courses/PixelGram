@@ -16,7 +16,7 @@ class MetadataClient:
         return self.stub.getMetaData(pb2.MetadataRequest(**request))
 
 def get_image_byte_data():
-    image = Image.open("./Image/sample.jpg")
+    image = Image.open("./Image/sample.jpeg")
     exif_data = image.getexif()
     img_byte_arr = io.BytesIO()
     roi_img.save(img_byte_arr, format='JPG', exit=exif)
