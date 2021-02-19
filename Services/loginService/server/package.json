@@ -1,0 +1,18 @@
+{
+  "name": "loginserviceagain",
+  "version": "1.0.0",
+  "description": "",
+  "main": "accountService.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@grpc/proto-loader": "^0.1.0",
+    "google-protobuf": "^3.15.0-rc.1",
+    "grpc": "^1.11.0",
+    "lodash": "^4.6.1",
+    "mysql": "^2.18.1"
+  },
+  "author": "",
+  "license": "ISC"
+}
