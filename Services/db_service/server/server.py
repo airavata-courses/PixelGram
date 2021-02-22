@@ -15,7 +15,9 @@ class db_service(pb2_grpc.DatabaseServiceServicer):
         db_fetch = db_data.db_data_fetcher()
         return db_fetch.createUser(request, context, self.update_db_instance.getConnection())
 
-    def UpdateUserDetails(self, request, context):
+    def UpdateUserName(self, request, context):
+        db_fetch = db_data.db_data_fetcher()
+        return db_fetch.updateUserPassword(request, context, self.update_db_instance.getConnection())
 
     def UpdateUserPassword(self, request, context):
         db_fetch = db_data.db_data_fetcher()
@@ -28,6 +30,10 @@ class db_service(pb2_grpc.DatabaseServiceServicer):
     def GetUserPasswordByEmail(self, request, context):
         db_fetch = db_data.db_data_fetcher()
         return db_fetch.getUserPasswordByEmail(request, context, self.read_db_instance.getConnection())
+
+    def SessionTokenForUser(self, request, context):
+    
+    def ValidateSessionTokenForUser(self, request, context):
 
 
 def start_server(server_details):

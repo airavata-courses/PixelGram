@@ -1,5 +1,5 @@
-import mysql.connector as mysql
 import psycopg2 as pgsql
+from datetime import datetime, timezone
 import uuid
 import sys
 import grpc
@@ -8,6 +8,9 @@ from google.protobuf import empty_pb2
 
 
 USER_TABLE_NAME = 'userdetails'
+IMAGE_TABLE_NAME = 'imagedetails'
+SESSION_TABLE_NAME = 'sessiontokens'
+SHARE_TABLE_NAME = 'shareimagedetails'
 
 
 def throw_exception(grpc_context, code, details):
@@ -61,7 +64,7 @@ class db_data_fetcher:
         }
 
         retrive_query = '''SELECT * FROM %s WHERE email = %s;'''
-        update_query = '''INSERT INTO %s (user_id, user_name, email, password) VALUES (%s, %s, %s, %s);'''
+        update_query = '''INSERT INTO %s (user_id, user_name, email, password) VALUES (%s, %s, %s, %s) RETURNING user_id;'''
 
         try:
             with connection.cursor() as curs:
@@ -91,7 +94,8 @@ class db_data_fetcher:
         password = None
         responseDict = {
             'userId': user_id,
-            'password': password
+            'password': password,
+            'email': request.email
         }
 
         retrive_query = '''SELECT user_id, password FROM %s WHERE email = %s;'''
@@ -112,7 +116,7 @@ class db_data_fetcher:
             print_psycopg2_exception(error)
         finally:
             context.set_code(grpc.StatusCode.OK)
-            return pb2.UserPassword(**responseDict)
+            return pb2.UserDetails(**responseDict)
 
     def updateUserPassword(self, request, context, connection):
 
@@ -152,8 +156,56 @@ class db_data_fetcher:
                 details = 'Updating the record failed.'  
             )
 
+    def sessionTokenForUser(self, request, context, connection):
 
+        session_token = None
+        # Getting current time and date in UTC zone
+        timestamp = datetime.now(timezone.utc) + datetime.timedelta(minutes = 30)
 
+        responseDict = {
+            'sessionId': session_token,
+            'userId': request.user_id,
+            'expireTime': timestamp
+        }
+
+        update_query = '''INSERT INTO %s (user_id, session_id, timestamp) VALUES (%s, %s, %s) RETURNING session_id;'''
+
+        try:
+            with connection.cursor() as curs:
+                curs.execute(update_query, (SESSION_TABLE_NAME, request.username, uuid.uuid4().hex, timestamp))
+                session_token = curs.fetchone()[0]
+        except pgsql.Error as error:
+            print_psycopg2_exception(error)
+            return throw_exception(
+                grpc_context = context,
+                code = grpc.StatusCode.INTERNAL,
+                details = 'Unable to create the session toke for the user. Try again'
+            )
+        finally:
+            context.set_code(grpc.StatusCode.OK)
+            return pb2.Session(**responseDict)
+    
+    def validateSessionTokenForUser(self, request, context, connection):
+
+        timestamp = datetime.now(timezone.utc)
+
+        retrive_query = '''SELECT user_id, session_id, timestamp FROM %s WHERE user_id = %s AND session_id = %s AND timestamp > %s;'''
+
+        try:
+            with connection.cursor() as curs:
+                curs.execute(retrive_query, (SESSION_TABLE_NAME, request.userId, request.sessionId, timestamp))
+                if len(curs.fetchall()) > 0:
+                    return throw_exception(
+                        grpc_context = context,
+                        code = grpc.StatusCode.OK,
+                        details = 'Session token verified successfully.'
+                    )
+        except pgsql.Error as error:
+            print_psycopg2_exception(error)
+        finally:
+            return throw_exception(
+                grpc_context = context,
+                code = grpc.StatusCode.UNAUTHENTICATED,
+                details = 'Invalid session token. Please create new one to continue'
+            )
         
-
-
