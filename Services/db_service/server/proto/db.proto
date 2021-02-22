@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
+
 option py_generic_services = true;
 
 enum Format {
@@ -60,10 +61,10 @@ message queryString {
 }
 
 service DatabaseService {
-    rpc UpdateImageDetails(ImageDetails) returns (StatusResponse);
+    rpc UpdateImageDetails(ImageDetails) returns (google.protobuf.Empty);
     rpc CreateUser(User) returns (UserDetails);
-    rpc UpdateUserDetails(UserDetails) returns (StatusResponse); 
-    rpc UpdateUserPassword(UserPassword) returns (StatusResponse);
+    rpc updateUserName(UserDetails) returns (google.protobuf.Empty); 
+    rpc UpdateUserPassword(UserDetails) returns (google.protobuf.Empty);
     rpc CreateImage(ImageUserDetails) returns (ImageDetails);
     rpc GetImageDetails(queryString) returns (ImageDetails); 
     rpc GetUserPasswordByEmail(queryString) returns (UserPassword);

@@ -18,6 +18,8 @@ class db_service(pb2_grpc.DatabaseServiceServicer):
     def UpdateUserDetails(self, request, context):
 
     def UpdateUserPassword(self, request, context):
+        db_fetch = db_data.db_data_fetcher()
+        return db_fetch.updateUserPassword(request, context, self.update_db_instance.getConnection())
 
     def CreateImage(self, request, context):
 
@@ -25,7 +27,7 @@ class db_service(pb2_grpc.DatabaseServiceServicer):
 
     def GetUserPasswordByEmail(self, request, context):
         db_fetch = db_data.db_data_fetcher()
-        return db_fetch.getUserPasswordByEmail(request, context, self.update_db_instance.getConnection())
+        return db_fetch.getUserPasswordByEmail(request, context, self.read_db_instance.getConnection())
 
 
 def start_server(server_details):

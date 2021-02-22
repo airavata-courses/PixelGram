@@ -114,7 +114,44 @@ class db_data_fetcher:
             context.set_code(grpc.StatusCode.OK)
             return pb2.UserPassword(**responseDict)
 
-    def 
+    def updateUserPassword(self, request, context, connection):
+
+        update_query = '''UPDATE %s SET password = %s WHERE user_id = %s AND email = %s;'''
+
+        try:
+            with connection.cursor() as curs:
+                curs.execute(update_query, (USER_TABLE_NAME, request.password, request.userId, request.email))
+                if curs.rowcount > 0:
+                    context.set_code(grpc.StatusCode.OK)
+                    return empty_pb2.Empty()
+        except pgsql.Error as error:
+            print_psycopg2_exception(error)
+        finally:
+            return throw_exception(
+                grpc_context = context,
+                code = grpc.StatusCode.INTERNAL,
+                details = 'Updating the record failed.'  
+            )
+    
+    def updateUserName(self, request, context, connection):
+        
+        update_query = '''UPDATE %s SET user_name = %s WHERE user_id = %s AND email = %s;'''
+
+        try:
+            with connection.cursor() as curs:
+                curs.execute(update_query, (USER_TABLE_NAME, request.username, request.userId, request.email))
+                if curs.rowcount > 0:
+                    context.set_code(grpc.StatusCode.OK)
+                    return empty_pb2.Empty()
+        except pgsql.Error as error:
+            print_psycopg2_exception(error)
+        finally:
+            return throw_exception(
+                grpc_context = context,
+                code = grpc.StatusCode.INTERNAL,
+                details = 'Updating the record failed.'  
+            )
+
 
 
         
