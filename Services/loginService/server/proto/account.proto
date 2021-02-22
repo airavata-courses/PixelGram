@@ -1,9 +1,8 @@
 syntax = "proto3";
 package account;
-import "C:\Users\surgudla\Desktop\1-1\Applied Dist Sys\ADS Project\MicroServices\Image_meta_data_service\server\proto\metaData.proto"
 
 message user{
-    string name=1;
+    string username = 1;
     string email = 2;
     string password =3;
 }
