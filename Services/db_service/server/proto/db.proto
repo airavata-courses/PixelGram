@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+option py_generic_services = true;
+
+enum Format {
+    JPEG = 0;
+    PNG = 1;
+    WEBP = 2;
+}
+
+enum Statuscode {
+    SUCCESS = 0;
+    FAILURE = 1;
+}
+
+message StatusResponse {
+    Statuscode status = 1;
+}
+
+message ImageUserDetails {
+    string userId = 1;
+    string imageId = 2;
+    Format format = 3;
+    google.protobuf.Timestamp dateTime = 4;
+    double latitude = 5;
+    double longitude = 6;
+    string locationName = 7;
+}
+
+message ImageDetails {
+    string imageId = 1;
+    Format format = 2;
+    google.protobuf.Timestamp dateTime = 4;
+    double latitude = 5;
+    double longitude = 6;
+    string locationName = 7;
+}
+
+message UserDetails {
+    string userId = 1;
+    string username = 2;
+    string email = 3;
+    string password = 4;
+}
+
+message UserPassword {
+    string userId = 1;
+    string password = 2;
+}
+
+message User {
+    string username = 1;
+    string email = 2;
+    string password =3;
+}
+
+message queryString {
+    string value = 1;
+}
+
+service DatabaseService {
+    rpc UpdateImageDetails(ImageDetails) returns (StatusResponse);
+    rpc CreateUser(User) returns (UserDetails);
+    rpc UpdateUserDetails(UserDetails) returns (StatusResponse); 
+    rpc UpdateUserPassword(UserPassword) returns (StatusResponse);
+    rpc CreateImage(ImageUserDetails) returns (ImageDetails);
+    rpc GetImageDetails(queryString) returns (ImageDetails); 
+    rpc GetUserPasswordByEmail(queryString) returns (UserPassword);
+}
