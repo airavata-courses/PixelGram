@@ -21,4 +21,4 @@ The session management service is built to manage the session of user for better
 The database service to connect to the data base and all the operations related to that.
 All other services connect to database via this service.
 
-! [Architecture diagram](https://user-images.githubusercontent.com/29830913/108661175-2edd3780-7499-11eb-802d-515a67d5704c.jpg)
+![Architecture diagram](https://user-images.githubusercontent.com/29830913/108661175-2edd3780-7499-11eb-802d-515a67d5704c.jpg)
