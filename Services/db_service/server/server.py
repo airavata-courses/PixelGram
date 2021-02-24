@@ -26,14 +26,20 @@ class db_service(pb2_grpc.DatabaseServiceServicer):
     def CreateImage(self, request, context):
 
     def GetImageDetails(self, request, context):
+        db_fetch = db_data.db_data_fetcher()
+        return db_fetch.getImageDetailsByImageId(request, context, self.read_db_instance.getConnection())
 
     def GetUserPasswordByEmail(self, request, context):
         db_fetch = db_data.db_data_fetcher()
         return db_fetch.getUserPasswordByEmail(request, context, self.read_db_instance.getConnection())
 
     def SessionTokenForUser(self, request, context):
+        db_fetch = db_data.db_data_fetcher()
+        return db_fetch.createSessionTokenForUser(request, context, self.update_db_instance.getConnection())
     
     def ValidateSessionTokenForUser(self, request, context):
+        db_fetch = db_data_fetcher()
+        return db_fetch.validateSessionTokenForUser(request, context, self.read_db_instance.getConnection())
 
 
 def start_server(server_details):

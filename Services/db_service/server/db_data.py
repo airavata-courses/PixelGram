@@ -156,7 +156,7 @@ class db_data_fetcher:
                 details = 'Updating the record failed.'  
             )
 
-    def sessionTokenForUser(self, request, context, connection):
+    def createSessionTokenForUser(self, request, context, connection):
 
         session_token = None
         # Getting current time and date in UTC zone
@@ -208,4 +208,41 @@ class db_data_fetcher:
                 code = grpc.StatusCode.UNAUTHENTICATED,
                 details = 'Invalid session token. Please create new one to continue'
             )
+
+    def getImageDetailsByImageId(self, request, context, connection):
+
+        responseDict = {
+            'imageId': request.value,
+            'format': None,
+            'dateTime' : None,
+            'latitude': None,
+            'longitude': None,
+            'locationName': None
+        }
+
+        retrival_query = '''SELECT image_id, latitude, longitude, location_name, timestamp, format FROM %s WHERE image_id = %s;'''
+
+        try:
+            with connection.cursor() as curs:
+                curs.execute(retrival_query, (IMAGE_TABLE_NAME, request.value))
+                db_response = curs.fetchall()
+                if len(db_response) == 0:
+                    return throw_exception(
+                        grpc_context = context,
+                        code = grpc.StatusCode.NOT_FOUND,
+                        details = 'No details found for requested image_id.' 
+                    )
+                db_response = db_response[0]
+                responseDict['latitude'] = db_response[1]
+                responseDict['longitude'] = db_response[2]
+                responseDict['loacationName'] = db_response[3]
+                context.set_code(grpc.StatusCode.OK)
+                context.set_details('Request successful')
+        except pgsql.Error as error:
+            print_psycopg2_exception(error)
+            context.set_code(grpc.StatusCode.INTERNAL)
+            context.set_details('Unable to fetch details from postgres.')
+        finally:
+            return pb2.ImageDetails(**responseDict)
+                
         
