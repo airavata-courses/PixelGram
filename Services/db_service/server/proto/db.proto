@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
 
 option py_generic_services = true;
 
@@ -10,19 +11,10 @@ enum Format {
     WEBP = 2;
 }
 
-enum Statuscode {
-    SUCCESS = 0;
-    FAILURE = 1;
-}
-
-message StatusResponse {
-    Statuscode status = 1;
-}
-
 message Session {
-    string sessionId = 0;
-    string userId = 1;
-    google.protobuf.Timestamp expireTime = 2;
+    string sessionId = 1;
+    string userId = 2;
+    google.protobuf.Timestamp expireTime = 3;
 }
 
 message ImageUserDetails {
@@ -68,7 +60,8 @@ service DatabaseService {
     rpc UpdateUserPassword(UserDetails) returns (google.protobuf.Empty);
     rpc CreateImage(ImageUserDetails) returns (ImageDetails);
     rpc GetImageDetails(queryString) returns (ImageDetails); 
-    rpc GetUserPasswordByEmail(queryString) returns (UserPassword);
+    rpc GetUserPasswordByEmail(queryString) returns (User);
     rpc SessionTokenForUser(Session) returns (Session);
     rpc ValidateSessionTokenForUser(Session) returns (google.protobuf.Empty);
+    rpc EndSessionForUser(session) returns (google.protobuf.Empty);
 }

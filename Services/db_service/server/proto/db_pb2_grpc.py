@@ -2,7 +2,8 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from . import db_pb2 as db_pb2
+from . import db_pb2 as db__pb2
+from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
 
 class DatabaseServiceStub(object):
@@ -17,22 +18,22 @@ class DatabaseServiceStub(object):
         self.UpdateImageDetails = channel.unary_unary(
                 '/DatabaseService/UpdateImageDetails',
                 request_serializer=db__pb2.ImageDetails.SerializeToString,
-                response_deserializer=db__pb2.StatusResponse.FromString,
+                response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 )
         self.CreateUser = channel.unary_unary(
                 '/DatabaseService/CreateUser',
                 request_serializer=db__pb2.User.SerializeToString,
                 response_deserializer=db__pb2.UserDetails.FromString,
                 )
-        self.UpdateUserDetails = channel.unary_unary(
-                '/DatabaseService/UpdateUserDetails',
+        self.updateUserName = channel.unary_unary(
+                '/DatabaseService/updateUserName',
                 request_serializer=db__pb2.UserDetails.SerializeToString,
-                response_deserializer=db__pb2.StatusResponse.FromString,
+                response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 )
         self.UpdateUserPassword = channel.unary_unary(
                 '/DatabaseService/UpdateUserPassword',
-                request_serializer=db__pb2.UserPassword.SerializeToString,
-                response_deserializer=db__pb2.StatusResponse.FromString,
+                request_serializer=db__pb2.UserDetails.SerializeToString,
+                response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 )
         self.CreateImage = channel.unary_unary(
                 '/DatabaseService/CreateImage',
@@ -44,10 +45,20 @@ class DatabaseServiceStub(object):
                 request_serializer=db__pb2.queryString.SerializeToString,
                 response_deserializer=db__pb2.ImageDetails.FromString,
                 )
-        self.GetUserPassword = channel.unary_unary(
-                '/DatabaseService/GetUserPassword',
+        self.GetUserPasswordByEmail = channel.unary_unary(
+                '/DatabaseService/GetUserPasswordByEmail',
                 request_serializer=db__pb2.queryString.SerializeToString,
-                response_deserializer=db__pb2.UserPassword.FromString,
+                response_deserializer=db__pb2.User.FromString,
+                )
+        self.SessionTokenForUser = channel.unary_unary(
+                '/DatabaseService/SessionTokenForUser',
+                request_serializer=db__pb2.Session.SerializeToString,
+                response_deserializer=db__pb2.Session.FromString,
+                )
+        self.ValidateSessionTokenForUser = channel.unary_unary(
+                '/DatabaseService/ValidateSessionTokenForUser',
+                request_serializer=db__pb2.Session.SerializeToString,
+                response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 )
 
 
@@ -66,7 +77,7 @@ class DatabaseServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def UpdateUserDetails(self, request, context):
+    def updateUserName(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -90,7 +101,19 @@ class DatabaseServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def GetUserPassword(self, request, context):
+    def GetUserPasswordByEmail(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def SessionTokenForUser(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ValidateSessionTokenForUser(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -102,22 +125,22 @@ def add_DatabaseServiceServicer_to_server(servicer, server):
             'UpdateImageDetails': grpc.unary_unary_rpc_method_handler(
                     servicer.UpdateImageDetails,
                     request_deserializer=db__pb2.ImageDetails.FromString,
-                    response_serializer=db__pb2.StatusResponse.SerializeToString,
+                    response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
             'CreateUser': grpc.unary_unary_rpc_method_handler(
                     servicer.CreateUser,
                     request_deserializer=db__pb2.User.FromString,
                     response_serializer=db__pb2.UserDetails.SerializeToString,
             ),
-            'UpdateUserDetails': grpc.unary_unary_rpc_method_handler(
-                    servicer.UpdateUserDetails,
+            'updateUserName': grpc.unary_unary_rpc_method_handler(
+                    servicer.updateUserName,
                     request_deserializer=db__pb2.UserDetails.FromString,
-                    response_serializer=db__pb2.StatusResponse.SerializeToString,
+                    response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
             'UpdateUserPassword': grpc.unary_unary_rpc_method_handler(
                     servicer.UpdateUserPassword,
-                    request_deserializer=db__pb2.UserPassword.FromString,
-                    response_serializer=db__pb2.StatusResponse.SerializeToString,
+                    request_deserializer=db__pb2.UserDetails.FromString,
+                    response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
             'CreateImage': grpc.unary_unary_rpc_method_handler(
                     servicer.CreateImage,
@@ -129,10 +152,20 @@ def add_DatabaseServiceServicer_to_server(servicer, server):
                     request_deserializer=db__pb2.queryString.FromString,
                     response_serializer=db__pb2.ImageDetails.SerializeToString,
             ),
-            'GetUserPassword': grpc.unary_unary_rpc_method_handler(
-                    servicer.GetUserPassword,
+            'GetUserPasswordByEmail': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetUserPasswordByEmail,
                     request_deserializer=db__pb2.queryString.FromString,
-                    response_serializer=db__pb2.UserPassword.SerializeToString,
+                    response_serializer=db__pb2.User.SerializeToString,
+            ),
+            'SessionTokenForUser': grpc.unary_unary_rpc_method_handler(
+                    servicer.SessionTokenForUser,
+                    request_deserializer=db__pb2.Session.FromString,
+                    response_serializer=db__pb2.Session.SerializeToString,
+            ),
+            'ValidateSessionTokenForUser': grpc.unary_unary_rpc_method_handler(
+                    servicer.ValidateSessionTokenForUser,
+                    request_deserializer=db__pb2.Session.FromString,
+                    response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -157,7 +190,7 @@ class DatabaseService(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/DatabaseService/UpdateImageDetails',
             db__pb2.ImageDetails.SerializeToString,
-            db__pb2.StatusResponse.FromString,
+            google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -179,7 +212,7 @@ class DatabaseService(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def UpdateUserDetails(request,
+    def updateUserName(request,
             target,
             options=(),
             channel_credentials=None,
@@ -189,9 +222,9 @@ class DatabaseService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/DatabaseService/UpdateUserDetails',
+        return grpc.experimental.unary_unary(request, target, '/DatabaseService/updateUserName',
             db__pb2.UserDetails.SerializeToString,
-            db__pb2.StatusResponse.FromString,
+            google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -207,8 +240,8 @@ class DatabaseService(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/DatabaseService/UpdateUserPassword',
-            db__pb2.UserPassword.SerializeToString,
-            db__pb2.StatusResponse.FromString,
+            db__pb2.UserDetails.SerializeToString,
+            google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -247,7 +280,7 @@ class DatabaseService(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def GetUserPassword(request,
+    def GetUserPasswordByEmail(request,
             target,
             options=(),
             channel_credentials=None,
@@ -257,8 +290,42 @@ class DatabaseService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/DatabaseService/GetUserPassword',
+        return grpc.experimental.unary_unary(request, target, '/DatabaseService/GetUserPasswordByEmail',
             db__pb2.queryString.SerializeToString,
-            db__pb2.UserPassword.FromString,
+            db__pb2.User.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def SessionTokenForUser(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/DatabaseService/SessionTokenForUser',
+            db__pb2.Session.SerializeToString,
+            db__pb2.Session.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def ValidateSessionTokenForUser(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/DatabaseService/ValidateSessionTokenForUser',
+            db__pb2.Session.SerializeToString,
+            google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
