@@ -37,6 +37,10 @@ class db_service(pb2_grpc.DatabaseServiceServicer):
         db_fetch = db_data.db_data_fetcher()
         return db_fetch.createSessionTokenForUser(request, context, self.update_db_instance.getConnection())
     
+    def EndSessionForUser(self, request, context):
+        db_fetch = db_data.db_data_fetcher()
+        return db_fetch.endSessionforUser(request, context, self.update_db_instance.getConnection())
+    
     def ValidateSessionTokenForUser(self, request, context):
         db_fetch = db_data_fetcher()
         return db_fetch.validateSessionTokenForUser(request, context, self.read_db_instance.getConnection())

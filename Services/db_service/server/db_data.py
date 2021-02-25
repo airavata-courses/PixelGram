@@ -172,7 +172,7 @@ class db_data_fetcher:
 
         try:
             with connection.cursor() as curs:
-                curs.execute(update_query, (SESSION_TABLE_NAME, request.username, uuid.uuid4().hex, timestamp))
+                curs.execute(update_query, (SESSION_TABLE_NAME, request.userId, uuid.uuid4().hex, timestamp))
                 session_token = curs.fetchone()[0]
         except pgsql.Error as error:
             print_psycopg2_exception(error)
@@ -185,11 +185,30 @@ class db_data_fetcher:
             context.set_code(grpc.StatusCode.OK)
             return pb2.Session(**responseDict)
     
+    def endSessionforUser(self, request, context, connection):
+
+        # Current time 
+        timestamp = datetime.now(timezone.utc)
+
+        delete_query = '''DELETE FROM %s WHERE user_id = %s OR expire_time < %s'''
+
+        try:
+            with connection.cursor() as curs:
+                curs.execute(delete_query, (SESSION_TABLE_NAME, request.userId, timestamp))
+            context.set_code(grpc.StatusCode.OK)
+            context.set_details('User session cleared.')
+        except pgsql.Error as error:
+            print_psycopg2_exception(error)
+            context.set_code(grpc.StatusCode.INTERNAL)
+            context.set_details('User session has not been cleared. Please try again')
+        finally:
+            return empty_pb2.Empty()
+    
     def validateSessionTokenForUser(self, request, context, connection):
 
         timestamp = datetime.now(timezone.utc)
 
-        retrive_query = '''SELECT user_id, session_id, timestamp FROM %s WHERE user_id = %s AND session_id = %s AND timestamp > %s;'''
+        retrive_query = '''SELECT user_id, session_id, timestamp FROM %s WHERE user_id = %s AND session_id = %s AND expire_time > %s;'''
 
         try:
             with connection.cursor() as curs:
@@ -210,6 +229,8 @@ class db_data_fetcher:
             )
 
     def getImageDetailsByImageId(self, request, context, connection):
+
+        # Still timestamo and format need to be implement.
 
         responseDict = {
             'imageId': request.value,
