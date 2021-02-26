@@ -38,9 +38,11 @@ function getDetails(call, callback) {
                 message:{name:result[0].name,email:result[0].email}
                 });
             }); 
-    })
-  
+    }) 
 }
+
+
+
 
 function main() {
   let server = new grpc.Server();

@@ -31,7 +31,6 @@ body, html, .App, #root, .outer {
 }
 
 .inner {
-  width: 450px;
   margin-top: 20px;
   margin-bottom: 30px;
   margin-left:auto;

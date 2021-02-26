@@ -7,7 +7,8 @@ import * as serviceWorker from "./serviceWorker";
 import login from ".Actions/login.component";
 const { creds, accountFlag } = require('./account_pb.js');
 const {}
-class index extends Component {
+class index extends Component 
+{
     callGrpcService = () => {
         const request = new creds();
         request.setEmail(email);
@@ -21,4 +22,5 @@ class index extends Component {
             }
         });
 }
-}    
+}  
+  

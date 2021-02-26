@@ -1,169 +1,29 @@
 import React, { Component } from "react";
-import {Dropdown} from 'react-bootstrap';
-import { Link } from "react-router-dom";
-import ImageComponent from "./image.component";
-import Gallery from "react-grid-gallery";
-const divStyle = {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  };
-   
-  const IMAGES = [
-    {
-      src: "https://c2.staticflickr.com/9/8817/28973449265_07e3aa5d2e_b.jpg",
-      thumbnail:
-        "https://c2.staticflickr.com/9/8817/28973449265_07e3aa5d2e_n.jpg",
-      thumbnailWidth: 320,
-      thumbnailHeight: 174,
-      caption: "After Rain (Jeshu John - designerspics.com)"
-    },
-    {
-      src: "https://c2.staticflickr.com/9/8356/28897120681_3b2c0f43e0_b.jpg",
-      thumbnail:
-        "https://c2.staticflickr.com/9/8356/28897120681_3b2c0f43e0_n.jpg",
-      thumbnailWidth: 320,
-      thumbnailHeight: 212,
-      tags: [
-        { value: "Ocean", title: "Ocean" },
-        { value: "People", title: "People" }
-      ],
-      caption: "Boats (Jeshu John - designerspics.com)"
-    },
-  
-    {
-      src: "https://c4.staticflickr.com/9/8887/28897124891_98c4fdd82b_b.jpg",
-      thumbnail:
-        "https://c4.staticflickr.com/9/8887/28897124891_98c4fdd82b_n.jpg",
-      thumbnailWidth: 320,
-      thumbnailHeight: 212
-    },
-    {
-      src: "https://c2.staticflickr.com/9/8817/28973449265_07e3aa5d2e_b.jpg",
-      thumbnail:
-        "https://c2.staticflickr.com/9/8817/28973449265_07e3aa5d2e_n.jpg",
-      thumbnailWidth: 320,
-      thumbnailHeight: 174,
-      caption: "After Rain (Jeshu John - designerspics.com)"
-    },
-    {
-      src: "https://c2.staticflickr.com/9/8356/28897120681_3b2c0f43e0_b.jpg",
-      thumbnail:
-        "https://c2.staticflickr.com/9/8356/28897120681_3b2c0f43e0_n.jpg",
-      thumbnailWidth: 320,
-      thumbnailHeight: 212,
-      tags: [
-        { value: "Ocean", title: "Ocean" },
-        { value: "People", title: "People" }
-      ],
-      caption: "Boats (Jeshu John - designerspics.com)"
-    },
-  
-    {
-      src: "https://c4.staticflickr.com/9/8887/28897124891_98c4fdd82b_b.jpg",
-      thumbnail:
-        "https://c4.staticflickr.com/9/8887/28897124891_98c4fdd82b_n.jpg",
-      thumbnailWidth: 320,
-      thumbnailHeight: 212
-    },
-    {
-      src: "https://c2.staticflickr.com/9/8817/28973449265_07e3aa5d2e_b.jpg",
-      thumbnail:
-        "https://c2.staticflickr.com/9/8817/28973449265_07e3aa5d2e_n.jpg",
-      thumbnailWidth: 320,
-      thumbnailHeight: 174,
-      caption: "After Rain (Jeshu John - designerspics.com)"
-    },
-    {
-      src: "https://c2.staticflickr.com/9/8356/28897120681_3b2c0f43e0_b.jpg",
-      thumbnail:
-        "https://c2.staticflickr.com/9/8356/28897120681_3b2c0f43e0_n.jpg",
-      thumbnailWidth: 320,
-      thumbnailHeight: 212,
-      tags: [
-        { value: "Ocean", title: "Ocean" },
-        { value: "People", title: "People" }
-      ],
-      caption: "Boats (Jeshu John - designerspics.com)"
-    },
-  
-    {
-      src: "https://c4.staticflickr.com/9/8887/28897124891_98c4fdd82b_b.jpg",
-      thumbnail:
-        "https://c4.staticflickr.com/9/8887/28897124891_98c4fdd82b_n.jpg",
-      thumbnailWidth: 320,
-      thumbnailHeight: 212
-    },
-    {
-      src: "https://c2.staticflickr.com/9/8817/28973449265_07e3aa5d2e_b.jpg",
-      thumbnail:
-        "https://c2.staticflickr.com/9/8817/28973449265_07e3aa5d2e_n.jpg",
-      thumbnailWidth: 320,
-      thumbnailHeight: 174,
-      caption: "After Rain (Jeshu John - designerspics.com)"
-    },
-    {
-      src: "https://c2.staticflickr.com/9/8356/28897120681_3b2c0f43e0_b.jpg",
-      thumbnail:
-        "https://c2.staticflickr.com/9/8356/28897120681_3b2c0f43e0_n.jpg",
-      thumbnailWidth: 320,
-      thumbnailHeight: 212,
-      tags: [
-        { value: "Ocean", title: "Ocean" },
-        { value: "People", title: "People" }
-      ],
-      caption: "Boats (Jeshu John - designerspics.com)"
-    },
-  
-    {
-      src: "https://c4.staticflickr.com/9/8887/28897124891_98c4fdd82b_b.jpg",
-      thumbnail:
-        "https://c4.staticflickr.com/9/8887/28897124891_98c4fdd82b_n.jpg",
-      thumbnailWidth: 720,
-      thumbnailHeight: 212
-    }
-  ];
+import {Button} from 'react-bootstrap'
+import Card from "react-bootstrap/Card";
 
 export default class home extends Component {
      render() {
         return (
-            <div>
-                      <div style={divStyle}>
-
-                    
-      <Dropdown>
-  <Dropdown.Toggle variant="dark" id="dropdown-basic">
-    Menu
-  </Dropdown.Toggle>
-
-  <Dropdown.Menu>
-    <Dropdown.Item > <Link to="/upload">Upload photo</Link></Dropdown.Item>
-    <Dropdown.Item >profile</Dropdown.Item>
-    <Dropdown.Item>logout</Dropdown.Item>
-  </Dropdown.Menu>
-</Dropdown>
-<h3> My Photos </h3>
-<Link to="/upload" className="upload" > Upload </Link>
-</div>
-<Gallery
-      images={IMAGES}
-      enableLightbox={true}
-      // maxRows={3}
-      backdropClosesModal
-      // currentImage={3}
-      // isOpen={ true}
-    />
-
-
-            <ImageComponent/>
-            <footer>
-            <div style={divStyle}>
-            <Link to = "/albums" className="Album" > My Albums </Link>
-            <Link to className="sort" > Sort </Link>
-            
+            <div >
+            <p >
+            <input className="upload-button" type="button" value="+" />
+            <input className="menu-button" type="button" value="Menu" />
+            </p>
+            <h1> welcome</h1>
+            <Card style={{ width: '18rem' }}>
+                <Card.Img variant="top" src={require('./resources/pic1.jpg')} />
+                <Card.Body>
+                    <Card.Title></Card.Title> 
+                    <Button variant="primary">menu</Button>
+                </Card.Body>
+            </Card>
+            <img src={require('./resources/pic1.jpg')} alt="pic1" width='100px' height='150px' />
+            <img src={require('./resources/pic2.jpg')} alt="pic2" width='100px' height='150px' />
+            <img src={require('./resources/pic3.jpg')} alt="pic3" width='100px' height='150px' />
+            <img onClick="" src={require('./resources/pic2.jpg')} alt="pic2" width='100px' height='150px' />
+            <img src={'https://www.indiancinemagallery.net/wp-content/uploads/2018/01/telugu_actress_sravya_hot_stills_green_saree_2b19a35-279x420.jpg'} alt="from-cloud" width='100px' height='150px' />
             </div>
-            </footer>
-            </div>
-
         )
-    }}
+    }
+    }
