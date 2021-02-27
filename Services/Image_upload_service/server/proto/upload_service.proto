@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option py_generic_services = true;
+
+enum Format {
+    JPEG = 0;
+    PNG = 1;
+    WEBP = 2;
+}
+
+message uploadDataRequest {
+    string userId = 1;
+    string imageName = 2;
+    bytes imageData = 3;
+    Format format = 4;
+}
+
+message downloadDataRequest {
+    string imageId = 1;
+}
+
+message uploadDataResponse {
+    string userId = 1;
+    string imageId = 2;
+}
+
+message downloadDataResponse {
+    string imageId = 1;
+    bytes imageData = 2;
+}
+
+service uploadService {
+    rpc uploadDataService(uploadDataRequest) returns (uploadDataResponse);
+    rpc downloadDataService(uploadDataRequest) returns (downloadDataResponse);
+}

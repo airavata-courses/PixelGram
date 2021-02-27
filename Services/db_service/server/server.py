@@ -54,11 +54,7 @@ def start_server(server_details):
     print('Server started at {}:{}'.format(server_details['host'], server_details['port']))
     server.wait_for_termination()
 
-def getDatabaseDetails()
-    # Reding config file
-    config = configparser.RawConfigParser()
-    config.read('config.cfg')
-
+def getDatabaseDetails(config)
     # Getting databse details
     database_details = dict(config.items('db_configurations'))
     print('Database configurations from config file {}'.format(database_details))
@@ -68,6 +64,9 @@ if __name__ == '__main__':
     # Running bash script which will create database and load with backup data to get start with.
     
     try:
+        # Reading config file
+        config = configparser.RawConfigParser()
+        config.read('config.cfg')
         # Getting database details from config file
         database_details = getDatabaseDetails()
         
@@ -77,7 +76,7 @@ if __name__ == '__main__':
 
         # Getting server details
         server_details = dict(config.items('server'))
-        print('Server configurations from config file {}'.format(server_details))
+        print('Database service Server configurations from config file {}'.format(server_details))
 
         # Starting the server
         start_server(server_details)
