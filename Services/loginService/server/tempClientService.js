@@ -10,6 +10,7 @@ let packageDefinition = protoLoader.loadSync(
      defaults: true,
      oneofs: true
     });
+    
 let account_proto = grpc.loadPackageDefinition(packageDefinition).account;
 
 function main() {

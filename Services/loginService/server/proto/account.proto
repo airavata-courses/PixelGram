@@ -7,52 +7,25 @@ message user{
     string password =3;
 }
 
-message userRequest {
-  string name = 1;
-}
-
-message userResponse{
-  userDetails message = 1;
-}
-
-message userDetails{
-    string name=1;
-    string email = 2;
-}
-
 message userEmail{
     string email=1;
 }
 
 message creds{
-    string email = 2;
-    string password = 3; 
+    string email = 1;
+    string password = 2; 
+}
+message otpGen{
+    int64 otp=1;
 }
 
 message accountFlag{
     bool isSuccess = 1;
 }
 
-message typedString{
-    string str = 1;
-}
-
-message randomPassword{
-    string password = 1;
-}
-
-message usersListPage{
-    int64 pageNum =1;
-    int64 pageSize =2;
-}
-
 service accountService{
     rpc create(user) returns (accountFlag);
-    rpc forgotpwd(userEmail) returns (randomPassword);
+    rpc forgotpwd(userEmail) returns (otpGen);
     rpc loginUser(creds) returns (accountFlag);
     rpc delete(userEmail) returns (accountFlag);
-    rpc listUsers(usersListPage) returns (user);
-    rpc getByName(typedString) returns (userDetails);
-    rpc getByEmail(typedString) returns (userDetails);
-    rpc getDetails(userRequest) returns (userResponse);
 }
