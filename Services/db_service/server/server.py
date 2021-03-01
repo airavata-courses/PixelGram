@@ -4,12 +4,15 @@ import proto.db_pb2_grpc as pb2_grpc
 import configparser
 import db_data
 
+from concurrent import futures
+
 class db_service(pb2_grpc.DatabaseServiceServicer):
     def __init__(self, *args, **kwargs):
         self.read_db_instance = db_data.db_Instance(getDatabaseDetails())
         self.update_db_instance = db_data.db_Instance(getDatabaseDetails())
 
     def UpdateImageDetails(self, request, context):
+        return ''
 
     def CreateUser(self, request, context):
         db_fetch = db_data.db_data_fetcher()
@@ -24,6 +27,7 @@ class db_service(pb2_grpc.DatabaseServiceServicer):
         return db_fetch.updateUserPassword(request, context, self.update_db_instance.getConnection())
 
     def CreateImage(self, request, context):
+        return ''
 
     def GetImageDetails(self, request, context):
         db_fetch = db_data.db_data_fetcher()
@@ -47,14 +51,14 @@ class db_service(pb2_grpc.DatabaseServiceServicer):
 
 
 def start_server(server_details):
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=server_details['max_workers']))
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=int(server_details['max_workers'])))
     pb2_grpc.add_DatabaseServiceServicer_to_server(db_service(), server)
     server.add_insecure_port('{}:{}'.format(server_details['host'], server_details['port']))
     server.start()
     print('Server started at {}:{}'.format(server_details['host'], server_details['port']))
     server.wait_for_termination()
 
-def getDatabaseDetails(config)
+def getDatabaseDetails(config):
     # Getting databse details
     database_details = dict(config.items('db_configurations'))
     print('Database configurations from config file {}'.format(database_details))

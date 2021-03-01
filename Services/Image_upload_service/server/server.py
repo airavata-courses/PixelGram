@@ -9,10 +9,11 @@ from oauth2client.file import Storage
 from apiclient.http import MediaFileUpload, MediaIoBaseDownload
 
 import auth
+from concurrent import futures
 
 import grpc
-import proto.db_pb2 as pb2
-import proto.db_pb2_grpc as pb2_grpc
+import proto.upload_service_pb2 as pb2
+import proto.upload_service_pb2_grpc as pb2_grpc
 from google.protobuf import empty_pb2
 
 # If scope is changed you need to delete previously generated google-drive-credentials.json file
@@ -66,9 +67,9 @@ def getDriveService(connection_details):
         credentials = authInst.getCredentials()
         http = credentials.authorize(httplib2.Http())
         return discovery.build(connection_details['connect_to'], connection_details['drive_version'], http=http)
-    except discovery.Error as error:
+    except Exception as e:
         print('Error in connecing to google drive with provided creds.')
-        print(error)
+        print(e)
         raise Exception('Google Drive connection error')
 
 def uploadFile(drive_service, filename, imageData, mimetype):
@@ -96,33 +97,32 @@ def downloadFile(drive_service, file_id):
 
     
 def start_server(server_details, drive_service):
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=server_details['max_workers']))
-    pb2_grpc.add_DatabaseServiceServicer_to_server(db_service(drive_service), server)
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=int(server_details['max_workers'])))
+    pb2_grpc.add_uploadServiceServicer_to_server(db_service(drive_service), server)
     server.add_insecure_port('{}:{}'.format(server_details['host'], server_details['port']))
     server.start()
     print('Server started at {}:{}'.format(server_details['host'], server_details['port']))
     server.wait_for_termination()
 
 if __name__ == '__main__':
-    drive_service = getDriveService()
-    file_id = uploadFile(drive_service, 'sample.jpeg','sample.jpeg','image/jpeg')
-    downloadFile(drive_service, file_id, 'download.jpeg')
+    # drive_service = getDriveService()
+    # file_id = uploadFile(drive_service, 'sample.jpeg','sample.jpeg','image/jpeg')
+    # downloadFile(drive_service, file_id, 'download.jpeg')
     
     try:
         # Reading config file
         config = configparser.RawConfigParser()
         config.read('config.cfg')
+        print(config)
         
         # Connectiong to google drive and creating drive service object
-        drive_service = getDriveService(config.items('drive'))
+        drive_service = getDriveService(dict(config.items('drive')))
 
         # Getting server details
-        server_details = dict(config.items('server'))
-        print('Database service Server configurations from config file {}'.format(server_details))
+        print('Database service Server configurations from config file {}'.format(dict(config.items('server'))))
 
         # Starting the server
-        start_server(server_details, drive_service)
+        start_server(dict(config.items('server')), drive_service)
     except Exception as error:
         print(error)
         print('Unable to start the server!!!!!')
-    
