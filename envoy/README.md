@@ -18,3 +18,6 @@ We need to forward host port  to the containers port so that any request  is for
 9901 is the port where envoy admin portal is running. You can use this portal to check envoy routes, health checks and a lot more.
 
 8000 is the port where envoy is listening for incoming requests. Our website will make a request to envoy on this port.
+
+# Alternative
+Instead you can run the script build_and_run.sh (only on linux environment) which runs the envoy proxy via docker container.
