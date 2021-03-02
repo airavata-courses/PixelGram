@@ -13,9 +13,18 @@ virtualenv
 
 python modules listed in requirements.txt
 
-Create a virtual environment based on Python 3.8
+postgreSQL database
+
+* Create a virtual environment based on Python 3.8:
+
 You need to have python3 installed on your machine. If this requirement is satisifed, you can install virtualenv by using the the link.
 Once the virtualenv setup is done, please activate the environment using the command below:
+
+* setting up postgreSQL database:
+
+first configure the database on default port 5432.
+and then run the sql query script dummy_data.sql
+Note: change the username and password in the config.cfg respectively with values used while setup of postgreSQL
 
 ```source <venv_folder_name>/bin/activate4```
 
