@@ -60,8 +60,8 @@ service DatabaseService {
     rpc UpdateUserPassword(UserDetails) returns (google.protobuf.Empty);
     rpc CreateImage(ImageUserDetails) returns (ImageDetails);
     rpc GetImageDetails(queryString) returns (ImageDetails); 
-    rpc GetUserPasswordByEmail(queryString) returns (User);
+    rpc GetUserPasswordByEmail(queryString) returns (UserDetails);
     rpc SessionTokenForUser(Session) returns (Session);
     rpc ValidateSessionTokenForUser(Session) returns (google.protobuf.Empty);
-    rpc EndSessionForUser(session) returns (google.protobuf.Empty);
+    rpc EndSessionForUser(Session) returns (google.protobuf.Empty);
 }

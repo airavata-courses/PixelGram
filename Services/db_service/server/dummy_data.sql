@@ -1,7 +1,8 @@
 -- Creating database
-CREATE DATABASE pixelgram;
--- Connecting to pixelgram databse
-\c pixelgram
+-- CREATE DATABASE pixelgram;
+-- -- Connecting to pixelgram databse
+
+-- \c pixelgram
 
 CREATE TABLE IF NOT EXISTS userdetails(
     user_id text NOT NULL,
@@ -35,4 +36,9 @@ CREATE TABLE IF NOT EXISTS shareimagedetails(
     user_id_shared text NOT NULL,
     PRIMARY KEY (user_id, image_id, user_id_shared)
 );
+
+INSERT INTO userdetails VALUES
+    ('aa82a6df839344a8bb03c660562405ba', 'krishna', 'ssannidh@iu.edu', 'admin'),
+    ('9f91fdc86de84776abcfb10154f51f43', 'sannidhi', 'pixelgram16@gmail.com', 'admin');
+
 

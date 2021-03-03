@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+option go_package=".;session";
+
+message sessionRequest {
+    string userId = 1;
+}
+
+message sessionResponse {
+    string userId = 1;
+    string sessionToken = 2;
+    google.protobuf.Timestamp expireTime = 3;
+}
+
+service sessionService {
+    rpc ValidateSession(sessionResponse) returns (google.protobuf.Empty);
+    rpc CreateSession(sessionRequest) returns (sessionResponse); 
+}
