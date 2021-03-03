@@ -48,7 +48,7 @@ class DatabaseServiceStub(object):
         self.GetUserPasswordByEmail = channel.unary_unary(
                 '/DatabaseService/GetUserPasswordByEmail',
                 request_serializer=db__pb2.queryString.SerializeToString,
-                response_deserializer=db__pb2.User.FromString,
+                response_deserializer=db__pb2.UserDetails.FromString,
                 )
         self.SessionTokenForUser = channel.unary_unary(
                 '/DatabaseService/SessionTokenForUser',
@@ -57,6 +57,11 @@ class DatabaseServiceStub(object):
                 )
         self.ValidateSessionTokenForUser = channel.unary_unary(
                 '/DatabaseService/ValidateSessionTokenForUser',
+                request_serializer=db__pb2.Session.SerializeToString,
+                response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+                )
+        self.EndSessionForUser = channel.unary_unary(
+                '/DatabaseService/EndSessionForUser',
                 request_serializer=db__pb2.Session.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 )
@@ -119,6 +124,12 @@ class DatabaseServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def EndSessionForUser(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_DatabaseServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -155,7 +166,7 @@ def add_DatabaseServiceServicer_to_server(servicer, server):
             'GetUserPasswordByEmail': grpc.unary_unary_rpc_method_handler(
                     servicer.GetUserPasswordByEmail,
                     request_deserializer=db__pb2.queryString.FromString,
-                    response_serializer=db__pb2.User.SerializeToString,
+                    response_serializer=db__pb2.UserDetails.SerializeToString,
             ),
             'SessionTokenForUser': grpc.unary_unary_rpc_method_handler(
                     servicer.SessionTokenForUser,
@@ -164,6 +175,11 @@ def add_DatabaseServiceServicer_to_server(servicer, server):
             ),
             'ValidateSessionTokenForUser': grpc.unary_unary_rpc_method_handler(
                     servicer.ValidateSessionTokenForUser,
+                    request_deserializer=db__pb2.Session.FromString,
+                    response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+            ),
+            'EndSessionForUser': grpc.unary_unary_rpc_method_handler(
+                    servicer.EndSessionForUser,
                     request_deserializer=db__pb2.Session.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
@@ -292,7 +308,7 @@ class DatabaseService(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/DatabaseService/GetUserPasswordByEmail',
             db__pb2.queryString.SerializeToString,
-            db__pb2.User.FromString,
+            db__pb2.UserDetails.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -325,6 +341,23 @@ class DatabaseService(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/DatabaseService/ValidateSessionTokenForUser',
+            db__pb2.Session.SerializeToString,
+            google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def EndSessionForUser(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/DatabaseService/EndSessionForUser',
             db__pb2.Session.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options, channel_credentials,

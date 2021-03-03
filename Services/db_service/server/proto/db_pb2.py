@@ -24,7 +24,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'\220\001\001',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x08\x64\x62.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bgoogle/protobuf/empty.proto\"-\n\x0eStatusResponse\x12\x1b\n\x06status\x18\x01 \x01(\x0e\x32\x0b.Statuscode\"\\\n\x07Session\x12\x11\n\tsessionId\x18\x01 \x01(\t\x12\x0e\n\x06userId\x18\x02 \x01(\t\x12.\n\nexpireTime\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"\xb5\x01\n\x10ImageUserDetails\x12\x0e\n\x06userId\x18\x01 \x01(\t\x12\x0f\n\x07imageId\x18\x02 \x01(\t\x12\x17\n\x06\x66ormat\x18\x03 \x01(\x0e\x32\x07.Format\x12,\n\x08\x64\x61teTime\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x10\n\x08latitude\x18\x05 \x01(\x01\x12\x11\n\tlongitude\x18\x06 \x01(\x01\x12\x14\n\x0clocationName\x18\x07 \x01(\t\"\xa1\x01\n\x0cImageDetails\x12\x0f\n\x07imageId\x18\x01 \x01(\t\x12\x17\n\x06\x66ormat\x18\x02 \x01(\x0e\x32\x07.Format\x12,\n\x08\x64\x61teTime\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x10\n\x08latitude\x18\x05 \x01(\x01\x12\x11\n\tlongitude\x18\x06 \x01(\x01\x12\x14\n\x0clocationName\x18\x07 \x01(\t\"P\n\x0bUserDetails\x12\x0e\n\x06userId\x18\x01 \x01(\t\x12\x10\n\x08username\x18\x02 \x01(\t\x12\r\n\x05\x65mail\x18\x03 \x01(\t\x12\x10\n\x08password\x18\x04 \x01(\t\"9\n\x04User\x12\x10\n\x08username\x18\x01 \x01(\t\x12\r\n\x05\x65mail\x18\x02 \x01(\t\x12\x10\n\x08password\x18\x03 \x01(\t\"\x1c\n\x0bqueryString\x12\r\n\x05value\x18\x01 \x01(\t*%\n\x06\x46ormat\x12\x08\n\x04JPEG\x10\x00\x12\x07\n\x03PNG\x10\x01\x12\x08\n\x04WEBP\x10\x02*&\n\nStatuscode\x12\x0b\n\x07SUCCESS\x10\x00\x12\x0b\n\x07\x46\x41ILURE\x10\x01\x32\xe1\x03\n\x0f\x44\x61tabaseService\x12;\n\x12UpdateImageDetails\x12\r.ImageDetails\x1a\x16.google.protobuf.Empty\x12!\n\nCreateUser\x12\x05.User\x1a\x0c.UserDetails\x12\x36\n\x0eupdateUserName\x12\x0c.UserDetails\x1a\x16.google.protobuf.Empty\x12:\n\x12UpdateUserPassword\x12\x0c.UserDetails\x1a\x16.google.protobuf.Empty\x12/\n\x0b\x43reateImage\x12\x11.ImageUserDetails\x1a\r.ImageDetails\x12.\n\x0fGetImageDetails\x12\x0c.queryString\x1a\r.ImageDetails\x12-\n\x16GetUserPasswordByEmail\x12\x0c.queryString\x1a\x05.User\x12)\n\x13SessionTokenForUser\x12\x08.Session\x1a\x08.Session\x12?\n\x1bValidateSessionTokenForUser\x12\x08.Session\x1a\x16.google.protobuf.EmptyB\x03\x90\x01\x01\x62\x06proto3'
+  serialized_pb=b'\n\x08\x64\x62.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bgoogle/protobuf/empty.proto\"\\\n\x07Session\x12\x11\n\tsessionId\x18\x01 \x01(\t\x12\x0e\n\x06userId\x18\x02 \x01(\t\x12.\n\nexpireTime\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"\xb5\x01\n\x10ImageUserDetails\x12\x0e\n\x06userId\x18\x01 \x01(\t\x12\x0f\n\x07imageId\x18\x02 \x01(\t\x12\x17\n\x06\x66ormat\x18\x03 \x01(\x0e\x32\x07.Format\x12,\n\x08\x64\x61teTime\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x10\n\x08latitude\x18\x05 \x01(\x01\x12\x11\n\tlongitude\x18\x06 \x01(\x01\x12\x14\n\x0clocationName\x18\x07 \x01(\t\"\xa1\x01\n\x0cImageDetails\x12\x0f\n\x07imageId\x18\x01 \x01(\t\x12\x17\n\x06\x66ormat\x18\x02 \x01(\x0e\x32\x07.Format\x12,\n\x08\x64\x61teTime\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x10\n\x08latitude\x18\x05 \x01(\x01\x12\x11\n\tlongitude\x18\x06 \x01(\x01\x12\x14\n\x0clocationName\x18\x07 \x01(\t\"P\n\x0bUserDetails\x12\x0e\n\x06userId\x18\x01 \x01(\t\x12\x10\n\x08username\x18\x02 \x01(\t\x12\r\n\x05\x65mail\x18\x03 \x01(\t\x12\x10\n\x08password\x18\x04 \x01(\t\"9\n\x04User\x12\x10\n\x08username\x18\x01 \x01(\t\x12\r\n\x05\x65mail\x18\x02 \x01(\t\x12\x10\n\x08password\x18\x03 \x01(\t\"\x1c\n\x0bqueryString\x12\r\n\x05value\x18\x01 \x01(\t*%\n\x06\x46ormat\x12\x08\n\x04JPEG\x10\x00\x12\x07\n\x03PNG\x10\x01\x12\x08\n\x04WEBP\x10\x02\x32\x9f\x04\n\x0f\x44\x61tabaseService\x12;\n\x12UpdateImageDetails\x12\r.ImageDetails\x1a\x16.google.protobuf.Empty\x12!\n\nCreateUser\x12\x05.User\x1a\x0c.UserDetails\x12\x36\n\x0eupdateUserName\x12\x0c.UserDetails\x1a\x16.google.protobuf.Empty\x12:\n\x12UpdateUserPassword\x12\x0c.UserDetails\x1a\x16.google.protobuf.Empty\x12/\n\x0b\x43reateImage\x12\x11.ImageUserDetails\x1a\r.ImageDetails\x12.\n\x0fGetImageDetails\x12\x0c.queryString\x1a\r.ImageDetails\x12\x34\n\x16GetUserPasswordByEmail\x12\x0c.queryString\x1a\x0c.UserDetails\x12)\n\x13SessionTokenForUser\x12\x08.Session\x1a\x08.Session\x12?\n\x1bValidateSessionTokenForUser\x12\x08.Session\x1a\x16.google.protobuf.Empty\x12\x35\n\x11\x45ndSessionForUser\x12\x08.Session\x1a\x16.google.protobuf.EmptyB\x03\x90\x01\x01\x62\x06proto3'
   ,
   dependencies=[google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,google_dot_protobuf_dot_empty__pb2.DESCRIPTOR,])
 
@@ -53,76 +53,16 @@ _FORMAT = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=734,
-  serialized_end=771,
+  serialized_start=687,
+  serialized_end=724,
 )
 _sym_db.RegisterEnumDescriptor(_FORMAT)
 
 Format = enum_type_wrapper.EnumTypeWrapper(_FORMAT)
-_STATUSCODE = _descriptor.EnumDescriptor(
-  name='Statuscode',
-  full_name='Statuscode',
-  filename=None,
-  file=DESCRIPTOR,
-  create_key=_descriptor._internal_create_key,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='SUCCESS', index=0, number=0,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='FAILURE', index=1, number=1,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=773,
-  serialized_end=811,
-)
-_sym_db.RegisterEnumDescriptor(_STATUSCODE)
-
-Statuscode = enum_type_wrapper.EnumTypeWrapper(_STATUSCODE)
 JPEG = 0
 PNG = 1
 WEBP = 2
-SUCCESS = 0
-FAILURE = 1
 
-
-
-_STATUSRESPONSE = _descriptor.Descriptor(
-  name='StatusResponse',
-  full_name='StatusResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='status', full_name='StatusResponse.status', index=0,
-      number=1, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=74,
-  serialized_end=119,
-)
 
 
 _SESSION = _descriptor.Descriptor(
@@ -166,8 +106,8 @@ _SESSION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=121,
-  serialized_end=213,
+  serialized_start=74,
+  serialized_end=166,
 )
 
 
@@ -240,8 +180,8 @@ _IMAGEUSERDETAILS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=216,
-  serialized_end=397,
+  serialized_start=169,
+  serialized_end=350,
 )
 
 
@@ -307,8 +247,8 @@ _IMAGEDETAILS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=400,
-  serialized_end=561,
+  serialized_start=353,
+  serialized_end=514,
 )
 
 
@@ -360,8 +300,8 @@ _USERDETAILS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=563,
-  serialized_end=643,
+  serialized_start=516,
+  serialized_end=596,
 )
 
 
@@ -406,8 +346,8 @@ _USER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=645,
-  serialized_end=702,
+  serialized_start=598,
+  serialized_end=655,
 )
 
 
@@ -438,17 +378,15 @@ _QUERYSTRING = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=704,
-  serialized_end=732,
+  serialized_start=657,
+  serialized_end=685,
 )
 
-_STATUSRESPONSE.fields_by_name['status'].enum_type = _STATUSCODE
 _SESSION.fields_by_name['expireTime'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _IMAGEUSERDETAILS.fields_by_name['format'].enum_type = _FORMAT
 _IMAGEUSERDETAILS.fields_by_name['dateTime'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _IMAGEDETAILS.fields_by_name['format'].enum_type = _FORMAT
 _IMAGEDETAILS.fields_by_name['dateTime'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
-DESCRIPTOR.message_types_by_name['StatusResponse'] = _STATUSRESPONSE
 DESCRIPTOR.message_types_by_name['Session'] = _SESSION
 DESCRIPTOR.message_types_by_name['ImageUserDetails'] = _IMAGEUSERDETAILS
 DESCRIPTOR.message_types_by_name['ImageDetails'] = _IMAGEDETAILS
@@ -456,15 +394,7 @@ DESCRIPTOR.message_types_by_name['UserDetails'] = _USERDETAILS
 DESCRIPTOR.message_types_by_name['User'] = _USER
 DESCRIPTOR.message_types_by_name['queryString'] = _QUERYSTRING
 DESCRIPTOR.enum_types_by_name['Format'] = _FORMAT
-DESCRIPTOR.enum_types_by_name['Statuscode'] = _STATUSCODE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
-
-StatusResponse = _reflection.GeneratedProtocolMessageType('StatusResponse', (_message.Message,), {
-  'DESCRIPTOR' : _STATUSRESPONSE,
-  '__module__' : 'db_pb2'
-  # @@protoc_insertion_point(class_scope:StatusResponse)
-  })
-_sym_db.RegisterMessage(StatusResponse)
 
 Session = _reflection.GeneratedProtocolMessageType('Session', (_message.Message,), {
   'DESCRIPTOR' : _SESSION,
@@ -518,8 +448,8 @@ _DATABASESERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=814,
-  serialized_end=1295,
+  serialized_start=727,
+  serialized_end=1270,
   methods=[
   _descriptor.MethodDescriptor(
     name='UpdateImageDetails',
@@ -587,7 +517,7 @@ _DATABASESERVICE = _descriptor.ServiceDescriptor(
     index=6,
     containing_service=None,
     input_type=_QUERYSTRING,
-    output_type=_USER,
+    output_type=_USERDETAILS,
     serialized_options=None,
     create_key=_descriptor._internal_create_key,
   ),
@@ -605,6 +535,16 @@ _DATABASESERVICE = _descriptor.ServiceDescriptor(
     name='ValidateSessionTokenForUser',
     full_name='DatabaseService.ValidateSessionTokenForUser',
     index=8,
+    containing_service=None,
+    input_type=_SESSION,
+    output_type=google_dot_protobuf_dot_empty__pb2._EMPTY,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='EndSessionForUser',
+    full_name='DatabaseService.EndSessionForUser',
+    index=9,
     containing_service=None,
     input_type=_SESSION,
     output_type=google_dot_protobuf_dot_empty__pb2._EMPTY,

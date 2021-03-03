@@ -33,9 +33,10 @@ def print_psycopg2_exception(err):
     print ("pgcode:", err.pgcode, "\n")
 
 class db_connection:
-    def __init__(self, connection_details):
+    def __init__(self, connection_details, readonly):
         self.connection_details = connection_details
-        self.connection = self.getConnection()
+        self.readonly = readonly
+        self.connection = None
     
     def getConnection(self):
         """ Connect to the PostgreSQL database server """
@@ -43,6 +44,8 @@ class db_connection:
             try:
                 print("Connecting to the postgreSQL database with details {}".format(self.connection_details))
                 self.connection = pgsql.connect(**self.connection_details)
+                self.connection.set_session(readonly= self.readonly, autocommit=True)
+                print("Happy")
             except pgsql.OperationalError as error:
                 print_psycopg2_exception(error)
                 raise RuntimeError('Failed to connect with database')
@@ -53,7 +56,22 @@ class db_data_fetcher:
     def __init__(self):
         pass
     
-    def createUser(self, request, context, connection):
+    def createUser(self, request, context, connection_details):
+
+        db_connect = None
+
+        try:
+            db_connect = db_connection(connection_details, False)
+        except Exception as error:
+            return throw_exception(
+                grpc_context = context,
+                code = grpc.StatusCode.ABORTED,
+                details = 'Error while connecting to database'
+            )
+
+        connection = db_connect.getConnection()
+
+
         user_id = None
         responseDict = {
             'userId': user_id,
@@ -86,39 +104,80 @@ class db_data_fetcher:
                 details = 'Error occured while creating new user.'
             )
         finally:
+            connection.close()
             context.set_code(grpc.StatusCode.OK)
             return pb2.UserDetails(**responseDict)
 
-    def getUserPasswordByEmail(self, request, context, connection):
-        user_id = None
-        password = None
+    def getUserPasswordByEmail(self, request, context, connection_details):
+
+        print("debug")
+
+        db_connect = None
+
+        try:
+            db_connect = db_connection(connection_details, False)
+        except Exception as error:
+            print("connection")
+            return throw_exception(
+                grpc_context = context,
+                code = grpc.StatusCode.ABORTED,
+                details = 'Error while connecting to database'
+            )
+        
+        connection = db_connect.getConnection()
+        
         responseDict = {
-            'userId': user_id,
-            'password': password,
-            'email': request.email
+            'userId': None,
+            'username': None,
+            'email': request.value,
+            'password': None
         }
 
-        retrive_query = '''SELECT user_id, password FROM %s WHERE email = %s;'''
+        retrive_query = '''SELECT user_id, user_name, password FROM {} WHERE email = '{}';'''.format(USER_TABLE_NAME, request.value)
+        print(retrive_query)
 
         try:
             with connection.cursor() as curs:
-                curs.execute(retrive_query, (USER_TABLE_NAME, request.email))
+                curs.execute(retrive_query)
                 result = curs.fetchall()
+                print(len(result))
+                print(result)
+                print(result[0])
+                print(result[0][0])
+                print(result[0][1])
                 if len(result) == 0:
                     return throw_exception(
                         grpc_context = context,
                         code = grpc.StatusCode.NOT_FOUND,
                         details = 'No related records found in database.'
                     )
-                user_id = result[0][0]
-                password = result[0][1]
+                responseDict['userId'] = result[0][0]
+                responseDict['username'] = result[0][1]
+                responseDict['password'] = result[0][2]
         except pgsql.Error as error:
+            print('ERROR')
             print_psycopg2_exception(error)
         finally:
+            print('Finally')
+            connection.close()
             context.set_code(grpc.StatusCode.OK)
+            print(responseDict)
             return pb2.UserDetails(**responseDict)
 
     def updateUserPassword(self, request, context, connection):
+
+        db_connect = None
+
+        try:
+            db_connect = db_connection(connection_details, False)
+        except Exception as error:
+            return throw_exception(
+                grpc_context = context,
+                code = grpc.StatusCode.ABORTED,
+                details = 'Error while connecting to database'
+            )
+        
+        connection = db_connect.getConnection()
 
         update_query = '''UPDATE %s SET password = %s WHERE user_id = %s AND email = %s;'''
 
@@ -131,6 +190,7 @@ class db_data_fetcher:
         except pgsql.Error as error:
             print_psycopg2_exception(error)
         finally:
+            connection.close()
             return throw_exception(
                 grpc_context = context,
                 code = grpc.StatusCode.INTERNAL,
@@ -138,6 +198,19 @@ class db_data_fetcher:
             )
     
     def updateUserName(self, request, context, connection):
+
+        db_connect = None
+
+        try:
+            db_connect = db_connection(connection_details, False)
+        except Exception as error:
+            return throw_exception(
+                grpc_context = context,
+                code = grpc.StatusCode.ABORTED,
+                details = 'Error while connecting to database'
+            )
+        
+        connection = db_connect.getConnection()
         
         update_query = '''UPDATE %s SET user_name = %s WHERE user_id = %s AND email = %s;'''
 
@@ -150,6 +223,7 @@ class db_data_fetcher:
         except pgsql.Error as error:
             print_psycopg2_exception(error)
         finally:
+            connection.close()
             return throw_exception(
                 grpc_context = context,
                 code = grpc.StatusCode.INTERNAL,
@@ -157,6 +231,19 @@ class db_data_fetcher:
             )
 
     def createSessionTokenForUser(self, request, context, connection):
+
+        db_connect = None
+
+        try:
+            db_connect = db_connection(connection_details, False)
+        except Exception as error:
+            return throw_exception(
+                grpc_context = context,
+                code = grpc.StatusCode.ABORTED,
+                details = 'Error while connecting to database'
+            )
+        
+        connection = db_connect.getConnection()
 
         session_token = None
         # Getting current time and date in UTC zone
@@ -182,10 +269,24 @@ class db_data_fetcher:
                 details = 'Unable to create the session toke for the user. Try again'
             )
         finally:
+            connection.close()
             context.set_code(grpc.StatusCode.OK)
             return pb2.Session(**responseDict)
     
     def endSessionforUser(self, request, context, connection):
+
+        db_connect = None
+
+        try:
+            db_connect = db_connection(connection_details, False)
+        except Exception as error:
+            return throw_exception(
+                grpc_context = context,
+                code = grpc.StatusCode.ABORTED,
+                details = 'Error while connecting to database'
+            )
+        
+        connection = db_connect.getConnection()
 
         # Current time 
         timestamp = datetime.now(timezone.utc)
@@ -202,9 +303,23 @@ class db_data_fetcher:
             context.set_code(grpc.StatusCode.INTERNAL)
             context.set_details('User session has not been cleared. Please try again')
         finally:
+            connection.close()
             return empty_pb2.Empty()
     
     def validateSessionTokenForUser(self, request, context, connection):
+
+        db_connect = None
+
+        try:
+            db_connect = db_connection(connection_details, True)
+        except Exception as error:
+            return throw_exception(
+                grpc_context = context,
+                code = grpc.StatusCode.ABORTED,
+                details = 'Error while connecting to database'
+            )
+        
+        connection = db_connect.getConnection()
 
         timestamp = datetime.now(timezone.utc)
 
@@ -222,6 +337,7 @@ class db_data_fetcher:
         except pgsql.Error as error:
             print_psycopg2_exception(error)
         finally:
+            connection.close()
             return throw_exception(
                 grpc_context = context,
                 code = grpc.StatusCode.UNAUTHENTICATED,
@@ -229,6 +345,19 @@ class db_data_fetcher:
             )
 
     def getImageDetailsByImageId(self, request, context, connection):
+
+        db_connect = None
+
+        try:
+            db_connect = db_connection(connection_details, True)
+        except Exception as error:
+            return throw_exception(
+                grpc_context = context,
+                code = grpc.StatusCode.ABORTED,
+                details = 'Error while connecting to database'
+            )
+        
+        connection = db_connect.getConnection()
 
         # Still timestamo and format need to be implement.
 
@@ -264,6 +393,7 @@ class db_data_fetcher:
             context.set_code(grpc.StatusCode.INTERNAL)
             context.set_details('Unable to fetch details from postgres.')
         finally:
+            connection.close()
             return pb2.ImageDetails(**responseDict)
                 
         
