@@ -26,8 +26,8 @@ render(){
   return(
     <div className="ui container">
       <h1>Landing Page</h1>
-
-    <p>Welcome Home {this.getQueryVariable("name")}</p>
+    <h2>  {this.props.successMessage} </h2> 
+    <p>Welcome {this.props.username}</p>
 
         <Link to="/" className="button">Logout</Link>
 

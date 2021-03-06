@@ -6,9 +6,7 @@ class LearnMore extends React.Component{
  <div className="LearnMore">
 <noscript>You need to enable JavaScript to run this app.</noscript>
 <div id="root"></div>
-
 <header className="masthead text-center text-white">
-   
 </header>
 
 <body>

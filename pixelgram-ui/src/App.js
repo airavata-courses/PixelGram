@@ -7,6 +7,7 @@ import RegistrationPage from "./components/pages/RegistrationPage";
 import LearnMore from "./components/pages/LearnMore.js"
 import ForgotPasswordPage from "./components/pages/ForgotPasswordPage.js"
 import SharePage from "./components/pages/SharePage.js"
+import UploadImagePage from "./components/pages/UploadImagePage.js"
 
 
 const App = () => (
@@ -19,6 +20,7 @@ const App = () => (
   <Route path="/learnMore" exact component = {LearnMore}/>
   <Route path="/ForgotPassword" exact component = {ForgotPasswordPage}/>
   <Route path="/Share" exact component = {SharePage}/>
+  <Route path="/UploadImage" exact component = {UploadImagePage}/>
 </section>
 );
 
