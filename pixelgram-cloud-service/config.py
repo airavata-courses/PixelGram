@@ -1,0 +1,5 @@
+SCOPES = 'https://www.googleapis.com/auth/drive'
+CLIENT_SECRET_FILE_PATH = 'client_secret.json'
+APP_NAME = 'Pixel Gram'
+CONNECT_TO = 'drive'
+DRIVE_VERSION = 'v3'
