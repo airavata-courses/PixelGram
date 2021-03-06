@@ -1,0 +1,23 @@
+{
+  "name": "PixelGram-react",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.21.1",
+    "react": "^16.3.2",
+    "react-dom": "^16.14.0",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
+    "react-scripts": "1.1.4",
+    "react-toggle": "^4.0.2",
+    "semantic-ui-css": "^2.3.1",
+    "semantic-ui-react": "^0.80.0",
+    "yarn": "^1.6.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
