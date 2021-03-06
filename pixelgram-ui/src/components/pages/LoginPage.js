@@ -7,7 +7,6 @@ import './PixelGram.png';
 
 
 class LoginPage extends React.Component{
-
 //This gets the data and sends it as a post request
 submit = data => {
     //alert("username: " + data.username);
@@ -17,14 +16,15 @@ submit = data => {
       //var username = response.data.username;
       //This part is responsible for the window navigation after login.
       response.data.message ==="User verified"
-      //?  (document.getElementById('status').innerHTML = "Login Successfull! You are being redirected to landing page in 5 seconds.",setTimeout(() => {window.location.replace('/landing?username='+ username)},5000))
-      ?  (document.getElementById('status').innerHTML = "Login Successfull! You are being redirected to landing page in 5 seconds.",setTimeout(() => {window.location.replace('/landing')},5000))
+      ?  (document.getElementById('status').innerHTML = "Login Successfull! You are being redirected to landing page in 5 seconds.",setTimeout(() => {window.location.replace('/landing?username='+ data.username)},5000))
+      //?  (document.getElementById('status').innerHTML = "Login Successfull! You are being redirected to landing page in 5 seconds.",setTimeout(() => {window.location.replace('/landing')},5000))
       : document.getElementById('status').innerHTML = response.data.message
     })
     .catch(function(error){
       document.getElementById('status').innerHTML = error.message
     });
   };
+
 
 //This renders the HTML code
 render(){

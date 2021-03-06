@@ -8,33 +8,22 @@ class LearnMore extends React.Component{
 <div id="root"></div>
 
 <header className="masthead text-center text-white">
-<div className="masthead-content">
- <div className="container">
-   <h1 className="masthead-subheading mb-0">PixelGram</h1>
-   <h3 className="mb-0">A Cloud-based Photo Sharing Application.</h3> 
-   <h3 className="mb-0">Upload, Download, Share and Organize your photos.</h3> 
- </div>
-</div>
+   
 </header>
 
-<section>
-<div className="container">
- <div className="row align-items-center">
- <div className="p-5">
-       <h3 className="display-4">Upload Your Photos to Cloud.</h3>
+<body>
+<h1 className="masthead-subheading mb-0">PixelGram</h1>
+   <h3 className="mb-1">A Cloud-based Photo Sharing Application.</h3> 
+   <h3 className="mb-1">Upload, Download, Share and Organize your photos.</h3>
+  <h3>***Upload Your Photos to Cloud***</h3>
        <p>Upload your precious memories on cloud in a click. Panorama provides features for single photo upload and bulk photos upload.</p>
-</div>
-<div className="p-5">
-       <h3 className="display-4">Download your photos from Cloud.</h3>
-       <p>Download photos from cloud in a click. You can download the photos on your device and google drives.   </p>
-     </div>
- </div>
- <div className="p-5">
-       <h3 className="display-4">Share your Photos with Friends and Family</h3>
-       <p>PixelGram is a secure photo sharing application. Share your moments with your loved phones. PixelGram gives an option to grant access via email ids.</p>
-     </div>
-</div>
-</section>
+
+       <h3 className="display-4">***Download your photos from Cloud***</h3>
+       <p>Download photos from cloud in a click. You can download the photos on your device local storage.</p>
+
+       <h3 className="display-4">***Share your Photos with Friends and Family***</h3>
+       <p>PixelGram is a secure photo sharing application. PixelGram gives an option to grant access to images to other pixelGram users.</p>
+</body>
 
 <footer className="py-5 bg-black">
 <div className="container">
