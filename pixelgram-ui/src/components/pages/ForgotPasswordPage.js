@@ -1,9 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { Button } from "semantic-ui-react";
-import propTypes from "prop-types";
-import Toggle from "react-toggle";
 import "react-toggle/style.css";
 
 class ForgotPasswordPage extends React.Component {
