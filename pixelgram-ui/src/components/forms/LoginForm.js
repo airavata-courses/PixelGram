@@ -37,7 +37,7 @@ import propTypes from 'prop-types';
             <input type="password" placeholder="Enter Password" id="password" name="password" value={data.password} onChange = {this.onChange} required/>
 
             <br/><br/>
-            <button type="submit" primary>Login</button>
+            <button style = {{color:'red'}} type="submit">Login</button>
         </form>
      );
     }

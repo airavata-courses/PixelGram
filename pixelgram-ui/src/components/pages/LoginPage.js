@@ -2,7 +2,6 @@ import React from 'react';
 import {Link} from "react-router-dom";
 import LoginForm from "../forms/LoginForm";
 import axios from 'axios';
-import './PixelGram.png';
 import LandingPage from "./LandingPage"
 
 class LoginPage extends React.Component{
@@ -21,7 +20,6 @@ constructor(props) {
 submit = parentdata => {
   this.setState({username:parentdata.username});
     //This calls the URL to submit the post request.
- var localthis=this;
     axios.post('http://localhost:5003/login',{username:parentdata.username,password:parentdata.password})
     .then(response =>{
       //This part is responsible for the window navigation after login.

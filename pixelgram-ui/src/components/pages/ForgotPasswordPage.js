@@ -26,6 +26,7 @@ class ForgotPasswordPage extends React.Component {
           })
         .then(function (response) {
             //This is responsible for the page navigation.
+            // eslint-disable-next-line
             (document.getElementById("status").innerHTML ="Update Password Successfull! You are being redirected to login in 3 seconds."),setTimeout(() => {window.location.replace("/login");}, 3000)
           })
           .catch(function (error) {

@@ -1,7 +1,5 @@
 import React from 'react';
 import propTypes from 'prop-types';
-import {Button } from 'semantic-ui-react';
-import Toggle from 'react-toggle';
 import "react-toggle/style.css"
 
 

@@ -2,8 +2,6 @@ import React from 'react';
 import {Link} from "react-router-dom";
 import RegistrationForm from "../forms/RegistrationForm";
 import axios from 'axios';
-import {Button } from 'semantic-ui-react';
-
 
 class RegistrationPage extends React.Component{
 
@@ -13,8 +11,8 @@ submit = data => {
     username:data.username,
     password:data.password,
   })
-  .then(function(response){
-    //This is responsible for the page navigation.
+  .then(function(response){ //This is responsible for the page navigation.
+    // eslint-disable-next-line
     response.data.message ==="User created successfully."
     ?  (document.getElementById('status').innerHTML = "Registration Successfull! You are being redirected to login in 5 seconds.",setTimeout(() => {window.location.replace('/login')},5000))
     : document.getElementById('status').innerHTML = response.data.message

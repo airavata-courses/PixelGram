@@ -4,21 +4,8 @@ import Card from 'react-bootstrap/Card';
 import {Dropdown} from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
-import axios from 'axios';
-import {Router} from "react-router-dom"
 import UploadImagePage from './UploadImagePage'
 
 const drawerWidth = 240;
@@ -39,10 +26,6 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerPaper: {
     width: drawerWidth,
-  },
-  cardGrid: {
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(8),
   },
   // necessary for content to be below app bar
   toolbar: theme.mixins.toolbar,
@@ -87,53 +70,28 @@ export default class home extends Component {
     imageids :[],
     imageid : null,
     id: this.props.username
-
-
     }
   }
-componentDidMount(){
-  //axios.get(`/${id}`)
-  //.then(res => {
-    //const persons = res.data;
-   // this.setState({images});
-  //})
-  //axios.post("http://localhost:5003/userdetails", { username:this.props.user })
-    //  .then(function (response) {
-      //  userid = response.data.userid;
-        //console.log(userid)
-  //axios.get(`http://localhost:5004/gdrive/upload/userid`)
-//.then(response => {
-//this.imageids = response.data
-//})
-//.catch(function(error){
- // console.log(error.message)
-//}); })
-//.catch(function(error){
-  //console.log(error.message)
-//});
 
-}
-//handleshare 
-//handledownload 
 
- //abc = this.imageids.length
-
-  render() {
-  return (
-          
- <div>  
+render() {
+  return (        
+<div>  
 <div style={divStyle}>
-  <h3>Welcome {this.props.username}</h3>
+
+<h3>Welcome {this.props.username}</h3>
 <h3> My Photos </h3>
+<div>
 <UploadImagePage user={this.props.username}/>
-<Dropdown>
+</div>
+ <Dropdown>
         <Dropdown.Toggle> Menu</Dropdown.Toggle>
         <Dropdown.Menu>
             <Dropdown.Item >profile</Dropdown.Item>
             <Dropdown.Item><Link to = "/login"> logout </Link></Dropdown.Item>
         </Dropdown.Menu>
-    </Dropdown>
-    </div>
+  </Dropdown>
+</div>
 <main className={useStyles.content}>
         <div className={useStyles.toolbar} />
             <Container className={useStyles.cardGrid} maxWidth="md">
@@ -155,7 +113,7 @@ componentDidMount(){
             </Container>
             </main>
         </div>
-        )}}
+)}}
     
     
     

@@ -1,6 +1,5 @@
 import React from 'react';
 import {Link} from "react-router-dom";
-import {Button} from 'semantic-ui-react';
 
 const HomePage = () => (
 <div className="ui container">
