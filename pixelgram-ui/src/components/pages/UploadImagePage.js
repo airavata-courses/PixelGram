@@ -21,24 +21,37 @@ class UploadImagePage extends Component {
       const formData = new FormData();
       // Update the formData object
       formData.append(
-        "myFile",
+        "images",
         this.state.selectedFile,
         this.state.selectedFile.name
       );
-    
+        //console.log(JSON.Stringify(formData));
       // Details of the uploaded file
       console.log(this.state.selectedFile);
-    
       // Request made to the backend api
       // Send formData object
-      axios.post("api/uploadfile", formData);
+      var userid;
+      axios.post("http://localhost:5003/userdetails", { username:this.props.user })
+      .then(function (response) {
+        userid = response.data.userid;
+        console.log(userid)
+      axios.post(`http://localhost:5004/gdrive/upload/userid`, formData)
+      .then(response =>{
+      console.log(response.data.success[0].id)
+      })
+      .catch(function(error){
+      console.log(error.message)
+    });
+  })
+  .catch(function(error){
+    console.log(error.message)
+  });
     };
     
     // File content to be displayed after
     // file upload is complete
     fileData = () => {
       if (this.state.selectedFile) {
-         
         return (
           <div>
             <h2>File Details:</h2>
@@ -61,9 +74,7 @@ class UploadImagePage extends Component {
             <div>
                 <input type="file" onChange={this.onFileChange} />
                 <button onClick={this.onFileUpload}>Upload!</button>
-            </div>
-          {this.fileData()}
-        </div>
+            </div>{this.fileData()} </div>
       );}}
  
   export default UploadImagePage;

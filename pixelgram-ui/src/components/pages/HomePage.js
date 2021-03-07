@@ -9,7 +9,9 @@ const HomePage = () => (
   <Link to='/UploadImage' className="button"> Upload </Link><br/>
   <Link to='/login' className="button"> Login </Link><br/>
   <Link to='/ForgotPassword'>Forgot Password ?</Link><br/>
-  <Link to='/registration' className ="button"> Registration</Link>
+  <Link to='/registration' className ="button"> Registration</Link>   
+  
+
 </div>
 );
 

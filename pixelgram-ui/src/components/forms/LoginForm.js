@@ -1,6 +1,5 @@
 import React from 'react';
 import propTypes from 'prop-types';
-import {Button} from 'semantic-ui-react';
 
  class LoginForm extends React.Component {
    state = {
@@ -38,7 +37,7 @@ import {Button} from 'semantic-ui-react';
             <input type="password" placeholder="Enter Password" id="password" name="password" value={data.password} onChange = {this.onChange} required/>
 
             <br/><br/>
-            <Button type="submit" primary>Login</Button>
+            <button type="submit" primary>Login</button>
         </form>
      );
     }

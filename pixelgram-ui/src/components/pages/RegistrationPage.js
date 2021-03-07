@@ -4,6 +4,7 @@ import RegistrationForm from "../forms/RegistrationForm";
 import axios from 'axios';
 import {Button } from 'semantic-ui-react';
 
+
 class RegistrationPage extends React.Component{
 
 //Gets the data and sumbits it for a post request
@@ -14,7 +15,7 @@ submit = data => {
   })
   .then(function(response){
     //This is responsible for the page navigation.
-    response.data.message==="User created successfully."
+    response.data.message ==="User created successfully."
     ?  (document.getElementById('status').innerHTML = "Registration Successfull! You are being redirected to login in 5 seconds.",setTimeout(() => {window.location.replace('/login')},5000))
     : document.getElementById('status').innerHTML = response.data.message
   })

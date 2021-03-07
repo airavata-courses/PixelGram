@@ -8,6 +8,7 @@ import LearnMore from "./components/pages/LearnMore.js"
 import ForgotPasswordPage from "./components/pages/ForgotPasswordPage.js"
 import SharePage from "./components/pages/SharePage.js"
 import UploadImagePage from "./components/pages/UploadImagePage.js"
+import {Router} from "react-router-dom"
 
 
 const App = () => (

@@ -2,7 +2,6 @@ import React from 'react';
 import {Link} from "react-router-dom";
 import LoginForm from "../forms/LoginForm";
 import axios from 'axios';
-import {Button } from 'semantic-ui-react';
 import './PixelGram.png';
 import LandingPage from "./LandingPage"
 
