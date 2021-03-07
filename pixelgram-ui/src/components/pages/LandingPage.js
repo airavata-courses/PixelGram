@@ -55,11 +55,6 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(6),
   },
 }));
-const divStyle = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-};
 
 
 export default class home extends Component {
@@ -77,21 +72,21 @@ export default class home extends Component {
 render() {
   return (        
 <div>  
-<div style={divStyle}>
+<div>
 
 <h3>Welcome {this.props.username}</h3>
-<h3> My Photos </h3>
 <div>
 <UploadImagePage user={this.props.username}/>
 </div>
  <Dropdown>
-        <Dropdown.Toggle> Menu</Dropdown.Toggle>
+        <Dropdown.Toggle style = {{color:'red'}} > Menu</Dropdown.Toggle>
         <Dropdown.Menu>
-            <Dropdown.Item >profile</Dropdown.Item>
-            <Dropdown.Item><Link to = "/login"> logout </Link></Dropdown.Item>
+            <Dropdown.Item className="button" >profile</Dropdown.Item>
+            <Dropdown.Item><Link  className="button" to = "/"> logout </Link></Dropdown.Item>
         </Dropdown.Menu>
   </Dropdown>
 </div>
+<h3> My Photos </h3>
 <main className={useStyles.content}>
         <div className={useStyles.toolbar} />
             <Container className={useStyles.cardGrid} maxWidth="md">

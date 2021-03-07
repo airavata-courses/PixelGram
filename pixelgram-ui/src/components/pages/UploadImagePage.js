@@ -4,77 +4,72 @@ import React,{Component} from 'react';
  
 class UploadImagePage extends Component {
   
-    state = {
-      // Initially, no file is selected
-      selectedFile: null
-    };
+    state = { selectedFile: null };
     
     // On file select (from the pop up)
-    onFileChange = event => {
-      // Update the state
-      this.setState({ selectedFile: event.target.files[0] });
-    };
+    onFileChange = event => { this.setState({ selectedFile: event.target.files }) }
     
     // On file upload (click the upload button)
     onFileUpload = () => {
       // Create an object of formData
       const formData = new FormData();
       // Update the formData object
-      formData.append(
-        "images",
-        this.state.selectedFile,
-        this.state.selectedFile.name
-      );
-        //console.log(JSON.Stringify(formData));
-      // Details of the uploaded file
-      console.log(this.state.selectedFile);
-      // Request made to the backend api
-      // Send formData object
+      for(var x = 0; x<this.state.selectedFile.length; x++)
+      {
+        formData.append('images', this.state.selectedFile[x])
+        console.log(this.state.selectedFile); // Details of the uploaded file
+      }
+      // Request made to the backend api- Send formData object
       var userid;
       axios.post("http://localhost:5003/userdetails", { username:this.props.user })
       .then(function (response) {
         userid = response.data.userid;
-        console.log(userid)
+        console.log("user id is" + userid)
       axios.post(`http://localhost:5004/gdrive/upload/userid`, formData)
       .then(response =>{
-      console.log(response.data.success[0].id)
+          for(var x = 0; x<response.data.success.length; x++)
+            console.log(response.data.success[x].id)
       })
       .catch(function(error){
-      console.log(error.message)
-    });
-  })
-  .catch(function(error){
-    console.log(error.message)
-  });
-    };
+        console.log(error.message)
+      });
+      })
+      .catch(function(error){
+        console.log(error.message)
+      });
+      };
     
-    // File content to be displayed after
-    // file upload is complete
+    // File content to be displayed after file upload is complete
     fileData = () => {
-      if (this.state.selectedFile) {
+      if (this.state.selectedFile) 
+      {
+        const getFileContent =  selectedfiles => {
+    let content = [];
+    for(var x = 0; x<this.state.selectedFile.length; x++)
+    {
+      const item = selectedfiles[x];
+      content.push(<p>Selected File {x}: File Name: {item.name} File Type: {item.type}</p>);
+    }
+    return content;
+    };
+    return <ul>{getFileContent(this.state.selectedFile)}</ul>;
+}
+else {
         return (
-          <div>
-            <h2>File Details:</h2>
-<p>File Name: {this.state.selectedFile.name}</p>
-<p>File Type: {this.state.selectedFile.type}</p>             
-<p>Last Modified:{" "} {this.state.selectedFile.lastModifiedDate.toDateString()}</p>
-          </div>
-        );
-      } else {
-        return (
-          <div><br /><h4>Choose before Pressing the Upload button</h4></div>
+          <div><br /><h4>Choose images before Pressing the Upload button</h4></div>
         );
       }
     };
+
     
     render() {
       return (
         <div>
             <h3>Upload your Image here !!</h3>
-            <div>
-                <input type="file" onChange={this.onFileChange} />
-                <button onClick={this.onFileUpload}>Upload!</button>
-            </div>{this.fileData()} </div>
+            <input type="file" multiple onChange={this.onFileChange} />
+                <button style = {{color:'black'}} onClick={this.onFileUpload}>Upload!</button>
+            {this.fileData()} 
+        </div>
       );}}
  
   export default UploadImagePage;
