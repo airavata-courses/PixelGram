@@ -56,7 +56,7 @@ class UploadImagePage extends Component {
 }
 else {
         return (
-          <div><br /><h4>Choose images before Pressing the Upload button</h4></div>
+          <div><br /> <p style = {{color:'yellow'}} >Choose images before Pressing the Upload button</p></div>
         );
       }
     };

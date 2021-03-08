@@ -6,11 +6,11 @@ import { Link } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
+import axios from 'axios';
 import UploadImagePage from './UploadImagePage'
 
 const drawerWidth = 240;
-const cards = ["https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Google_Images_2015_logo.svg/1200px-Google_Images_2015_logo.svg.png","https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Google_Images_2015_logo.svg/1200px-Google_Images_2015_logo.svg.png","https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Google_Images_2015_logo.svg/1200px-Google_Images_2015_logo.svg.png"];
-   
+const cards = ["https://media3.s-nbcnews.com/j/newscms/2019_41/3047866/191010-japan-stalker-mc-1121_06b4c20bbf96a51dc8663f334404a899.fit-760w.JPG"];
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -55,38 +55,54 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(6),
   },
 }));
-
+const imageids=["1OUYzlG-gOW_FQDa4n4_pTUZOLYqzi2TN","1OUYzlG-gOW_FQDa4n4_pTUZOLYqzi2TN","1OUYzlG-gOW_FQDa4n4_pTUZOLYqzi2TN"]
 
 export default class home extends Component {
   constructor(props) {
     super(props);
     this.state = {
     images : [],
-    imageids :[],
     imageid : null,
-    id: this.props.username
-    }
+    id: this.props.username,
+    image : '',
+    newImage :''}
   }
 
+componentDidMount(){
+  imageids.map((id)=>{
+  axios.get(`http://localhost:5004/gdrive/view/${id}`,{responseType:'blob'})
+  .then(response =>{
+    const data = response;
+    console.log(data.data)
+    this.setState({
+	    images:[...this.state.images, URL.createObjectURL(data.data)]
+    });
+  });
+  })
+}
 
 render() {
   return (        
 <div>  
-<div>
-
-<h3>Welcome {this.props.username}</h3>
-<div>
-<UploadImagePage user={this.props.username}/>
-</div>
- <Dropdown>
-        <Dropdown.Toggle style = {{color:'red'}} > Menu</Dropdown.Toggle>
-        <Dropdown.Menu>
-            <Dropdown.Item className="button" >profile</Dropdown.Item>
-            <Dropdown.Item><Link  className="button" to = "/"> logout </Link></Dropdown.Item>
-        </Dropdown.Menu>
-  </Dropdown>
-</div>
-<h3> My Photos </h3>
+  <div>
+    <h3>Welcome {this.props.username}</h3>
+  <div>
+    <UploadImagePage user={this.props.username}/>
+    </div>
+    <Dropdown>
+            <Dropdown.Toggle style = {{color:'red'}} > Menu</Dropdown.Toggle>
+            <Dropdown.Menu>
+                <Dropdown.Item className="button" >profile</Dropdown.Item>
+                <Dropdown.Item><Link  className="button" to = "/"> logout </Link></Dropdown.Item>
+            </Dropdown.Menu>
+      </Dropdown>
+  </div>
+  <h3> My Photos </h3>
+  {
+    this.state.images.map((item) => {
+    return <img src={item} height="120" width="120" alt='unable to load' ></img>;
+    })
+  } 
 <main className={useStyles.content}>
         <div className={useStyles.toolbar} />
             <Container className={useStyles.cardGrid} maxWidth="md">
