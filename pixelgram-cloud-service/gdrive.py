@@ -3,8 +3,9 @@ import os
 import tempfile
 
 from flask import jsonify, send_file
+import requests
 
-from config import SCOPES, CLIENT_SECRET_FILE_PATH, APP_NAME, CONNECT_TO, DRIVE_VERSION
+from config import SCOPES, CLIENT_SECRET_FILE_PATH, APP_NAME, CONNECT_TO, DRIVE_VERSION, IMAGE_SERVICE_URL
 
 from apiclient.http import MediaIoBaseDownload, MediaIoBaseUpload
 import googleapiclient.discovery
@@ -25,6 +26,10 @@ MIMETPES = dict(**{
     'png': 'image/png',
     'jpg': 'image/jpeg',
     'jpeg': 'image/jpeg'
+})
+
+HEADERS = dict(**{
+    'Content-type': 'application/json'
 })
 
 def drive_auth_creds():
@@ -89,9 +94,20 @@ def files_to_be_uploaded(files, user_id):
             failed_uploads.append({'image_name': filename, 'reason': e})
     
     # Send this information to image service to store the user-image mapping
+    data = {
+        "userid": user_id,
+        "imageids": image_ids
+    }
+
+    response = requests.post(IMAGE_SERVICE_URL, data=data, headers=HEADERS)
+
+    if response.status_code == 200:
+        print('Details posted successfully to image service')
+
     print(user_id)
     print(image_ids)
     print(failed_uploads)
+    
     return jsonify(
         userid= user_id,
         fails=failed_uploads,

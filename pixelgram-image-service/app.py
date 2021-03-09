@@ -2,7 +2,7 @@ from flask import Flask, Response, request, jsonify
 from flask_cors import CORS
 from flask_restful import Api
 from resources.usertoimage import UsertoimageResource
-import create_db
+import create_tables
 
 app = Flask(__name__)
 

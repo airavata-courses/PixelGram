@@ -4,7 +4,7 @@ from flask_restful import Api
 from flask_jwt import JWT
 from flask import request
 from resources.user import UserRegister, User, getUserDetailsByName
-from models.user import search_by_username, authentication
+from models.user import search_by_username, authentication, search_by_username
 import create_tables
 
 app = Flask(__name__)
@@ -37,6 +37,12 @@ def getUserDetails():
         return {'message': 'send data in form of json'}, 400
     data = request.get_json()
     return getUserDetailsByName(data['username'])
+
+@app.route('/userlist', methods=['GET'])
+def getUsersList():
+    querystr = str(request.args.get('query_string'))
+    return search_by_username(querystr)
+
 
 
 @app.route('/logout', methods=['GET'])

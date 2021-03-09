@@ -26,7 +26,10 @@ def createdb():
         createddate timestamp)'''
     cursor.execute(query)
         
-    query = '''INSERT INTO usertoimage VALUES ('1234', '345'), ('1234', '567')'''
+    query = '''INSERT INTO usertoimage VALUES ('6c230d27-b5d6-49f4-a13b-5fba20465de5', '1y4z5fqcJx_65ALsrwQ5CMjGdUXyxDIEa'), 
+        ('6c230d27-b5d6-49f4-a13b-5fba20465de5', '1jvX58M8DdfldSpweSmgf2q29rl3k_-4u')
+        ('6c230d27-b5d6-49f4-a13b-5fba20465de5', '1U4G8GvdctszuFs-zzWwT5-kJu7apqbTH')'''
+
     cursor.execute(query)
 
     connection.commit()
