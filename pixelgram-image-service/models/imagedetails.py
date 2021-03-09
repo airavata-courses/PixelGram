@@ -21,7 +21,7 @@ class imagedetailsModel:
                     'longitude': row[0][1],
                     'locationname': row[0][2]
                 },
-                dbparms=tuple(self.imageid)
+                dbparms=tuple([self.imageid])
             )
             if len(resultrows) > 0:
                 self.latitude = resultrows[0]['latitude']
@@ -37,7 +37,7 @@ class imagedetailsModel:
             runqueryindb(
                 query=query,
                 readquery=False,
-                dbparms=tuple(self.latitude, self.longitude, self.loactionname, self.imageid)
+                dbparms=tuple([self.latitude, self.longitude, self.loactionname, self.imageid])
             )
         except Exception as e:
             print(e)
@@ -48,7 +48,7 @@ class imagedetailsModel:
         try:
             runqueryindb(
                 query=query,
-                dbparms= tuple(self.imageid, self.latitude, self.longitude, self.locationname),
+                dbparms= tuple([self.imageid, self.latitude, self.longitude, self.locationname]),
                 readquery=False
             )
         except Exception as e:
@@ -63,7 +63,7 @@ class imagedetailsModel:
             resultrows = runqueryindb(
                 query=query,
                 lambdafun= lambda cursor, row: row[0],
-                dbparms=tuple(self.imageid)
+                dbparms=tuple([self.imageid])
             )
         except Exception as e:
             print(e)
@@ -73,3 +73,15 @@ class imagedetailsModel:
             self.insertdetails()
         else:
             self.updatedetails()
+
+    def deletedetails(self):
+        query = 'DELETE FROM imagedetails WHERE imageid = ?'
+        try:
+            runqueryindb(
+                query=query,
+                dbparms=tuple([self.imageid]),
+                readquery= False
+            )
+        except Exception as e:
+            print(e)
+            raise Exception("Unable to delete image details for imageid: {}".format(self.imageid))
