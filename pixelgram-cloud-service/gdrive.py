@@ -2,6 +2,7 @@ import io
 import os
 import tempfile
 import zipfile
+import json
 
 from flask import jsonify, send_file
 import requests
@@ -90,24 +91,22 @@ def files_to_be_uploaded(files, user_id):
 
         try:
             image_id = save_image(drive_api, user_id+'_'+filename, mimetype, file_data)
-            image_ids.append(image_id)
+            image_ids.append(image_id['id'])
         except Exception as e:
             failed_uploads.append({'image_name': filename, 'reason': e})
     
     # Send this information to image service to store the user-image mapping
-    data = {
-        "userid": user_id,
-        "imageids": image_ids
-    }
-
-    response = requests.post(IMAGE_SERVICE_URL, data=data, headers=HEADERS)
+    response = requests.put(
+        IMAGE_SERVICE_URL, 
+        data=json.dumps({
+            "userid": user_id,
+            "imageids": image_ids
+        }), 
+        headers=HEADERS
+    )
 
     if response.status_code == 200:
         print('Details posted successfully to image service')
-
-    print(user_id)
-    print(image_ids)
-    print(failed_uploads)
     
     return jsonify(
         userid= user_id,
