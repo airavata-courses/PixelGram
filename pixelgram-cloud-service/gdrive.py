@@ -5,9 +5,8 @@ import zipfile
 import json
 
 from flask import jsonify, send_file
-import requests
 
-from config import SCOPES, CLIENT_SECRET_FILE_PATH, APP_NAME, CONNECT_TO, DRIVE_VERSION, IMAGE_SERVICE_URL
+from config import SCOPES, CLIENT_SECRET_FILE_PATH, APP_NAME, CONNECT_TO, DRIVE_VERSION
 
 from apiclient.http import MediaIoBaseDownload, MediaIoBaseUpload
 import googleapiclient.discovery
@@ -28,10 +27,6 @@ MIMETPES = dict(**{
     'png': 'image/png',
     'jpg': 'image/jpeg',
     'jpeg': 'image/jpeg'
-})
-
-HEADERS = dict(**{
-    'Content-type': 'application/json'
 })
 
 def drive_auth_creds():
@@ -114,8 +109,14 @@ def files_to_be_uploaded(files, user_id):
         success=image_ids
     ), 200
 
-def get_file_data_drive(drive_api, file_id):
+
+def view_file(file_id):
+
     try:
+        drive_api = getDriveService()
+        metadata = drive_api.files().get(fields="name,mimeType", fileId=file_id).execute()
+        print(metadata)
+
         request = drive_api.files().get_media(fileId=file_id)
         fh = io.BytesIO()
         downloader = MediaIoBaseDownload(fh, request)
@@ -125,32 +126,8 @@ def get_file_data_drive(drive_api, file_id):
             status, done = downloader.next_chunk()
 
         fh.seek(0)
-        return fh
-    except Exception as e:
-        raise Exception(e)
-
-def get_file_meta_data_drive(drive_api, file_id, fields):
-    try:
-        metadata = drive_api.files().get(fields=fields, fileId=file_id).execute()
-        return metadata
-    except Exception as e:
-        raise Exception(e)
-
-
-def view_file(file_id):
-
-    try:
-        drive_api = getDriveService()
-        metadata = get_file_meta_data_drive(
-            drive_api=drive_api,
-            fields="name,mimetype",
-            file_id=file_id
-        )
-        print(metadata)
-
-        filedata = get_file_data_drive(drive_api=drive_api, file_id=file_id)
         return send_file(
-            filedata,
+            fh,
             attachment_filename=metadata['name'],
             mimetype=metadata['mimeType']
         )
@@ -158,30 +135,4 @@ def view_file(file_id):
         return jsonify(
             message='Failed',
             error=e
-        ), 500
-
-def download_multiple_files(fileids):
-    try:
-        drive_api = getDriveService()
-        zip_file = BytesIO()
-        with zipfile.ZipFile(zip_file, 'w', compression= zipfile.ZIP_STORED) as zf:
-            for file_id in fileids:
-                filedata = get_file_data_drive(drive_api=drive_api, file_id=file_id)
-                metadata = get_file_meta_data_drive(
-                    drive_api=drive_api,
-                    fields="name",
-                    file_id=file_id
-                )
-                zip_info_data = zipfile.ZipInfo(metadata['name'])
-                zf.writestr(data, filedata)
-        zip_file.seek(0)
-        return send_file(
-            zip_file,
-            attachment_filename=images.zip,
-            as_attachment= True
-        )
-    except Exception as e:
-        return jsonify(
-            message='Download Failed',
-            error = e
         ), 500

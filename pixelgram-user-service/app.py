@@ -3,8 +3,9 @@ from flask_cors import CORS
 from flask_restful import Api
 from flask_jwt import JWT
 from flask import request
+# from security import authenticate, identity
 from resources.user import UserRegister, User, getUserDetailsByName
-from models.user import search_by_username, authentication, search_by_username
+from models.user import search_by_username, authentication
 import create_tables
 
 app = Flask(__name__)
@@ -38,12 +39,6 @@ def getUserDetails():
     data = request.get_json()
     return getUserDetailsByName(data['username'])
 
-@app.route('/userlist', methods=['GET'])
-def getUsersList():
-    querystr = str(request.args.get('query_string'))
-    return search_by_username(querystr)
-
-
 
 @app.route('/logout', methods=['GET'])
 def logout():
@@ -55,4 +50,5 @@ api.add_resource(User,'/user')
 api.add_resource(UserRegister,'/register')
 
 if __name__ == "__main__":
+    # create_tables.createDB()
     app.run(port = 5003, debug = True)

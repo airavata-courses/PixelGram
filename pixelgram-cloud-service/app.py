@@ -25,10 +25,6 @@ def upload_file(user_id):
 def view_file(file_id):
     return gdrive.view_file(file_id)
 
-@app.route('/gdrive/download', methods=['POST'])
-def download_files():
-    imageids = request.form.getlist('imageids')
-    return download_multiple_files(imageids)
 
 if __name__ == "__main__":
     drive_api = gdrive.getDriveService()
