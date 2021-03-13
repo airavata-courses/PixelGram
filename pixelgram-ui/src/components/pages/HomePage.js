@@ -1,14 +1,12 @@
 import React from 'react';
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const HomePage = () => (
-<div className="ui container">
-  <h1>PixelGram</h1>
-  <Link to='/LearnMore' className="button"> LearnMore </Link><br/>
-  <Link to='/login' className="button"> Login </Link><br/>
-  <Link to='/ForgotPassword'>Forgot Password ?</Link><br/>
-  <Link to='/registration' className ="button"> Registration</Link>   
-</div>
+  <div>
+    <h1>PixelGram</h1>
+    <Link to='/LearnMore' className="button"> About PixelGram </Link><br />
+    <Link to='/loginSignup' className="button"> Login / Signup </Link><br />
+  </div>
 );
 
 export default HomePage;
