@@ -13,6 +13,8 @@ CORS(app)
 api = Api(app)
 
 api.add_resource(UsertoimageResource,'/usertoimage')
+api.add_resource(ImagedetailsResource, '/imagdetails')
+api.add_resource(ShareddetailsResource, '/shareimage')
 
 if __name__ == '__main__':
     app.run(debug = True, port = 5005)
