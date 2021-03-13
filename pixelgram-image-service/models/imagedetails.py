@@ -1,10 +1,10 @@
-from dboperations import runqueryindb
+from models.dboperations import runqueryindb
 
 class imagedetailsModel:
     def __init__(self, imageid=None, latitude=None, longitude=None, locationname=None):
         if imageid == None:
             raise ValueError('Image id cant be None.')
-        if not isinstance(imageis, str):
+        if not isinstance(imageid, str):
             raise TypeError('Image id should be string')
         self.imageid = imageid
         self.locationname = locationname
@@ -17,16 +17,16 @@ class imagedetailsModel:
             resultrows = runqueryindb(
                 query= query,
                 lambdafun= lambda cursor, row: {
-                    'latitude': row[0][0],
-                    'longitude': row[0][1],
-                    'locationname': row[0][2]
+                    'latitude': row[0],
+                    'longitude': row[1],
+                    'locationname': row[2]
                 },
                 dbparms=tuple([self.imageid])
             )
             if len(resultrows) > 0:
                 self.latitude = resultrows[0]['latitude']
                 self.longitude = resultrows[0]['longitude']
-                self.locationname = resultrows[0]['loactionname']
+                self.locationname = resultrows[0]['locationname']
         except Exception as e:
             print(e)
             raise Exception("Unable to fetch image details for image id: {}".format(self.imageid))
@@ -37,7 +37,7 @@ class imagedetailsModel:
             runqueryindb(
                 query=query,
                 readquery=False,
-                dbparms=tuple([self.latitude, self.longitude, self.loactionname, self.imageid])
+                dbparms=tuple([self.latitude, self.longitude, self.locationname, self.imageid])
             )
         except Exception as e:
             print(e)

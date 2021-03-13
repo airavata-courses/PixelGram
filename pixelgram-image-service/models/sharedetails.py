@@ -1,4 +1,4 @@
-from dboperations import runqueryindb
+from models.dboperations import runqueryindb
 
 class shareimagedetalsModel:
     def __init__(self, userid=None, imageids=None, sharedtoids=None):
@@ -22,9 +22,9 @@ class shareimagedetalsModel:
             resultrows = runqueryindb(
                 query=query,
                 lambdafun= lambda cursor, row: {
-                    'shareduserid': row[0][0],
-                    'imageids': [x.strip() for x in row[0][1].split(',')]
-                },
+                    'shareduserid': row[0],
+                    'imageids': [x.strip() for x in row[1].split(',')] if not row[1] == None else None
+                } if not row == None else None,
                 dbparms=tuple([self.userid])
             )
             return {
@@ -36,7 +36,7 @@ class shareimagedetalsModel:
             raise Exception('Unable to get shared image details from databse for userid: {}'.format(self.userid))
     
     def update_share_details(self):
-        query = '''INSERT OR REPLACE sharedetails(userid, imageid, sharedfromid) VALUES (?,?,?)'''
+        query = '''INSERT OR REPLACE INTO sharedetails(userid, imageid, sharedfromid) VALUES (?,?,?)'''
         try:
             runqueryindb(
                 query=query,
@@ -48,7 +48,7 @@ class shareimagedetalsModel:
             raise Exception('Unable to insert/update shared image details for userid: {}'.format(self.userid))
     
     def delete_share_details_for_user(self):
-        query = '''DELETE FROM sharedetails WHERE userid = ?'''
+        query = '''DELETE FROM sharedetails WHERE sharedfromid = ?'''
         try:
             runqueryindb(
                 query=query,

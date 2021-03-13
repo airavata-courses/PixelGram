@@ -1,6 +1,6 @@
 import json
 from flask_restful import Resource,reqparse
-from models.shareimage import shareimagedetalsModel
+from models.sharedetails import shareimagedetalsModel
 
 
 
@@ -45,9 +45,9 @@ class ShareddetailsResource(Resource):
             except Exception as e:
                 print(e)
                 return json.dumps({'error': e}), 500
-        elif (not data['imageids'] == None) and (not data['sharedtoids'] == None):
+        elif (not (data['imageids'] == None)) and (not (data['sharedtoids'] == None)):
             try:
-                shareimagedetals = shareimagedetalsModel(userid=data['userid'], sharedtoids=data['sharedtoids'])
+                shareimagedetals = shareimagedetalsModel(userid=data['userid'], imageids=data['imageids'], sharedtoids=data['sharedtoids'])
                 shareimagedetals.delete_share_details()
                 return json.dumps({'message': 'Deleted successfully'}), 200
             except Exception as e:
@@ -55,7 +55,7 @@ class ShareddetailsResource(Resource):
                 return json.dumps({'error': e}), 500
         else:
             try:
-                shareimagedetals = shareimagedetalsModel(userid=data['userid'], sharedtoids=data['sharedtoids'])
+                shareimagedetals = shareimagedetalsModel(userid=data['userid'], imageids=data['imageids'])
                 shareimagedetals.delete_share_details_images()
                 return json.dumps({'message': 'Deleted successfully'}), 200
             except Exception as e:
@@ -70,7 +70,8 @@ class ShareddetailsResource(Resource):
         try:
             shareimagedetals = shareimagedetalsModel(userid = data['userid'])
             response = shareimagedetals.get_shared_imageids()
-            return json.dump(response.__dict__), 200
+            print(response)
+            return json.dumps(response), 200
         except Exception as e:
             print(e)
-            return json.dump({'error', e}), 500
+            return json.dumps({'error', e}), 500
