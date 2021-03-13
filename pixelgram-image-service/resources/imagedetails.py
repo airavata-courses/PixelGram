@@ -24,7 +24,7 @@ class ImagedetailsResource(Resource):
             return json.dumps({'error': e}), 500
     
     def delete(self):
-        data = ImagedetailsResource.parse.parse_args()
+        data = ImagedetailsResource.parser.parse_args()
         print(data)
         try:
             imagedetails = imagedetailsModel(imageid=data['imageid'])
