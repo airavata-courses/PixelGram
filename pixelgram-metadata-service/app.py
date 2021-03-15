@@ -18,4 +18,4 @@ api = Api(app)
 app.add_resource(MetaDataExtractorResource, '/metadataectractor')
 
 if __name__ == "__main__":
-    app.run(port = 5005, debug = True)
+    app.run(port = 5006, debug = True)
