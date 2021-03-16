@@ -24,8 +24,9 @@ class MetaDataExtractorResource(Resource):
 
 class MetaDataExtractor:
 
-    def __init__(self, filename):
+    def __init__(self, filename, filedata):
         self.filename = filename
+        self.filedata = filedata
         self.exif = None
 
 
@@ -80,7 +81,7 @@ class MetaDataExtractor:
         return round(degrees + minutes + seconds, 5)
 
 
-    def get_coordinates(self,geotags):
+    def get_coordinates(self, geotags):
         lat = self.get_decimal_from_dms(geotags['GPSLatitude'], geotags['GPSLatitudeRef'])
 
         lon = self.get_decimal_from_dms(geotags['GPSLongitude'], geotags['GPSLongitudeRef'])

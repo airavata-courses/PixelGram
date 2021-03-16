@@ -13,7 +13,6 @@ CORS(app)
 
 api = Api(app)
 
-api.add_resource(MetaDataExtractorResource, '/metadataectractor')
 
 if __name__ == "__main__":
     app.run(port = 5006, debug = True, host='0.0.0.0')

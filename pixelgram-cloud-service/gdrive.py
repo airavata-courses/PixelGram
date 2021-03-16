@@ -115,6 +115,7 @@ def files_to_be_uploaded(files, user_id):
     ), 200
 
 def get_file_data_drive(drive_api, file_id):
+    print('Requested file: {}'.format(file_id))
     try:
         request = drive_api.files().get_media(fileId=file_id)
         fh = io.BytesIO()
@@ -143,7 +144,7 @@ def view_file(file_id):
         drive_api = getDriveService()
         metadata = get_file_meta_data_drive(
             drive_api=drive_api,
-            fields="name,mimetype",
+            fields="name,mimeType",
             file_id=file_id
         )
         print(metadata)
@@ -163,9 +164,10 @@ def view_file(file_id):
 def download_multiple_files(fileids):
     try:
         drive_api = getDriveService()
-        zip_file = BytesIO()
+        zip_file = io.BytesIO()
         with zipfile.ZipFile(zip_file, 'w', compression= zipfile.ZIP_STORED) as zf:
             for file_id in fileids:
+                print('About to Request fileid: {}'.format(file_id))
                 filedata = get_file_data_drive(drive_api=drive_api, file_id=file_id)
                 metadata = get_file_meta_data_drive(
                     drive_api=drive_api,
@@ -173,13 +175,16 @@ def download_multiple_files(fileids):
                     file_id=file_id
                 )
                 zip_info_data = zipfile.ZipInfo(metadata['name'])
-                zf.writestr(data, filedata)
+                zf.writestr(zip_info_data, filedata.read())
         zip_file.seek(0)
+
         return send_file(
-            zip_file,
-            attachment_filename=images.zip,
-            as_attachment= True
+            zip_file, 
+            mimetype='application/zip', 
+            as_attachment=True, 
+            attachment_filename='archive.zip'
         )
+
     except Exception as e:
         return jsonify(
             message='Download Failed',
