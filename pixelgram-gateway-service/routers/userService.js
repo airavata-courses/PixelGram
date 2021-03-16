@@ -14,6 +14,12 @@ router.post('/register', (req, res) => {
     });
 });
 
+router.post('/login', (req, res) => {
+    api.post(req.path, req.body).then(resp => {
+        res.send(resp.data);
+    });
+});
+
 router.get('/userlist', (req, res) => {
     api.get(req.path).then(resp => {
         res.send(resp.data);

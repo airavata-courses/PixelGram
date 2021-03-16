@@ -32,4 +32,4 @@ def download_files():
 
 if __name__ == "__main__":
     drive_api = gdrive.getDriveService()
-    app.run(port = 5004, debug = True)
+    app.run(port = 5004, debug = True, host='0.0.0.0')
