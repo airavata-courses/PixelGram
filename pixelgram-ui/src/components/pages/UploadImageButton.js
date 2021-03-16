@@ -8,7 +8,7 @@ function UploadImageButton({ uploadImages, isLoading }) {
 
     const filesSelectedEvent = (e) => {
         let selectedFileNames = [];
-        for (var file of e.target.files) {
+        for (const file of e.target.files) {
             selectedFileNames.push({ name: file.name })
         }
         setFileNames(selectedFileNames)

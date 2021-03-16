@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Dialog, DialogTitle, Grid, TextField, Button, CircularProgress, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
 import axios from '../../helperClasses/axiosService';
-import { GET_USER_ID } from '../../helperClasses/API_EndPoints'
+import { GET_USER_ID, SHARE_IMAGES } from '../../helperClasses/API_EndPoints'
 import { getUserIdFromLocalStorage } from '../../helperClasses/localStorage'
 
 const useStyles = makeStyles((theme) => ({
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-function ShareImage({ dialogDetails, closeDialog }) {
+function ShareImage({ dialogDetails, closeDialog, openSnackbar }) {
 
     const [username, setUsername] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
@@ -46,7 +46,15 @@ function ShareImage({ dialogDetails, closeDialog }) {
                     setIsLoading(false)
                     return;
                 }
-                // share image user toUser
+                axios.put(SHARE_IMAGES, { userid: userId, sharedtoids: [toUserId], imageids: dialogDetails.imageIds }).then(result => {
+                    console.log('share image result ', result)
+                    openSnackbar(JSON.parse(result.data).message)
+                    setIsLoading(false)
+                    closeDialog()
+                }).catch(err => {
+                    console.log(err);
+                    setIsLoading(false)
+                })
             }).catch(err => {
                 setErrorMessage('Invalid User')
                 console.log(err)
@@ -70,7 +78,7 @@ function ShareImage({ dialogDetails, closeDialog }) {
                     <Grid item xs={12}>
                         <Button color="primary" variant="contained" onClick={shareImages} className={classes.buttonControl} type="submit" disabled={username.length < 1 ? true : false}>
                             <>
-                                <Typography>Share</Typography>
+                                <Typography>{isLoading ? 'Sharing...' : 'Share'}</Typography>
                                 {isLoading ? (
                                     <CircularProgress color="inherit" size={30} thickness={5} className={classes.loading} />
                                 ) : ""}

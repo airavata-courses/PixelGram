@@ -1,47 +1,69 @@
-import React, { useEffect, useState } from 'react'
-import { Paper, Grid, Snackbar, Typography, TableContainer, TableRow, Table, TableHead, TableBody, TableCell, IconButton, Checkbox, Tooltip } from '@material-ui/core'
-import { ArrowDownward, Visibility, Share } from '@material-ui/icons'
-//import data from '../../data/imagesInfo.json'
+import React, { useState } from 'react'
+import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/core/styles';
+import { Grid, Snackbar, AppBar, Tabs, Tab, Box, Typography, Paper } from '@material-ui/core'
 import UploadImageButton from './UploadImageButton'
 import axios from '../../helperClasses/axiosService'
-import { UPLOAD_IMAGES, GET_USER_IMAGES } from '../../helperClasses/API_EndPoints'
+import { UPLOAD_IMAGES } from '../../helperClasses/API_EndPoints'
 import { getUserIdFromLocalStorage } from '../../helperClasses/localStorage'
-import ImagePreview from './ImagePreview'
-import ShareImage from './ShareImage'
+import ViewImages from './ViewImages';
+import ViewSharedImages from './ViewSharedImages'
 
-const imageIds = ['1y4z5fqcJx_65ALsrwQ5CMjGdUXyxDIEa', '1gEGp_qfcQQsnkh0Jkp-DTtTrt55QZ53_']
+function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+            {...other}
+        >
+            {value === index && (
+                <Box p={3}>
+                    <Typography>{children}</Typography>
+                </Box>
+            )}
+        </div>
+    );
+}
+
+TabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.any.isRequired,
+    value: PropTypes.any.isRequired,
+};
+
+function a11yProps(index) {
+    return {
+        id: `simple-tab-${index}`,
+        'aria-controls': `simple-tabpanel-${index}`,
+    };
+}
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        //flexGrow: 1,
+        width: '90%',
+        marginLeft: '5%', marginRight: '5%',
+        backgroundColor: 'lightgray',
+    },
+}));
 
 function ImageViewer() {
 
-    const [userImages, setUserImages] = useState([]) // {image,type,name,file,isSelected}
     const [isLoading, setIsLoading] = useState(false)
     const [snackbarDetails, setSnackbarDetails] = useState({ state: false, message: '' });
-    const [allSelectionCheckbox, setAllSelectionCheckbox] = useState(false)
-    const [shareImageDialogDetails, setShareImageDialogDetails] = useState({ dialogState: false, imageIds: '' });
-    const [previewImageDialogDetails, setPreviewImageDialogDetails] = useState({ dialogState: false, image: '', imageId: '' });
+    const [imageUploadCount, setImageUploadCount] = useState(0)
 
-    useEffect(() => {
-        let oldImages = [...userImages]
-        setTimeout(() => {
-            setUserImages(oldImages)
-        }, 3000)
-        for (var imageId of imageIds) {
-            //debugger;
-            axios.get(`${GET_USER_IMAGES}${imageId}`, { responseType: 'blob' }).then(response => {
-                console.log(response)
-                if (response) {
-                    //debugger;
-                    let imgId = response.config.url.split('/')[5];
-                    let type = response.data.type.split('/')[1]
-                    oldImages.push({ image: URL.createObjectURL(response.data), imageId: imgId, isSelected: false, imageType: type })
+    const [value, setValue] = React.useState(0);
 
-                }
-            }
-            ).catch(err => {
-                console.log(err)
-            })
-        }
-    }, [])
+    const classes = useStyles();
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -50,31 +72,6 @@ function ImageViewer() {
 
         setSnackbarDetails({ ...snackbarDetails, state: false });
     };
-
-    const downloadImage = (imageInfo) => {
-
-        const link = document.createElement("a");
-        link.href = imageInfo.image;
-        link.setAttribute("download", `${imageInfo.imageId}.${imageInfo.imageType}`);
-        document.body.appendChild(link);
-        link.click();
-    }
-
-    const openShareImageDialog = (imageIds) => {
-        setShareImageDialogDetails({ dialogState: true, imageIds: imageIds })
-    }
-
-    const openPreviewImageDialog = (image, imageId) => {
-        setPreviewImageDialogDetails({ dialogState: true, image: image, imageId: imageId })
-    }
-
-    const closeShareImageDialog = () => {
-        setShareImageDialogDetails({ ...shareImageDialogDetails, dialogState: false })
-    }
-
-    const closePreviewImageDialog = () => {
-        setPreviewImageDialogDetails({ ...previewImageDialogDetails, dialogState: false })
-    }
 
     const uploadImages = async (files) => {
         setIsLoading(true)
@@ -88,6 +85,7 @@ function ImageViewer() {
                 console.log(response)
                 setIsLoading(false)
                 setSnackbarDetails({ state: true, message: `${response.data.success.length} images uploaded successfully` })
+                setImageUploadCount(imageUploadCount + 1)
             })
             .catch(err => {
                 console.log(err)
@@ -95,38 +93,8 @@ function ImageViewer() {
             });
     }
 
-    const checkBoxToggleEvent = (imageId) => {
-        let allImages = userImages.filter(i => i.imageId !== 0)
-        let selectedImage = allImages.find(i => i.imageId === imageId);
-        selectedImage.isSelected = !selectedImage.isSelected;
-        setUserImages(allImages);
-        if (selectedImage.isSelected) {
-            //debugger;
-            let allSelectedImages = allImages.filter(i => i.isSelected)
-            if (userImages.length === allSelectedImages.length) {
-                setAllSelectionCheckbox(true)
-            }
-        } else {
-            setAllSelectionCheckbox(false)
-        }
-    }
-
-    const selectAllCheckBoxToggleEvent = () => {
-        let allImages = userImages.map(i => ({ ...i, isSelected: !allSelectionCheckbox }))
-        setAllSelectionCheckbox(!allSelectionCheckbox)
-        setUserImages(allImages);
-    }
-
-    const downloadSelectedImages = () => {
-
-        let allImages = userImages.filter(i => i.isSelected)
-        for (const imageInfo of allImages)
-            downloadImage(imageInfo)
-    }
-
-    const shareMultipleImages = () => {
-        let allImages = userImages.filter(i => i.isSelected)
-        setShareImageDialogDetails({ dialogState: true, imageIds: allImages })
+    const openSnackbar = (message) => {
+        setSnackbarDetails({ state: true, message })
     }
 
     return (
@@ -135,82 +103,21 @@ function ImageViewer() {
                 <Grid item xs={12}>
                     <UploadImageButton uploadImages={uploadImages} isLoading={isLoading} />
                 </Grid>
-                {userImages && userImages.length > 0 ? (
+                <Paper className={classes.root}>
+                    <AppBar position="static" style={{ maxHeight: '50px', paddingTop: '0px', paddingBottom: '50px' }}>
+                        <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
+                            <Tab label="My Images" {...a11yProps(0)} />
+                            <Tab label="Images shared with me" {...a11yProps(1)} />
+                        </Tabs>
+                    </AppBar>
+                    <TabPanel value={value} index={0}>
+                        <ViewImages openSnackbar={openSnackbar} imageUploadCount={imageUploadCount} />
+                    </TabPanel>
+                    <TabPanel value={value} index={1}>
+                        <ViewSharedImages openSnackbar={openSnackbar} />
+                    </TabPanel>
+                </Paper>
 
-                    <Grid item style={{ width: '90%', marginLeft: '5%' }}>
-                        {
-                            userImages.find(i => i.isSelected) &&
-                            <Grid item container direction='row' justify='flex-end' alignItems='center'>
-                                <Tooltip title='Download Selected Images'>
-                                    <IconButton size='small' onClick={downloadSelectedImages}>
-                                        <ArrowDownward color='secondary' />
-                                    </IconButton>
-                                </Tooltip>
-                                <Tooltip title='Share Selected Images'>
-                                    <IconButton size='small' onClick={shareMultipleImages}>
-                                        <Share color='secondary' />
-                                    </IconButton>
-                                </Tooltip>
-                            </Grid>
-                        }
-                        <Grid item>
-                            <TableContainer component={Paper} >
-                                <Table size="small" aria-label="a dense table">
-
-                                    <TableHead style={{ 'backgroundColor': 'white', 'fontWeight': 'bolder' }}>
-                                        <TableRow>
-                                            <TableCell>
-                                                <Checkbox
-                                                    checked={allSelectionCheckbox}
-                                                    onChange={selectAllCheckBoxToggleEvent}
-                                                    inputProps={{ 'aria-label': 'primary checkbox' }}
-                                                />
-                                            </TableCell>
-                                            <TableCell>Image Type</TableCell>
-                                            <TableCell>Image</TableCell>
-                                            <TableCell>Actions</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {userImages.map((imageInfo) => (
-                                            <TableRow key={imageInfo.imageId}>
-                                                <TableCell>
-                                                    <Checkbox
-                                                        checked={imageInfo.isSelected}
-                                                        onChange={() => checkBoxToggleEvent(imageInfo.imageId)}
-                                                        inputProps={{ 'aria-label': 'primary checkbox' }}
-                                                    />
-                                                </TableCell>
-                                                <TableCell >{imageInfo.imageType}</TableCell>
-                                                <TableCell>
-                                                    <img height='100px' width='150px' src={imageInfo.image} />
-                                                </TableCell>
-                                                <TableCell>
-
-                                                    <Tooltip title='Download'>
-                                                        <IconButton size='small' onClick={() => downloadImage(imageInfo)}>
-                                                            <ArrowDownward color='primary' />
-                                                        </IconButton>
-                                                    </Tooltip>
-
-                                                    <IconButton size='small' onClick={() => openPreviewImageDialog(imageInfo.image, imageInfo.imageId)}>
-                                                        <Visibility color='primary' />
-                                                    </IconButton>
-
-                                                    <Tooltip title='Share'>
-                                                        <IconButton size='small' onClick={() => openShareImageDialog([imageInfo.imageId])}>
-                                                            <Share color='primary' />
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        </Grid>
-                    </Grid>
-                ) : (<Typography>No Images found.Please Upload Images.</Typography>)}
                 <Snackbar
                     anchorOrigin={{
                         vertical: 'bottom',
@@ -222,16 +129,7 @@ function ImageViewer() {
                     message={snackbarDetails.message}
                 />
             </Grid>
-            {
-                shareImageDialogDetails.dialogState && (
-                    <ShareImage closeDialog={closeShareImageDialog} dialogDetails={shareImageDialogDetails} imageIds={shareImageDialogDetails.imageIds} />
-                )
-            }
-            {
-                previewImageDialogDetails.dialogState && (
-                    <ImagePreview closeDialog={closePreviewImageDialog} dialogDetails={previewImageDialogDetails} image={previewImageDialogDetails.image} />
-                )
-            }
+
         </>
     )
 }

@@ -1,8 +1,10 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Dialog, Typography, Grid, } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
-import { getUserNameFromLocalStorage } from '../../helperClasses/localStorage'
+//import { getUserNameFromLocalStorage } from '../../helperClasses/localStorage'
 import ReactImageMagnify from 'react-image-magnify';
+import { GET_IMAGE_DETAILS } from '../../helperClasses/API_EndPoints'
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
     fieldControl: {
@@ -14,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     },
     container: {
         width: 450,
-        height: 350,
+        height: 380,
         minHeight: '100%',
         margin: 10,
     },
@@ -22,8 +24,15 @@ const useStyles = makeStyles((theme) => ({
 
 function ImagePreview({ dialogDetails, closeDialog }) {
 
+    const [imageDetails, setImageDetails] = useState({})
+
     useEffect(() => {
-        //axios.get() //get image details
+        axios.post(GET_IMAGE_DETAILS, { imageid: dialogDetails.imageId }).then(result => {
+            console.log('image details ', JSON.parse(result.data));
+            setImageDetails(JSON.parse(result.data))
+        }).catch(err => {
+            console.log(err);
+        }) //get image details
     }, [dialogDetails.imageId])
 
     const classes = useStyles();
@@ -52,16 +61,22 @@ function ImagePreview({ dialogDetails, closeDialog }) {
                         }} />
                     </Grid>
                     <Grid item xs={6}>
-                        <Typography >Uploaded by </Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Typography>{getUserNameFromLocalStorage()}</Typography>
-                    </Grid>
-                    <Grid item xs={6}>
                         <Typography >Location </Typography>
                     </Grid>
                     <Grid item xs={6}>
-                        <Typography >Delhi</Typography>
+                        <Typography>{imageDetails.locationname}</Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Typography >Latitude </Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Typography >{imageDetails.latitude}</Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Typography >Longitude </Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Typography >{imageDetails.longitude}</Typography>
                     </Grid>
                 </Grid>
             </Dialog>
