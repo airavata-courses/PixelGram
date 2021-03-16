@@ -8,11 +8,13 @@ from PIL.ExifTags import TAGS
 
 import werkzeug
 
+from flask_restful import Resource,reqparse
+
 
 class MetaDataExtractorResource(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('imageid', type = str, required = True, help = "This field cannot be left blank")
-    parser.add_argument('image', type=werkzeug.datastructures.FileStorage, requried = True, location='files', help = "This field cannot be left blank")
+    parser.add_argument('image', type=werkzeug.datastructures.FileStorage, required = True, location='files', help = "This field cannot be left blank")
 
     def post(self):
         image_file = MetaDataExtractorResource.parser.parse_args(strict=True).get('image',None)
