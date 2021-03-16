@@ -27,9 +27,10 @@ def view_file(file_id):
 
 @app.route('/gdrive/download', methods=['POST'])
 def download_files():
-    imageids = request.form.getlist('imageids')
-    return download_multiple_files(imageids)
+    if request.json['imageids'] == None:
+        return {'message: Must have imageids'}, 400
+    return gdrive.download_multiple_files(request.json['imageids'])
 
 if __name__ == "__main__":
     drive_api = gdrive.getDriveService()
-    app.run(port = 5004, debug = True)
+    app.run(port = 5004, debug = True, host='0.0.0.0')

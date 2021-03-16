@@ -8,11 +8,13 @@ from PIL.ExifTags import TAGS
 
 import werkzeug
 
+from flask_restful import Resource,reqparse
+
 
 class MetaDataExtractorResource(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('imageid', type = str, required = True, help = "This field cannot be left blank")
-    parser.add_argument('image', type=werkzeug.datastructures.FileStorage, requried = True, location='files', help = "This field cannot be left blank")
+    parser.add_argument('image', type=werkzeug.datastructures.FileStorage, required = True, location='files', help = "This field cannot be left blank")
 
     def post(self):
         image_file = MetaDataExtractorResource.parser.parse_args(strict=True).get('image',None)
@@ -22,8 +24,9 @@ class MetaDataExtractorResource(Resource):
 
 class MetaDataExtractor:
 
-    def __init__(self, filename):
+    def __init__(self, filename, filedata):
         self.filename = filename
+        self.filedata = filedata
         self.exif = None
 
 
@@ -78,7 +81,7 @@ class MetaDataExtractor:
         return round(degrees + minutes + seconds, 5)
 
 
-    def get_coordinates(self,geotags):
+    def get_coordinates(self, geotags):
         lat = self.get_decimal_from_dms(geotags['GPSLatitude'], geotags['GPSLatitudeRef'])
 
         lon = self.get_decimal_from_dms(geotags['GPSLongitude'], geotags['GPSLongitudeRef'])
