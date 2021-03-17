@@ -5,6 +5,8 @@ WORKDIR /docker-gateway-service
 
 RUN npm install
 
+RUN npm run compile
+
 EXPOSE 5000
 
 ENTRYPOINT [ "node" ]
