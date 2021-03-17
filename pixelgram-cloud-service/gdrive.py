@@ -73,7 +73,7 @@ def save_image(drive_api, file_name, mime_type, file_data):
 
     return image_id
 
-def files_to_be_uploaded(files, user_id):
+def files_to_be_uploaded(files, user_id, producermq):
     drive_api = getDriveService()
     image_ids = []
     failed_uploads = []
@@ -96,17 +96,27 @@ def files_to_be_uploaded(files, user_id):
             failed_uploads.append({'image_name': filename, 'reason': e})
     
     # Send this information to image service to store the user-image mapping
-    response = requests.put(
-        IMAGE_SERVICE_URL, 
-        data=json.dumps({
-            "userid": user_id,
+    # Pushing to rabbitmq 
+    producermq.publish_message(
+        body= json.dumps({
+            "user_id": user_id,
             "imageids": image_ids
-        }), 
-        headers=HEADERS
+        })
     )
+    
+    # REST API
 
-    if response.status_code == 200:
-        print('Details posted successfully to image service')
+    # response = requests.put(
+    #     IMAGE_SERVICE_URL, 
+    #     data=json.dumps({
+    #         "userid": user_id,
+    #         "imageids": image_ids
+    #     }), 
+    #     headers=HEADERS
+    # )
+
+    # if response.status_code == 200:
+    #     print('Details posted successfully to image service')
     
     return jsonify(
         userid= user_id,

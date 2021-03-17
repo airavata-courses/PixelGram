@@ -4,11 +4,9 @@ from config import RABBITMQ_HOST, RABBITMQ_PORT
 import json
 from time import sleep
 import threading
+from models.usertoimage import usertoimageModel
 
-
-def data_processing():
-    print()
-    return 
+    
 
 class consumerMQ:
 
@@ -24,6 +22,7 @@ class consumerMQ:
             durable=True,
             passive=True
         )
+        print(result)
         thread = threading.Thread(target=self._process_data_events)
         thread.setDaemon(True)
         thread.start()
@@ -45,8 +44,18 @@ class consumerMQ:
                 sleep(0.1)
 
     def callback(self, ch, method, properties, body):
-        ch.basic_ack(delivery_tag = method.delivery_tag)
-        print("Data Read: {}".format(json.loads(body)))
+        body = json.loads(body)
+        print(body)
+        try:
+            usertoimage = usertoimageModel(
+                userid=body['user_id'],
+                imageids=body['imageids']
+            )
+            usertoimage.insert()
+            print("Inserted")
+            ch.basic_ack(delivery_tag = method.delivery_tag)
+        except Exception as e:
+            print(e)
     
     def create_connection(self):
         while self.connection == None or self.connection.is_closed:
@@ -111,8 +120,7 @@ class producerMQ:
                         delivery_mode = 2,
                     )
                 )
-            except Exception as e:
-                print(e)
+            except:
                 print("Unable to push the message to queue {}".format(self.queue))
         else:
             print('{} queue is not binded. Trying to get connection'.format(self.queue))
