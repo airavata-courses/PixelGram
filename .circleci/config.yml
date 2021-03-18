@@ -10,8 +10,7 @@ jobs:
       - setup_remote_docker
       - checkout
       - run: docker login --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
-      - run: cd pixelgram-gateway-service/ && docker image build -t gateway-service:latest . && docker tag gateway-service:latest $DOCKER_USERNAME/gateway-service:latest
-      - run: docker push $DOCKER_USERNAME/gateway-service:latest
+      - run: cd pixelgram-gateway-service/ && docker image build -t pixelgram/gateway-service:latest . && docker push pixelgram/gateway-service:latest
 
   build-image-service:
     docker:
@@ -20,8 +19,7 @@ jobs:
       - setup_remote_docker
       - checkout
       - run: docker login --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
-      - run: cd pixelgram-image-service/ && docker image build -t image-service:latest . && docker tag image-service:latest $DOCKER_USERNAME/image-service:latest
-      - run: docker push $DOCKER_USERNAME/image-service:latest
+      - run: cd pixelgram-image-service/ && docker image build -t pixelgram/image-service:latest . && docker push pixelgram/image-service:latest
     
   build-cloud-service:
     docker:
@@ -30,8 +28,7 @@ jobs:
       - setup_remote_docker
       - checkout
       - run: docker login --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
-      - run: cd pixelgram-cloud-service/ && docker image build -t cloud-service:latest . && docker tag cloud-service:latest $DOCKER_USERNAME/cloud-service:latest
-      - run: docker push $DOCKER_USERNAME/cloud-service:latest
+      - run: cd pixelgram-cloud-service/ && docker image build -t pixelgram/cloud-service:latest . && docker push pixelgram/cloud-service:latest
     
   build-user-service:
     docker:
@@ -40,8 +37,7 @@ jobs:
       - setup_remote_docker
       - checkout
       - run: docker login --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
-      - run: cd pixelgram-user-service/ && docker image build -t user-service:latest . && docker tag user-service:latest $DOCKER_USERNAME/user-service:latest
-      - run: docker push $DOCKER_USERNAME/user-service:latest
+      - run: cd pixelgram-user-service/ && docker image build -t pixelgram/user-service:latest . && docker push pixelgram/user-service:latest
     
   build-metadata-service:
     docker:
@@ -50,8 +46,7 @@ jobs:
       - setup_remote_docker
       - checkout
       - run: docker login --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
-      - run: cd pixelgram-metadata-service/ && docker image build -t metadata-service:latest . && docker tag metadata-service:latest $DOCKER_USERNAME/metadata-service:latest
-      - run: docker push $DOCKER_USERNAME/metadata-service:latest
+      - run: cd pixelgram-metadata-service/ && docker image build -t pixelgram/metadata-service:latest . && docker push pixelgram/metadata-service:latest
 
   build-react-ui:
     docker:
@@ -60,8 +55,7 @@ jobs:
       - setup_remote_docker
       - checkout
       - run: docker login --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
-      - run: cd pixelgram-ui/ && docker image build -t pixelgram-ui:latest . && docker tag pixelgram-ui:latest $DOCKER_USERNAME/pixelgram-ui:latest
-      - run: docker push $DOCKER_USERNAME/pixelgram-ui:latest
+      - run: cd pixelgram-ui/ && docker image build -t pixelgram/pixelgram-ui:latest . && docker push pixelgram/pixelgram-ui:latest
 
 workflows:
   build:
