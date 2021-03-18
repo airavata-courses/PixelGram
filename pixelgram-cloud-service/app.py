@@ -8,7 +8,7 @@ from rabbitmq import producerMQ, consumerMQ
 
 app = Flask(__name__)
 
-app.secret_key =  'jose'
+app.secret_key =  'hello'
 
 CORS(app)
 
