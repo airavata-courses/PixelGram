@@ -4,7 +4,6 @@ from config import RABBITMQ_HOST, RABBITMQ_PORT
 import json
 from time import sleep
 import threading
-# from models.usertoimage import usertoimageModel
 
     
 
@@ -43,20 +42,6 @@ class consumerMQ:
             with self.internal_lock:
                 self.connection.process_data_events()
                 sleep(0.1)
-
-    # def callback(self, ch, method, properties, body):
-    #     body = json.loads(body)
-    #     print(body)
-    #     try:
-    #         usertoimage = usertoimageModel(
-    #             userid=body['user_id'],
-    #             imageids=body['imageids']
-    #         )
-    #         usertoimage.insert()
-    #         print("Inserted")
-    #         ch.basic_ack(delivery_tag = method.delivery_tag)
-    #     except Exception as e:
-    #         print(e)
     
     def create_connection(self):
         while self.connection == None or self.connection.is_closed:

@@ -2,6 +2,15 @@ import json
 from flask_restful import Resource,reqparse
 from models.imagedetails import imagedetailsModel
 
+def process_image_details_queue_data(ch, method, properties, body):
+    body = json.loads(body)
+    print(body)
+    try:
+        print("Inserted")
+        ch.basic_ack(delivery_tag = method.delivery_tag)
+    except Exception as e:
+        print(e)
+
 
 
 class ImagedetailsResource(Resource):

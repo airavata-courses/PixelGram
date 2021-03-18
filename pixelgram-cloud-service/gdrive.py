@@ -73,7 +73,7 @@ def save_image(drive_api, file_name, mime_type, file_data):
 
     return image_id
 
-def files_to_be_uploaded(files, user_id, producermq):
+def files_to_be_uploaded(files, user_id, userproducermq, metadataproducermq):
     drive_api = getDriveService()
     image_ids = []
     failed_uploads = []
@@ -91,20 +91,28 @@ def files_to_be_uploaded(files, user_id, producermq):
 
         try:
             image_id = save_image(drive_api, user_id+'_'+filename, mimetype, file_data)
+            # Publish image data and image id to rabbitmq 
+            metadataproducermq.publish_message(
+                body= json.dumps({
+                    "image_id": image_id,
+                    "imagedata": file_data,
+                    "mimetype": mimetype
+                })
+            )
             image_ids.append(image_id['id'])
         except Exception as e:
             failed_uploads.append({'image_name': filename, 'reason': e})
     
     # Send this information to image service to store the user-image mapping
     # Pushing to rabbitmq 
-    producermq.publish_message(
+    userproducermq.publish_message(
         body= json.dumps({
             "user_id": user_id,
             "imageids": image_ids
         })
     )
     
-    # REST API
+    # REST API, Need to add Try catch block
 
     # response = requests.put(
     #     IMAGE_SERVICE_URL, 

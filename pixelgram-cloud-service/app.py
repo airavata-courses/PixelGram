@@ -2,7 +2,7 @@ from flask import Flask, Response, request, jsonify
 from flask_cors import CORS
 from flask_restful import Api
 import gdrive
-from config import USER_TO_IMAGE_QUEUE
+from config import USER_TO_IMAGE_QUEUE, METADATA_QUEUE
 from rabbitmq import producerMQ, consumerMQ
 
 
@@ -21,7 +21,7 @@ def upload_file(user_id):
     if 'images' not in request.files:
         return Response('There is no image feilds to proceed', 400)
     files = request.files.getlist('images')
-    return gdrive.files_to_be_uploaded(files, user_id, producermq)
+    return gdrive.files_to_be_uploaded(files, user_id, userproducermq, metadataproducermq)
 
 
 @app.route('/gdrive/view/<file_id>', methods=['GET'])
@@ -36,6 +36,6 @@ def download_files():
 
 if __name__ == "__main__":
     drive_api = gdrive.getDriveService()
-    producermq = producerMQ(USER_TO_IMAGE_QUEUE)
-    # consumermq = consumerMQ(USER_TO_IMAGE_QUEUE)
+    userproducermq = producerMQ(USER_TO_IMAGE_QUEUE)
+    metadataproducermq = producerMQ(METADATA_QUEUE)
     app.run(port = 5004, debug = True, host='0.0.0.0')
