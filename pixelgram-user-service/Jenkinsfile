@@ -7,6 +7,7 @@ pipeline {
         stage('Get source') {
             steps {
                 script{
+                    sh 'pwd'
                     checkout scm
                     deleteDir()
                     sh 'cp -rf /pixelgram-user-service UserService'
