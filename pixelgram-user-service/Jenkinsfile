@@ -8,9 +8,7 @@ pipeline {
             steps {
                 script{
                     sh 'pwd'
-                    checkout scm
-                    deleteDir()
-                    sh 'cp -rf /pixelgram-user-service UserService'
+                    sh 'cp -rf pixelgram-user-service UserService'
                     if(!fileExists("UserService/Dockerfile")) {
                         error('Dockerfile missing.')
                     }
