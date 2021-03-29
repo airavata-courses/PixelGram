@@ -17,7 +17,7 @@ pipeline {
             }
         }
         stage('setup') {
-            agent { docker { image: 'python:3.8.2'} }
+            agent {  docker 'python:3.8.2' }
             steps {
                 script{
                     dir('UserService'){
@@ -29,7 +29,7 @@ pipeline {
 
         }
         stage('Linting') {
-            agent{ docker { image: 'python:3.8.2' } }
+            agent {  docker 'python:3.8.2' }
             steps {
                 script {
                     dir('UserService'){
