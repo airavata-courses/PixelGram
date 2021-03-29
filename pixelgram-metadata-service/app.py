@@ -5,6 +5,7 @@ from flask_jwt import JWT
 from flask import request
 from metadata import MetaDataExtractorResource
 from rabbitmq import consumerMQ, producerMQ
+from config import IMAGE_DETAILS_QUEUE, METADATA_QUEUE
 
 app = Flask(__name__)
 

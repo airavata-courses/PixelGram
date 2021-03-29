@@ -1,0 +1,80 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    hostname: rabbitmq
+    container_name: rabbitmq
+    volumes:
+      - ./.docker/rabbitmq/etc/:/etc/rabbitmq/
+      - ./.docker/rabbitmq/data/:/var/lib/rabbitmq/
+      - ./.docker/rabbitmq/logs/:/var/log/rabbitmq/
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "5672" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    
+  cloudservice:
+    build: ./pixelgram-cloud-service
+    ports:
+      - "5004:5004"
+    volumes:
+      - ./.docker/cloud-service/:/pixelgram-cloud-service/
+    tty: true
+    restart: on-failure
+    depends_on:
+      - rabbitmq
+    
+  userservice:
+    build: ./pixelgram-user-service
+    ports:
+      - "5003:5003"
+    volumes:
+      - ./.docker/user-service/:/pixelgram-user-service/
+    tty: true
+    restart: on-failure
+    
+  getwayservice:
+    build: ./pixelgram-gateway-service
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./.docker/gateway-service/:/pixelgram-gateway-service/
+    tty: true
+    restart: on-failure
+
+  metadataservice:
+    build: ./pixelgram-metadata-service
+    ports:
+      - "5006:5006"
+    volumes:
+      - ./.docker/metadata-service/:/pixelgram-metadata-service/
+    tty: true
+    restart: on-failure
+    depends_on:
+      - rabbitmq
+      - cloudservice
+
+  imageservice:
+    build: ./pixelgram-image-service
+    ports:
+      - "5005:5005"
+    volumes:
+      - ./.docker/image-service/:/pixelgram-image-service/
+    tty: true
+    restart: on-failure
+    depends_on:
+      - rabbitmq
+      - cloudservice
+      - metadataservice
+
+  ui:
+    build: ./pixelgram-ui
+    ports:
+      - "3000:3000"
+    tty: true
+    restart: on-failure
+    depends_on:
+      - getwayservice

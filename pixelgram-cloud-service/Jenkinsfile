@@ -1,0 +1,14 @@
+pipeline {
+    agent any
+    stages {
+        stage('Checkout'){
+            checkout scm
+        }
+        stage('build') {
+            agent { docker { image 'python:3.8.2' } }
+            steps {
+                sh 'python --version'
+            }
+        }
+    }
+}
