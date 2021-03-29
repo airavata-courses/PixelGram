@@ -1,0 +1,36 @@
+pipeline {
+    agent any
+    environment {
+
+    }
+    stages {
+        stage('Get source') {
+            steps {
+                checkout scm
+                deleteDir()
+                sh 'cp -rf /pixelgram-user-service UserService'
+                if(!fileExists("UserService/Dockerfile")) {
+                    error('Dockerfile missing.')
+                }
+            }
+        }
+        stage('setup') {
+            agent { docker { image: 'python:3.8.2'} }
+            steps {
+                dir('UserService'){
+                    sh '. .env/bin/activate'
+                    sh 'pip install --no-cache-dir  -r requriments.txt'
+                }
+            }
+
+        }
+        stage('Linting') {
+            agent{ docker { image: 'python:3.8.2' } }
+            steps {
+                dir('UserService'){
+                    sh 'pylint **/*.py'
+                }
+            }
+        }
+    }
+}
