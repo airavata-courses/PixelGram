@@ -31,10 +31,8 @@ pipeline {
         stage('CleanUp') {
             steps {
                 script{
-                    sh 'pwd'
                     sh '''
                     docker rmi $(docker images -f 'dangling=true' -q) || true
-                    docker rmi $(docker images | sed 1,2d | awk '{print $3}') || true
                     '''
                 }
             }
@@ -43,7 +41,7 @@ pipeline {
         stage('Build') {
             steps {
                 script{
-                    sh '''docker build -t ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG} .'''
+                    sh '''docker build -t ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG} -f pixelgram-cloud-service/Dockerfile pixelgram-cloud-service/.'''
                 }
             }
         }
