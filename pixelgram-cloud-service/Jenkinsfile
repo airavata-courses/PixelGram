@@ -2,6 +2,10 @@ def getEnvVar(String paramName){
     return sh (script: "grep '${paramName}' project.properties|cut -d'=' -f2", returnStdout: true).trim();
 }
 
+def getTimeStamp(){
+    return sh (script: "date +'%Y%m%d%H%M%S%N' | sed 's/[0-9][0-9][0-9][0-9][0-9][0-9]\$//g'", returnStdout: true);
+}
+
 pipeline {
     environment {
         GIT_COMMIT_SHORT_HASH = sh (script: "git rev-parse --short HEAD", returnStdout: true)
