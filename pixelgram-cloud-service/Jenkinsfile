@@ -14,7 +14,6 @@ pipeline {
                 script {
                     env.BASE_DIR = pwd()
                     env.CURRENT_BRANCH = env.BRANCH_NAME
-                    env.IMAGE_TAG = getImageTag(env.CURRENT_BRANCH)
                     env.TIMESTAMP = getTimeStamp()
                     env.IMAGE_NAME = getEnvVar('IMAGE_NAME')
                     env.RELEASE_TAG = getEnvVar('RELEASE_TAG')
