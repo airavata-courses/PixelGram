@@ -1,0 +1,471 @@
+apiVersion: v1
+items:
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -o kubernetes.yml
+        kompose.version: 1.22.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: cloudservice
+      name: cloudservice
+    spec:
+      ports:
+        - name: "5004"
+          port: 5004
+          targetPort: 5004
+      selector:
+        io.kompose.service: cloudservice
+    status:
+      loadBalancer: {}
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -o kubernetes.yml
+        kompose.version: 1.22.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: getwayservice
+      name: getwayservice
+    spec:
+      ports:
+        - name: "5000"
+          port: 5000
+          targetPort: 5000
+      selector:
+        io.kompose.service: getwayservice
+    status:
+      loadBalancer: {}
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -o kubernetes.yml
+        kompose.version: 1.22.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: imageservice
+      name: imageservice
+    spec:
+      ports:
+        - name: "5005"
+          port: 5005
+          targetPort: 5005
+      selector:
+        io.kompose.service: imageservice
+    status:
+      loadBalancer: {}
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -o kubernetes.yml
+        kompose.version: 1.22.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: metadataservice
+      name: metadataservice
+    spec:
+      ports:
+        - name: "5006"
+          port: 5006
+          targetPort: 5006
+      selector:
+        io.kompose.service: metadataservice
+    status:
+      loadBalancer: {}
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -o kubernetes.yml
+        kompose.version: 1.22.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: rabbitmq
+      name: rabbitmq
+    spec:
+      ports:
+        - name: "5672"
+          port: 5672
+          targetPort: 5672
+        - name: "15672"
+          port: 15672
+          targetPort: 15672
+      selector:
+        io.kompose.service: rabbitmq
+    status:
+      loadBalancer: {}
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -o kubernetes.yml
+        kompose.version: 1.22.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: ui
+      name: ui
+    spec:
+      ports:
+        - name: "3000"
+          port: 3000
+          targetPort: 3000
+      selector:
+        io.kompose.service: ui
+    status:
+      loadBalancer: {}
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -o kubernetes.yml
+        kompose.version: 1.22.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: userservice
+      name: userservice
+    spec:
+      ports:
+        - name: "5003"
+          port: 5003
+          targetPort: 5003
+      selector:
+        io.kompose.service: userservice
+    status:
+      loadBalancer: {}
+  - apiVersion: v1
+    kind: Pod
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -o kubernetes.yml
+        kompose.version: 1.22.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: cloudservice
+      name: cloudservice
+    spec:
+      containers:
+        - image: cloudservice
+          name: cloudservice
+          ports:
+            - containerPort: 5004
+          resources: {}
+          tty: true
+          volumeMounts:
+            - mountPath: /pixelgram-cloud-service/
+              name: cloudservice-claim0
+      restartPolicy: OnFailure
+      volumes:
+        - name: cloudservice-claim0
+          persistentVolumeClaim:
+            claimName: cloudservice-claim0
+    status: {}
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: cloudservice-claim0
+      name: cloudservice-claim0
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 100Mi
+    status: {}
+  - apiVersion: v1
+    kind: Pod
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -o kubernetes.yml
+        kompose.version: 1.22.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: getwayservice
+      name: getwayservice
+    spec:
+      containers:
+        - image: getwayservice
+          name: getwayservice
+          ports:
+            - containerPort: 5000
+          resources: {}
+          tty: true
+          volumeMounts:
+            - mountPath: /pixelgram-gateway-service/
+              name: getwayservice-claim0
+      restartPolicy: OnFailure
+      volumes:
+        - name: getwayservice-claim0
+          persistentVolumeClaim:
+            claimName: getwayservice-claim0
+    status: {}
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: getwayservice-claim0
+      name: getwayservice-claim0
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 100Mi
+    status: {}
+  - apiVersion: v1
+    kind: Pod
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -o kubernetes.yml
+        kompose.version: 1.22.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: imageservice
+      name: imageservice
+    spec:
+      containers:
+        - image: imageservice
+          name: imageservice
+          ports:
+            - containerPort: 5005
+          resources: {}
+          tty: true
+          volumeMounts:
+            - mountPath: /pixelgram-image-service/
+              name: imageservice-claim0
+      restartPolicy: OnFailure
+      volumes:
+        - name: imageservice-claim0
+          persistentVolumeClaim:
+            claimName: imageservice-claim0
+    status: {}
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: imageservice-claim0
+      name: imageservice-claim0
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 100Mi
+    status: {}
+  - apiVersion: v1
+    kind: Pod
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -o kubernetes.yml
+        kompose.version: 1.22.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: metadataservice
+      name: metadataservice
+    spec:
+      containers:
+        - image: metadataservice
+          name: metadataservice
+          ports:
+            - containerPort: 5006
+          resources: {}
+          tty: true
+          volumeMounts:
+            - mountPath: /pixelgram-metadata-service/
+              name: metadataservice-claim0
+      restartPolicy: OnFailure
+      volumes:
+        - name: metadataservice-claim0
+          persistentVolumeClaim:
+            claimName: metadataservice-claim0
+    status: {}
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: metadataservice-claim0
+      name: metadataservice-claim0
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 100Mi
+    status: {}
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -o kubernetes.yml
+        kompose.version: 1.22.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: rabbitmq
+      name: rabbitmq
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          io.kompose.service: rabbitmq
+      strategy:
+        type: Recreate
+      template:
+        metadata:
+          annotations:
+            kompose.cmd: kompose convert -o kubernetes.yml
+            kompose.version: 1.22.0 (HEAD)
+          creationTimestamp: null
+          labels:
+            io.kompose.service: rabbitmq
+        spec:
+          containers:
+            - image: rabbitmq:3-management-alpine
+              livenessProbe:
+                exec:
+                  command:
+                    - nc
+                    - -z
+                    - localhost
+                    - "5672"
+                failureThreshold: 5
+                periodSeconds: 10
+                timeoutSeconds: 10
+              name: rabbitmq
+              ports:
+                - containerPort: 5672
+                - containerPort: 15672
+              resources: {}
+              volumeMounts:
+                - mountPath: /etc/rabbitmq/
+                  name: rabbitmq-claim0
+                - mountPath: /var/lib/rabbitmq/
+                  name: rabbitmq-claim1
+                - mountPath: /var/log/rabbitmq/
+                  name: rabbitmq-claim2
+          hostname: rabbitmq
+          restartPolicy: Always
+          volumes:
+            - name: rabbitmq-claim0
+              persistentVolumeClaim:
+                claimName: rabbitmq-claim0
+            - name: rabbitmq-claim1
+              persistentVolumeClaim:
+                claimName: rabbitmq-claim1
+            - name: rabbitmq-claim2
+              persistentVolumeClaim:
+                claimName: rabbitmq-claim2
+    status: {}
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: rabbitmq-claim0
+      name: rabbitmq-claim0
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 100Mi
+    status: {}
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: rabbitmq-claim1
+      name: rabbitmq-claim1
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 100Mi
+    status: {}
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: rabbitmq-claim2
+      name: rabbitmq-claim2
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 100Mi
+    status: {}
+  - apiVersion: v1
+    kind: Pod
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -o kubernetes.yml
+        kompose.version: 1.22.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: ui
+      name: ui
+    spec:
+      containers:
+        - image: ui
+          name: ui
+          ports:
+            - containerPort: 3000
+          resources: {}
+          tty: true
+      restartPolicy: OnFailure
+    status: {}
+  - apiVersion: v1
+    kind: Pod
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -o kubernetes.yml
+        kompose.version: 1.22.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: userservice
+      name: userservice
+    spec:
+      containers:
+        - image: userservice
+          name: userservice
+          ports:
+            - containerPort: 5003
+          resources: {}
+          tty: true
+          volumeMounts:
+            - mountPath: /pixelgram-user-service/
+              name: userservice-claim0
+      restartPolicy: OnFailure
+      volumes:
+        - name: userservice-claim0
+          persistentVolumeClaim:
+            claimName: userservice-claim0
+    status: {}
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: userservice-claim0
+      name: userservice-claim0
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 100Mi
+    status: {}
+kind: List
+metadata: {}
+
