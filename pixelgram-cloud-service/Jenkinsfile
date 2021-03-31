@@ -1,5 +1,3 @@
-import jenkins.model.*
-jenkins = Jenkins.instance
 def getEnvVar(String paramName){
     return sh (script: "grep '${paramName}' pixelgram-cloud-service/project.properties|cut -d'=' -f2", returnStdout: true).trim();
 }
@@ -45,8 +43,6 @@ pipeline {
             steps {
                 script{
                     sh '''docker build -t ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG} -f pixelgram-cloud-service/Dockerfile pixelgram-cloud-service/.'''
-                    EnvironmentVariablesNodeProperty prop = jenkins.getGlobalNodeProperties().get(EnvironmentVariablesNodeProperty.class)
-                    EnvVars env = prop.getEnvVars()
                 }
             }
         }
