@@ -1,5 +1,5 @@
 def getEnvVar(String paramName){
-    return sh (script: "grep '${paramName}' pixelgram-user-service/project.properties|cut -d'=' -f2", returnStdout: true).trim();
+    return sh (script: "grep '${paramName}' pixelgram-gateway-service/project.properties|cut -d'=' -f2", returnStdout: true).trim();
 }
 
 def getTimeStamp(){

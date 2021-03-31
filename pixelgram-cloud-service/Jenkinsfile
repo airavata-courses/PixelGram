@@ -25,6 +25,7 @@ pipeline {
                     env.RELEASE_TAG = getEnvVar('RELEASE_TAG')
                     env.DOCKER_PROJECT_NAMESPACE = getEnvVar('DOCKER_PROJECT_NAMESPACE')
                     env.JENKINS_DOCKER_CREDENTIALS_ID = getEnvVar('JENKINS_DOCKER_CREDENTIALS_ID')
+                    env.PROJECT_PATH = getEnvVar('PROJECT_PATH')
                 }
             }
         }
@@ -34,6 +35,7 @@ pipeline {
                 script{
                     sh '''
                     docker rmi $(docker images -f 'dangling=true' -q) || true
+                    // docker rmi $(docker images | sed 1,2d | awk '{print $3}') || true
                     '''
                 }
             }
@@ -42,7 +44,7 @@ pipeline {
         stage('Build') {
             steps {
                 script{
-                    sh '''docker build -t ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG} -f pixelgram-cloud-service/Dockerfile pixelgram-cloud-service/.'''
+                    sh '''docker build -t ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG} -f ${PROJECT_PATH}/Dockerfile ${PROJECT_PATH}/.'''
                 }
             }
         }

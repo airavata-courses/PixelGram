@@ -1,4 +1,4 @@
-FROM node:15.11.0
+FROM node:15.11.0-alpine
 
 COPY . /docker-gateway-service
 WORKDIR /docker-gateway-service
