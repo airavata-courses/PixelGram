@@ -28,21 +28,21 @@ services:
       - rabbitmq
     
   userservice:
-    build: sannidhi09/pixelgram_user_service
+    image: sannidhi09/pixelgram_user_service
     ports:
       - "5003:5003"
     tty: true
     restart: on-failure
     
   getwayservice:
-    build: sannidhi09/pixelgram_gateway_service
+    image: sannidhi09/pixelgram_gateway_service
     ports:
       - "5000:5000"
     tty: true
     restart: on-failure
 
   metadataservice:
-    build: sannidhi09/pixelgram_metadata_service
+    image: sannidhi09/pixelgram_metadata_service
     ports:
       - "5006:5006"
     tty: true
@@ -52,7 +52,7 @@ services:
       - cloudservice
 
   imageservice:
-    build: sannidhi09/pixelgram_image_service
+    image: sannidhi09/pixelgram_image_service
     ports:
       - "5005:5005"
     tty: true
@@ -63,7 +63,7 @@ services:
       - metadataservice
 
   ui:
-    build: sannidhi09/pixelgram_ui_service
+    image: sannidhi09/pixelgram_ui_service
     ports:
       - "3000:3000"
     tty: true
