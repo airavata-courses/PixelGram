@@ -1,3 +1,5 @@
+import jenkins.model.*
+jenkins = Jenkins.instance
 def getEnvVar(String paramName){
     return sh (script: "grep '${paramName}' pixelgram-cloud-service/project.properties|cut -d'=' -f2", returnStdout: true).trim();
 }
@@ -24,6 +26,7 @@ pipeline {
                     env.IMAGE_NAME = getEnvVar('IMAGE_NAME')
                     env.RELEASE_TAG = getEnvVar('RELEASE_TAG')
                     env.DOCKER_PROJECT_NAMESPACE = getEnvVar('DOCKER_PROJECT_NAMESPACE')
+                    env.JENKINS_DOCKER_CREDENTIALS_ID = getEnvVar('JENKINS_DOCKER_CREDENTIALS_ID')
                 }
             }
         }
@@ -42,6 +45,8 @@ pipeline {
             steps {
                 script{
                     sh '''docker build -t ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG} -f pixelgram-cloud-service/Dockerfile pixelgram-cloud-service/.'''
+                    EnvironmentVariablesNodeProperty prop = jenkins.getGlobalNodeProperties().get(EnvironmentVariablesNodeProperty.class)
+                    EnvVars env = prop.getEnvVars()
                 }
             }
         }
