@@ -44,7 +44,7 @@ pipeline {
         stage('Build') {
             steps {
                 script{
-                    sh '''docker build -t ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG} -f ${PROJECT_PATH}/Dockerfile ${PROJECT_PATH}/.'''
+                    sh '''docker build -t ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG} -f ${PROJECT_PATH}/dockerfile ${PROJECT_PATH}/.'''
                 }
             }
         }
