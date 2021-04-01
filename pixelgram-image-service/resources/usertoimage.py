@@ -3,6 +3,22 @@ from flask_restful import Resource,reqparse
 from models.usertoimage import usertoimageModel
 
 
+def process_user_to_image_queue_data(ch, method, properties, body):
+    body = json.loads(body)
+    print(body)
+    try:
+        usertoimage = usertoimageModel(
+            userid=body['user_id'],
+            imageids=body['imageids']
+        )
+        usertoimage.insert()
+        print("Inserted")
+        ch.basic_ack(delivery_tag = method.delivery_tag)
+    except Exception as e:
+        print(e)
+
+
+
 class UsertoimageResource(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('userid', type= str, required= True, help= "This field cannot be left blank")

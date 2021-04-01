@@ -55,4 +55,5 @@ api.add_resource(User,'/user')
 api.add_resource(UserRegister,'/register')
 
 if __name__ == "__main__":
+    create_tables.createDB()
     app.run(host='0.0.0.0', port = 5003, debug = True)

@@ -5,17 +5,15 @@ import json
 from time import sleep
 import threading
 
-
-def data_processing():
-    print()
-    return 
+    
 
 class consumerMQ:
 
     internal_lock = threading.Lock()
 
-    def __init__(self, queue):
+    def __init__(self, queue, data_processing = lambda ch, method, properties, body: ch.basic_ack(delivery_tag = method.delivery_tag)):
         self.queue = queue
+        self.data_processing = data_processing
         self.connection = None
         self.channel = None
         self.create_connection()
@@ -24,6 +22,7 @@ class consumerMQ:
             durable=True,
             passive=True
         )
+        print(result)
         thread = threading.Thread(target=self._process_data_events)
         thread.setDaemon(True)
         thread.start()
@@ -36,17 +35,13 @@ class consumerMQ:
     def _process_data_events(self):
         self.channel.basic_consume(
             queue=self.queue,
-            on_message_callback=self.callback
+            on_message_callback=self.data_processing
         )
 
         while True:
             with self.internal_lock:
                 self.connection.process_data_events()
                 sleep(0.1)
-
-    def callback(self, ch, method, properties, body):
-        ch.basic_ack(delivery_tag = method.delivery_tag)
-        print("Data Read: {}".format(json.loads(body)))
     
     def create_connection(self):
         while self.connection == None or self.connection.is_closed:
@@ -111,8 +106,7 @@ class producerMQ:
                         delivery_mode = 2,
                     )
                 )
-            except Exception as e:
-                print(e)
+            except:
                 print("Unable to push the message to queue {}".format(self.queue))
         else:
             print('{} queue is not binded. Trying to get connection'.format(self.queue))

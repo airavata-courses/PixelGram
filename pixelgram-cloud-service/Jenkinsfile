@@ -1,0 +1,66 @@
+def getEnvVar(String paramName){
+    return sh (script: "grep '${paramName}' pixelgram-cloud-service/project.properties|cut -d'=' -f2", returnStdout: true).trim();
+}
+
+def getTimeStamp(){
+    return sh (script: "date +'%Y%m%d%H%M%S%N' | sed 's/[0-9][0-9][0-9][0-9][0-9][0-9]\$//g'", returnStdout: true);
+}
+
+pipeline {
+
+    agent any
+
+    environment {
+        GIT_COMMIT_SHORT_HASH = sh (script: "git rev-parse --short HEAD", returnStdout: true)
+    }
+
+    stages {
+        stage('Init') {
+            steps {
+                script {
+                    env.BASE_DIR = pwd()
+                    env.CURRENT_BRANCH = env.BRANCH_NAME
+                    env.TIMESTAMP = getTimeStamp()
+                    env.IMAGE_NAME = getEnvVar('IMAGE_NAME')
+                    env.RELEASE_TAG = getEnvVar('RELEASE_TAG')
+                    env.DOCKER_PROJECT_NAMESPACE = getEnvVar('DOCKER_PROJECT_NAMESPACE')
+                    env.JENKINS_DOCKER_CREDENTIALS_ID = getEnvVar('JENKINS_DOCKER_CREDENTIALS_ID')
+                    env.PROJECT_PATH = getEnvVar('PROJECT_PATH')
+                }
+            }
+        }
+
+        stage('CleanUp') {
+            steps {
+                script{
+                    sh '''
+                    docker rmi $(docker images -f 'dangling=true' -q) || true
+                    // docker rmi $(docker images | sed 1,2d | awk '{print $3}') || true
+                    '''
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                script{
+                    sh '''docker build -t ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG} -f ${PROJECT_PATH}/dockerfile ${PROJECT_PATH}/.'''
+                }
+            }
+        }
+
+        stage('Publish') {
+            steps {
+                script{
+                    withCredentials([usernamePassword(credentialsId: "${JENKINS_DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWD')]){
+                        sh '''
+                        echo $DOCKER_PASSWD | docker login --username ${DOCKER_USERNAME} --password-stdin
+                        docker push ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}
+                        docker logout
+                        '''
+                    }
+                }
+            }
+        }
+    }
+}

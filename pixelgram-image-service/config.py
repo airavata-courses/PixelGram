@@ -1,5 +1,4 @@
-IMAGE_SERVICE_URL='http://127.0.0.1:5004'
 RABBITMQ_HOST = 'rabbitmq'
 RABBITMQ_PORT = 5672
-METADATA_QUEUE = 'metadata_queue'
+USER_TO_IMAGE_QUEUE = 'usertoimage_queue'
 IMAGE_DETAILS_QUEUE = 'imagedetails_queue'
