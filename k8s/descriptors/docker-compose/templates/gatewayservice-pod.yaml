@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -c
+    kompose.version: 1.22.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.network/pixelgram: "true"
+    io.kompose.service: gatewayservice
+  name: gatewayservice
+spec:
+  containers:
+    - image: sannidhi09/pixelgram_gateway_service:latest
+      name: gatewayservice
+      ports:
+        - containerPort: 5000
+      resources: {}
+      tty: true
+  restartPolicy: OnFailure
+status: {}
