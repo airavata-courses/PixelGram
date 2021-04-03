@@ -1,0 +1,109 @@
+networks:
+  pixelgram: {}
+services:
+  cloudservice:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    image: sannidhi09/pixelgram_cloud_service:latest
+    networks:
+      pixelgram: null
+    ports:
+    - published: 5004
+      target: 5004
+    restart: on-failure
+    tty: true
+  gatewayservice:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    image: sannidhi09/pixelgram_gateway_service:latest
+    networks:
+      pixelgram: null
+    ports:
+    - published: 5000
+      target: 5000
+    restart: on-failure
+    tty: true
+  imageservice:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    image: sannidhi09/pixelgram_image_service:latest
+    networks:
+      pixelgram: null
+    ports:
+    - published: 5005
+      target: 5005
+    restart: on-failure
+    tty: true
+  metadataservice:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    image: sannidhi09/pixelgram_metadata_service:latest
+    networks:
+      pixelgram: null
+    ports:
+    - published: 5006
+      target: 5006
+    restart: on-failure
+    tty: true
+  rabbitmq:
+    container_name: rabbitmq
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    healthcheck:
+      interval: 10s
+      retries: 5
+      test:
+      - CMD
+      - nc
+      - -z
+      - localhost
+      - '5672'
+      timeout: 10s
+    hostname: rabbitmq
+    image: rabbitmq:3-management-alpine
+    networks:
+      pixelgram: null
+    ports:
+    - published: 5672
+      target: 5672
+    - published: 15672
+      target: 15672
+    restart: on-failure
+  ui:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    image: sannidhi09/pixelgram_ui_service:latest
+    networks:
+      pixelgram: null
+    ports:
+    - published: 3000
+      target: 3000
+    restart: on-failure
+    tty: true
+  userservice:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    image: sannidhi09/pixelgram_user_service:latest
+    networks:
+      pixelgram: null
+    ports:
+    - published: 5003
+      target: 5003
+    restart: on-failure
+    tty: true
+version: '3.7'
+
