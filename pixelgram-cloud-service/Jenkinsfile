@@ -74,9 +74,9 @@ pipeline {
                         sh '''
                         ssh -T -oStrictHostKeyChecking=no centos@149.165.171.210
                         
-                        [ ! -d "/repo" ] && mkdir /repo
+                        [ ! -d "/repo" ] && mkdir repo
                         
-                        cd /repo
+                        cd repo
                         
                         git clone --single-branch --branch ${CURRENT_BRANCH} https://github.com/airavata-courses/PixelGram.git
                         
