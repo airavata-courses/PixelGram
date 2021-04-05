@@ -70,7 +70,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    withCredentials() {
+                    withCredentials([usernamePassword(credentialsId: "${JENKINS_DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWD')]) {
                         sh '''
                         ssh centos@149.165.171.210
                         
