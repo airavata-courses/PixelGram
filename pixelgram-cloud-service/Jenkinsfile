@@ -74,7 +74,7 @@ pipeline {
                         sh '''
                         ssh -T -oStrictHostKeyChecking=no centos@149.165.171.210
                         
-                        [ ! -d "/repo" ] && mkdir repo
+                        [ ! -d "repo" ] && mkdir repo
                         
                         cd repo
                         
