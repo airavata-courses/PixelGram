@@ -72,7 +72,9 @@ pipeline {
                 script {
                     withCredentials([usernamePassword(credentialsId: "${JENKINS_DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWD')]) {
                         sh '''
-                        ssh centos@149.165.171.210
+                        sudo su jenkins
+
+                        ssh -T centos@149.165.171.210
                         
                         [ ! -d "/repo" ] && mkdir /repo
                         
