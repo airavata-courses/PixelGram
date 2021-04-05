@@ -19,9 +19,13 @@ pipeline {
             steps {
                 script {
                     env.BASE_DIR = pwd()
+                    env.PROJECT_NAME = 'pixelgram'
+                    env.APP_NAME = 'cloud_service'
                     env.CURRENT_BRANCH = env.BRANCH_NAME
                     env.TIMESTAMP = getTimeStamp()
                     env.IMAGE_NAME = getEnvVar('IMAGE_NAME')
+                    env.PORT = getEnvVar('PORT')
+                    env.REPLICA = getEnvVar('REPLICA')
                     env.RELEASE_TAG = getEnvVar('RELEASE_TAG')
                     env.DOCKER_PROJECT_NAMESPACE = getEnvVar('DOCKER_PROJECT_NAMESPACE')
                     env.JENKINS_DOCKER_CREDENTIALS_ID = getEnvVar('JENKINS_DOCKER_CREDENTIALS_ID')
@@ -57,6 +61,34 @@ pipeline {
                         echo $DOCKER_PASSWD | docker login --username ${DOCKER_USERNAME} --password-stdin
                         docker push ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}
                         docker logout
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {
+                    withCredentials() {
+                        sh '''
+                        ssh centos@149.165.171.210
+                        
+                        [ ! -d "/repo" ] && mkdir /repo
+                        
+                        cd /repo
+                        
+                        git clone --single-branch --branch ${CURRENT_BRANCH} https://github.com/airavata-courses/PixelGram.git
+                        
+                        [ -d "pixelgram" ] && echo "Sucussfully cloned" || [ ! -d "pixelgram" ] && echo "Not cloned"
+                        
+                        [ -d "pixelgram/Openshift/pixelgram_oc_object_files" ] && cd pixelgram/Openshift/pixelgram_oc_object_files || 
+                        [ ! -d "pixelgram/Openshift/pixelgram_oc_object_files" ] && echo "Openshift object files folder is not found"
+
+                        chmod +x process_files.sh
+
+                        ./process_files.sh ${PROJECT_NAME} ${APP_NAME} ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG} ${TIMESTAMP} ${PORT} ${REPLICA}
+
                         '''
                     }
                 }
