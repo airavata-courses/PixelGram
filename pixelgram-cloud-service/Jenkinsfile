@@ -76,7 +76,9 @@ pipeline {
                         
                         [ ! -d "repo" ] && mkdir repo
                         
-                        cd repo
+                        sudo cd repo
+
+                        pwd
                         
                         git clone --single-branch --branch ${CURRENT_BRANCH} https://github.com/airavata-courses/PixelGram.git
                         
