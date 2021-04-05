@@ -80,10 +80,10 @@ pipeline {
                         
                         git clone --single-branch --branch ${CURRENT_BRANCH} https://github.com/airavata-courses/PixelGram.git
                         
-                        [ -d "pixelgram" ] && echo "Sucussfully cloned" || [ ! -d "pixelgram" ] && echo "Not cloned"
+                        [ -d "Pixelgram" ] && echo "Sucussfully cloned" || [ ! -d "Pixelgram" ] && echo "Not cloned"
                         
-                        [ -d "pixelgram/Openshift/pixelgram_oc_object_files" ] && cd pixelgram/Openshift/pixelgram_oc_object_files || 
-                        [ ! -d "pixelgram/Openshift/pixelgram_oc_object_files" ] && echo "Openshift object files folder is not found"
+                        [ -d "Pixelgram/Openshift/pixelgram_oc_object_files" ] && cd Pixelgram/Openshift/pixelgram_oc_object_files || 
+                        [ ! -d "Pixelgram/Openshift/pixelgram_oc_object_files" ] && echo "Openshift object files folder is not found"
 
                         chmod +x process_files.sh
 
