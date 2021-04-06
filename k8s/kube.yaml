@@ -14,7 +14,6 @@ spec:
       labels:
         app: __APP_NAME__
         updateTimestamp: "__TIMESTAMP__"
-        version: __VERSION__
     spec:
       containers:
       - name: __APP_NAME__
