@@ -88,7 +88,7 @@ pipeline {
                                 verbose: true,
                                 transfers: [
                                     sshTransfer(
-                                        execCommand: '''
+                                        execCommand: "
                                         [ ! -d "deployment_files" ] && mkdir deployment_files;
                                         cd deployment_files;
                                         echo ${GITHUB_URL_YAML};
@@ -97,9 +97,9 @@ pipeline {
                                         wget ${GITHUB_URL_YAML};
                                         wget ${GITHUB_URL_SH};
                                         kubectl delete deployment,services,ingresses,horizontalpodautoscalers -l app=${APP_NAME};
-                                        ./process_file "$PWD" ${APP_NAME} ${IMAGE_NAME} ${TIMESTAMP} ${PORT} ${TARGET_PORT} ${CONTAINER_PORT} ${REPLICA} ${MAX_REPLICA} ${SERVICE_TYPE} ${SERVICE_PATH};                            
+                                        ./process_file `$PWD` ${APP_NAME} ${IMAGE_NAME} ${TIMESTAMP} ${PORT} ${TARGET_PORT} ${CONTAINER_PORT} ${REPLICA} ${MAX_REPLICA} ${SERVICE_TYPE} ${SERVICE_PATH};                            
                                         kubectl apply -f kube.yaml;
-                                        '''
+                                        "
                                     )
                                 ]
                             )
