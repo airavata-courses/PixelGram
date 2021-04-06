@@ -96,7 +96,13 @@ pipeline {
                                         wget ${GITHUB_URL_SH};
                                         kubectl delete deployment,services,ingresses,horizontalpodautoscalers -l app=${APP_NAME};
                                         chmod +x process_file.sh
-                                        ./process_file.sh $pwd ${APP_NAME} ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG} ${TIMESTAMP} ${PORT} ${TARGET_PORT} ${CONTAINER_PORT} ${REPLICA} ${MAX_REPLICA} ${SERVICE_TYPE} ${SERVICE_PATH};                            
+                                        echo $pwd
+                                        echo ${TARGET_PORT}
+                                        echo ${CONTAINER_PORT}
+                                        echo ${MAX_REPLICA}
+                                        ./process_file.sh $pwd 
+                                        ${APP_NAME} 
+                                        ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG} ${TIMESTAMP} ${PORT} ${TARGET_PORT} ${CONTAINER_PORT} ${REPLICA} ${MAX_REPLICA} ${SERVICE_TYPE} ${SERVICE_PATH};                            
                                         kubectl apply -f kube.yaml;
                                         """
                                     )
