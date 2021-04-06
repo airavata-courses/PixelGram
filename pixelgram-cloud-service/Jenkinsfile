@@ -69,6 +69,8 @@ pipeline {
                         echo $DOCKER_PASSWD | docker login --username ${DOCKER_USERNAME} --password-stdin
                         docker push ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}
                         docker logout
+                        echo ${GITHUB_URL_YAML}
+                        echo ${GITHUB_URL_SH}
                         '''
                     }
                 }
