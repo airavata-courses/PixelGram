@@ -4,9 +4,9 @@ const config = {
         port: 5000
     },
     routeURLS: {
-        userService: "http://127.0.0.1:5003",
-        imageService: "http://127.0.0.1:5005",
-        cloudService: "http://127.0.0.1:5004"
+        userService: "user-service:5003",
+        imageService: "image-service:5005",
+        cloudService: "cloud-service:5004"
     }
 };
 

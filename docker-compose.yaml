@@ -3,7 +3,7 @@ version: '3.7'
 services:
   rabbitmq:
     image: rabbitmq:3-management-alpine
-    hostname: rabbitmq
+    hostname: rabbitmq-service
     container_name: rabbitmq
     # volumes:
     #   - /.docker/rabbitmq/etc/:/etc/rabbitmq/
@@ -27,6 +27,7 @@ services:
     
   cloudservice:
     image: ${REPO}/pixelgram_cloud_service:${TAG}
+    hostname: cloud-service
     ports:
       - "5004:5004"
     tty: true
@@ -40,6 +41,7 @@ services:
     
   userservice:
     image: ${REPO}/pixelgram_user_service:${TAG}
+    hostname: cloud-service
     ports:
       - "5003:5003"
     tty: true
@@ -53,6 +55,7 @@ services:
     
   gatewayservice:
     image: ${REPO}/pixelgram_gateway_service:${TAG}
+    hostname: gateway-service
     ports:
       - "5000:5000"
     tty: true
@@ -66,6 +69,7 @@ services:
 
   metadataservice:
     image: ${REPO}/pixelgram_metadata_service:${TAG}
+    hostname: metadata-service
     ports:
       - "5006:5006"
     tty: true
@@ -79,6 +83,7 @@ services:
 
   imageservice:
     image: ${REPO}/pixelgram_image_service:${TAG}
+    hostname: image-service
     ports:
       - "5005:5005"
     tty: true
@@ -92,6 +97,7 @@ services:
 
   ui:
     image: ${REPO}/pixelgram_ui_service:${TAG}
+    hostname: pixelgramui
     ports:
       - "3000:3000"
     tty: true

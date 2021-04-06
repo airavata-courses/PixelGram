@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: __APP_NAME__-dc
+  name: __APP_NAME__-deploy
   labels:
     app: __APP_NAME__
 spec:
@@ -34,7 +34,7 @@ kind: Service
 metadata:
   labels:
     app: __APP_NAME__
-  name: __APP_NAME__-svc
+  name: __APP_NAME__-service
 spec:
   selector:
     app: __APP_NAME__
@@ -52,7 +52,7 @@ metadata:
   name: __APP_NAME__-ingress
 spec:
   backend:
-    serviceName: __APP_NAME__-svc
+    serviceName: __APP_NAME__-service
     servicePort: http-port
 ---
 apiVersion: autoscaling/v2beta1
@@ -65,11 +65,11 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: __APP_NAME__
+    name: __APP_NAME__-deploy
   minReplicas: __REPLICA__
   maxReplicas: __MAX_REPLICA__
   metrics:
   - type: Resource
     resource:
       name: cpu
-      targetAverageUtilization: 80
+      targetAverageUtilization: 60
