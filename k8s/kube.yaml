@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: __APP_NAME__-dc
+  labels:
+    app: __APP_NAME__
+    version: __VERSION__
+spec:
+  replicas: __REPLICA__
+  selector:
+    matchLabels:
+      app: __APP_NAME__
+  template:
+    metadata:
+      labels:
+        app: __APP_NAME__
+        updateTimestamp: "__TIMESTAMP__"
+        version: __VERSION__
+    spec:
+      containers:
+      - name: __APP_NAME__
+        image: __IMAGE__
+        imagePullPolicy: Always
+        ports:
+        - containerPort: __CONTAINER_PORT__
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+            memory: 2GiB
+        env:
+        - name: file-service
+          value: "driveservice:2222"
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: __APP_NAME__-svc
+spec:
+  selector:
+    app: __APP_NAME__
+  ports:
+    - protocol: TCP
+      port: __PORT__
+      targetPort: __TARGET_PORT__
+  type: __SERVICE_TYPE__
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: __APP_NAME__-route
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /__SERVICE_PATH__
+        pathType: Prefix
+        backend:
+          service:
+            name: __APP_NAME__
+            port:
+              number: __PORT__
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: __APP_NAME__-scaler
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: __APP_NAME__
+  minReplicas: __REPLICA__
+  maxReplicas: __MAX_REPLICA__
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 80

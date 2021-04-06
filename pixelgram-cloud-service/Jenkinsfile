@@ -19,17 +19,25 @@ pipeline {
             steps {
                 script {
                     env.BASE_DIR = pwd()
+                    env.K8_DEPLOY_DIR = '/home/centos/deployment'
                     env.PROJECT_NAME = 'pixelgram'
                     env.APP_NAME = 'cloud_service'
                     env.CURRENT_BRANCH = env.BRANCH_NAME
                     env.TIMESTAMP = getTimeStamp()
                     env.IMAGE_NAME = getEnvVar('IMAGE_NAME')
                     env.PORT = getEnvVar('PORT')
+                    env.TARGET_PORT = getEnvVar('TARGET_PORT')
+                    env.CONTAINER_PORT = getEnvVar('CONTAINER_PORT')
                     env.REPLICA = getEnvVar('REPLICA')
+                    env.MAX_REPLICA = getEnvVar('MAX_REPLICA')
+                    env.SERVICE_TYPE = getEnvVar('SERVICE_TYPE')
+                    env.SERVICE_PATH = getEnvVar('SERVICE_PATH')
                     env.RELEASE_TAG = getEnvVar('RELEASE_TAG')
                     env.DOCKER_PROJECT_NAMESPACE = getEnvVar('DOCKER_PROJECT_NAMESPACE')
                     env.JENKINS_DOCKER_CREDENTIALS_ID = getEnvVar('JENKINS_DOCKER_CREDENTIALS_ID')
                     env.PROJECT_PATH = getEnvVar('PROJECT_PATH')
+                    env.GITHUB_URL_YAML = 'https://raw.githubusercontent.com/airavata-courses/Panorama/'+${CURRENT_BRANCH}'/k8/kube.yaml'
+                    env.GITHUB_URL_SH = 'https://raw.githubusercontent.com/airavata-courses/Panorama/'+${CURRENT_BRANCH}'/k8/process_file.sh'
                 }
             }
         }
@@ -70,29 +78,29 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: "${JENKINS_DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWD')]) {
-                        sh '''
-                        ssh -T -oStrictHostKeyChecking=no centos@149.165.171.210
-                        
-                        [ ! -d "repo" ] && mkdir repo
-                        
-                        cd repo
-
-                        pwd
-                        
-                        git clone --single-branch --branch ${CURRENT_BRANCH} https://github.com/airavata-courses/PixelGram.git
-                        
-                        [ -d "Pixelgram" ] && echo "Sucussfully cloned" || [ ! -d "Pixelgram" ] && echo "Not cloned"
-                        
-                        [ -d "Pixelgram/Openshift/pixelgram_oc_object_files" ] && cd Pixelgram/Openshift/pixelgram_oc_object_files || 
-                        [ ! -d "Pixelgram/Openshift/pixelgram_oc_object_files" ] && echo "Openshift object files folder is not found"
-
-                        chmod +x process_files.sh
-
-                        ./process_files.sh ${PROJECT_NAME} ${APP_NAME} ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG} ${TIMESTAMP} ${PORT} ${REPLICA}
-
-                        '''
-                    }
+                    sshPublisher(
+                        continueOnError: false, failOnError: true
+                        publishers: [
+                            sshPublisherDesc(
+                                configName: 'ssh_k8_master'
+                                verbose: true,
+                                transfers; [
+                                    sshtransfer(
+                                        execCommand: '''
+                                        [ ! -d "deployment_files" ] && mkdir deployment_files
+                                        cd deployment_files;
+                                        rm -rf kube.yaml, process_file.sh;
+                                        wget ${GITHUB_URL_YAML};
+                                        wget ${GITHUB_URL_SH};
+                                        kubectl delete deployment,services,ingresses,horizontalpodautoscalers -l app=${appName};
+                                        ./process_file "$PWD" ${APP_NAME} ${IMAGE_NAME} ${TIMESTAMP} ${PORT} ${TARGET_PORT} ${CONTAINER_PORT} ${REPLICA} ${MAX_REPLICA} ${SERVICE_TYPE} ${SERVICE_PATH};                            
+                                        kubectl apply -f kube.yaml;
+                                        '''
+                                    )
+                                ]
+                            )
+                        ]
+                    )
                 }
             }
         }
