@@ -18,8 +18,7 @@ pipeline {
         stage('Init') {
             steps {
                 script {
-                    env.BASE_DIR = pwd()
-                    env.APP_NAME = 'cloud-service'
+                    env.APP_NAME = getEnvVar('APP_NAME')
                     env.CURRENT_BRANCH = env.BRANCH_NAME
                     env.TIMESTAMP = getTimeStamp()
                     env.IMAGE_NAME = getEnvVar('IMAGE_NAME')
@@ -95,7 +94,9 @@ pipeline {
                                         chmod +x process_file.sh;                           
                                         ./process_file.sh /home/centos/deployment_files ${APP_NAME} ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG} ${TIMESTAMP} ${PORT} ${TARGET_PORT} ${CONTAINER_PORT} ${REPLICA} ${MAX_REPLICA} ${SERVICE_TYPE} ${SERVICE_PATH};
                                         rm -rf *.bak*;
-                                        kubectl apply -f kube.yaml;
+                                        cp -f kube.yaml ../k8-${APP_NAME}.yaml;
+                                        cd ..;
+                                        kubectl apply -f k8-${APP_NAME}.yaml;
                                         """
                                     )
                                 ]
