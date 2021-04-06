@@ -82,7 +82,7 @@ pipeline {
                         continueOnError: false, failOnError: true
                         publishers: [
                             sshPublisherDesc(
-                                configName: 'ssh_k8_master'
+                                configName: 'ssh_k8_master',
                                 verbose: true,
                                 transfers; [
                                     sshtransfer(
@@ -96,10 +96,8 @@ pipeline {
                                         ./process_file "$PWD" ${APP_NAME} ${IMAGE_NAME} ${TIMESTAMP} ${PORT} ${TARGET_PORT} ${CONTAINER_PORT} ${REPLICA} ${MAX_REPLICA} ${SERVICE_TYPE} ${SERVICE_PATH};                            
                                         kubectl apply -f kube.yaml;
                                         '''
-                                    )
-                                ]
-                            )
-                        ]
+                                    )]
+                            )]
                     )
                 }
             }
