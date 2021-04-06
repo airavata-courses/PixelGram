@@ -20,13 +20,14 @@ spec:
         image: __IMAGE__
         imagePullPolicy: Always
         ports:
-        - containerPort: __CONTAINER_PORT__
+        - containerPort: 5672
+        - containerPort: 15672
         resources:
           requests:
-            cpu: 250m
+            cpu: 300m
           limits:
-            cpu: 500m
-            memory: 2Gi
+            cpu: 600m
+            memory: 4Gi
       restartPolicy: OnFailure
 ---
 apiVersion: v1
@@ -40,8 +41,11 @@ spec:
     app: __APP_NAME__
   ports:
     - protocol: TCP
-      port: __PORT__
-      targetPort: __TARGET_PORT__
+      port: 5672
+      targetPort: 5672
+    - protocol: TCP
+      port: 15672
+      targetPort: 15672
   type: __SERVICE_TYPE__
 ---
 apiVersion: extensions/v1beta1
