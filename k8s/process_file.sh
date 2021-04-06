@@ -1,4 +1,4 @@
-if (($# <11))
+if (($# <12))
   then
     echo "Usage : $0 <DOCKER_PROJECT_NAME> <APP_NAME> <IMAGE_TAG> <directory containing k8s files> <TIMESTAMP> <PORT/TARGEt PORT> <POD REPLICA COUNT>"
     exit 1
