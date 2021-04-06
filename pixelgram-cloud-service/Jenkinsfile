@@ -19,9 +19,7 @@ pipeline {
             steps {
                 script {
                     env.BASE_DIR = pwd()
-                    env.K8_DEPLOY_DIR = '/home/centos/deployment'
-                    env.PROJECT_NAME = 'pixelgram'
-                    env.APP_NAME = 'cloud_service'
+                    env.APP_NAME = 'cloud-service'
                     env.CURRENT_BRANCH = env.BRANCH_NAME
                     env.TIMESTAMP = getTimeStamp()
                     env.IMAGE_NAME = getEnvVar('IMAGE_NAME')
@@ -47,7 +45,8 @@ pipeline {
                 script{
                     sh '''
                     docker rmi $(docker images -f 'dangling=true' -q) || true
-                    // docker rmi $(docker images | sed 1,2d | awk '{print $3}') || true
+                    docker rmi $(docker images | sed 1,2d | awk '{print $3}') || true
+                    docker rmi ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}
                     '''
                 }
             }
@@ -94,7 +93,8 @@ pipeline {
                                         wget ${GITHUB_URL_SH}
                                         kubectl delete deployment,services,ingresses,horizontalpodautoscalers -l app=${APP_NAME};
                                         chmod +x process_file.sh;                           
-                                        ./process_file.sh /home/centos/deployment_files ${APP_NAME} ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG} ${TIMESTAMP} ${PORT} ${TARGET_PORT} ${CONTAINER_PORT} ${REPLICA} ${MAX_REPLICA} ${SERVICE_TYPE} ${SERVICE_PATH};                            
+                                        ./process_file.sh /home/centos/deployment_files ${APP_NAME} ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG} ${TIMESTAMP} ${PORT} ${TARGET_PORT} ${CONTAINER_PORT} ${REPLICA} ${MAX_REPLICA} ${SERVICE_TYPE} ${SERVICE_PATH};
+                                        rm -rf *.bak*;
                                         kubectl apply -f kube.yaml;
                                         """
                                     )

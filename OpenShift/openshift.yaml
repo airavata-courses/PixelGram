@@ -4,6 +4,7 @@ metadata:
   name: __APP_NAME__-dc
   labels:
     app: __APP_NAME__
+    version: __VERSION__
 spec:
   replicas: __REPLICA__
   selector:
@@ -27,14 +28,15 @@ spec:
             cpu: 250m
           limits:
             cpu: 500m
-            memory: 2Gi
+            memory: 2GiB
+        env:
+        - name: file-service
+          value: "driveservice:2222"
       restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  labels:
-    app: __APP_NAME__
   name: __APP_NAME__-svc
 spec:
   selector:
@@ -45,22 +47,25 @@ spec:
       targetPort: __TARGET_PORT__
   type: __SERVICE_TYPE__
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  labels:
-    app: __APP_NAME__
-  name: __APP_NAME__-ingress
+  name: __APP_NAME__-route
 spec:
-  backend:
-    serviceName: __APP_NAME__-svc
-    servicePort: http-port
+  rules:
+  - http:
+      paths:
+      - path: /__SERVICE_PATH__
+        pathType: Prefix
+        backend:
+          service:
+            name: __APP_NAME__
+            port:
+              number: __PORT__
 ---
-apiVersion: autoscaling/v2beta1
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
-  labels:
-    app: __APP_NAME__
   name: __APP_NAME__-scaler
 spec:
   scaleTargetRef:
@@ -73,4 +78,6 @@ spec:
   - type: Resource
     resource:
       name: cpu
-      targetAverageUtilization: 80
+      target:
+        type: Utilization
+        averageUtilization: 80
