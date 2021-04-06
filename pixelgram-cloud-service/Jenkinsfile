@@ -84,7 +84,7 @@ pipeline {
                             sshPublisherDesc(
                                 configName: 'ssh_k8_master',
                                 verbose: true,
-                                transfers; [
+                                transfers: [
                                     sshtransfer(
                                         execCommand: '''
                                         [ ! -d "deployment_files" ] && mkdir deployment_files
