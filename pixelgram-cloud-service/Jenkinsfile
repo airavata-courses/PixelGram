@@ -85,7 +85,7 @@ pipeline {
                                 configName: 'ssh_k8_master',
                                 verbose: true,
                                 transfers: [
-                                    sshtransfer(
+                                    sshTransfer(
                                         execCommand: '''
                                         [ ! -d "deployment_files" ] && mkdir deployment_files
                                         cd deployment_files;
