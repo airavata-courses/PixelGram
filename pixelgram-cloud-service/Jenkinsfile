@@ -89,7 +89,7 @@ pipeline {
                                 transfers: [
                                     sshTransfer(
                                         execCommand: '''
-                                        [ ! -d "deployment_files" ] && mkdir deployment_files
+                                        [ ! -d "deployment_files" ] && mkdir deployment_files;
                                         cd deployment_files;
                                         rm -rf kube.yaml, process_file.sh;
                                         wget ${GITHUB_URL_YAML};
