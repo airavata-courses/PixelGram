@@ -91,6 +91,8 @@ pipeline {
                                         execCommand: '''
                                         [ ! -d "deployment_files" ] && mkdir deployment_files;
                                         cd deployment_files;
+                                        echo ${GITHUB_URL_YAML};
+                                        echo ${GITHUB_URL_SH};
                                         rm -rf kube.yaml process_file.sh;
                                         wget ${GITHUB_URL_YAML};
                                         wget ${GITHUB_URL_SH};
