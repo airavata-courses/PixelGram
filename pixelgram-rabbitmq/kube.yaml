@@ -28,7 +28,7 @@ spec:
           limits:
             cpu: 600m
             memory: 4Gi
-      restartPolicy: OnFailure
+      restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
@@ -41,9 +41,11 @@ spec:
     app: __APP_NAME__
   ports:
     - protocol: TCP
+      name: "5672"
       port: 5672
       targetPort: 5672
     - protocol: TCP
+      name: "15672"
       port: 15672
       targetPort: 15672
   type: __SERVICE_TYPE__
