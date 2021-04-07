@@ -53,7 +53,7 @@ metadata:
 spec:
   backend:
     serviceName: __APP_NAME__-service
-    servicePort: http-port
+    servicePort: __PORT__
 ---
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
