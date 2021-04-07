@@ -80,6 +80,7 @@ class producerMQ:
                 durable=True
             )
             queueName = result.method.queue
+            print(queueName)
             sleep(0.1)
 
     def create_connection(self):

@@ -1,6 +1,13 @@
 FROM python:3.8.2-alpine
 COPY . /docker-image-service
+
+RUN adduser -D pixelgram
+RUN chown pixelgram /docker-image-service
+USER pixelgram
+
 WORKDIR /docker-image-service
+
+RUN touch data.db
 
 RUN pip install -r requirements.txt
 

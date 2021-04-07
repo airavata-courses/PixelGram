@@ -1,5 +1,11 @@
 FROM python:3.8.2-alpine
+
 COPY . /docker-cloud-service
+
+RUN adduser -D pixelgram
+RUN chown pixelgram /docker-cloud-service
+USER pixelgram
+
 WORKDIR /docker-cloud-service
 
 RUN pip install -r requirements.txt
