@@ -91,8 +91,7 @@ def files_to_be_uploaded(files, user_id, userproducermq, metadataproducermq):
 
         try:
             image_id = save_image(drive_api, user_id+'_'+filename, mimetype, file_data)
-            print("Hello")
-            print(image_id)
+            image_ids.append(image_id['id'])
             # Publish image data and image id to rabbitmq 
             metadataproducermq.publish_message(
                 body= json.dumps({
@@ -101,8 +100,7 @@ def files_to_be_uploaded(files, user_id, userproducermq, metadataproducermq):
                     "mimetype": mimetype
                 })
             )
-            print(image_id)
-            image_ids.append(image_id['id'])
+            
         except Exception as e:
             print(e)
             failed_uploads.append(filename)
