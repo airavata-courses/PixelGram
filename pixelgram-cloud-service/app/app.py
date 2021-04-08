@@ -38,4 +38,4 @@ if __name__ == "__main__":
     drive_api = gdrive.getDriveService()
     userproducermq = producerMQ(USER_TO_IMAGE_QUEUE)
     metadataproducermq = producerMQ(METADATA_QUEUE)
-    app.run(port = 5004, debug = True, host='0.0.0.0')
+    app.run(debug = True)

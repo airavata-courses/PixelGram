@@ -5,7 +5,6 @@ from flask_jwt import JWT
 from flask import request
 from resources.user import UserRegister, User, getUserDetailsByName
 from models.user import search_by_username, authentication, search_by_username
-import create_tables
 
 app = Flask(__name__)
 
@@ -55,5 +54,4 @@ api.add_resource(User,'/user')
 api.add_resource(UserRegister,'/register')
 
 if __name__ == "__main__":
-    create_tables.createDB()
-    app.run(host='0.0.0.0', port = 5003, debug = True)
+    app.run(debug = True)

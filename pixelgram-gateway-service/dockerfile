@@ -1,12 +1,14 @@
 FROM node:15.11.0-alpine
 
-COPY . /docker-gateway-service
+RUN mkdir /gateway-service
+
+COPY ./app /gateway-service
 
 RUN adduser -D pixelgram
-RUN chown pixelgram /docker-gateway-service
+RUN chown pixelgram /gateway-service
 USER pixelgram
 
-WORKDIR /docker-gateway-service
+WORKDIR /gateway-service
 
 RUN npm install
 

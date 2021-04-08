@@ -3,7 +3,7 @@ import json
 
 def search_by_username(username):
     try:
-        connection = sqlite3.connect('data.db')
+        connection = sqlite3.connect('database.db')
         connection.row_factory = lambda cursor, row: row[0]
         cursor = connection.cursor()
         query = 'SELECT username FROM WHERE username LIKE ?'
@@ -14,7 +14,7 @@ def search_by_username(username):
 
 def authentication(username, password):
     try:
-        connection = sqlite3.connect('data.db')
+        connection = sqlite3.connect('database.db')
         connection.row_factory = lambda cursor, row: row[0]
         cursor = connection.cursor()
         query = "SELECT password FROM users WHERE username = ?"
@@ -35,7 +35,7 @@ class UserModel:
 
     @classmethod
     def find_by_username(cls, username):
-        connection = sqlite3.connect('data.db')
+        connection = sqlite3.connect('database.db')
         cursor = connection.cursor()
         query = "SELECT * FROM users WHERE username = ?"
         result = cursor.execute(query, (username,))
@@ -51,7 +51,7 @@ class UserModel:
 
     @classmethod
     def find_by_userid(cls, userid):
-        connection = sqlite3.connect('data.db')
+        connection = sqlite3.connect('database.db')
         cursor = connection.cursor()
         query = "SELECT * FROM users WHERE userid = ?"
         result = cursor.execute(query, (userid,))
@@ -67,7 +67,7 @@ class UserModel:
 
     def delete(self):
         try:
-            connection = sqlite3.connect('data.db')
+            connection = sqlite3.connect('database.db')
             cursor = connection.cursor()
             query = "DELETE FROM users WHERE userid=?"
             cursor.execute(query,(self.userid,))
@@ -78,7 +78,7 @@ class UserModel:
     
     def update_password(self, password):
         try:
-            connection = sqlite3.connect('data.db')
+            connection = sqlite3.connect('database.db')
             cursor = connection.cursor()
             query = "UPDATE users SET password = ? WHERE userid = ?"
             cursor.execute(query, (password, self.userid))
@@ -90,7 +90,7 @@ class UserModel:
     
     def create_new_user(self):
         try:
-            connection = sqlite3.connect('data.db')
+            connection = sqlite3.connect('database.db')
             cursor = connection.cursor()
             query = "INSERT INTO users VALUES (?, ?, ?)"
             cursor.execute(query, (self.userid, self.username, self.password,))

@@ -1,14 +1,14 @@
 FROM node:13.12.0-alpine
 
-RUN mkdir /pixelgram-ui
+RUN mkdir /ui-service
 
-WORKDIR /pixelgram-ui
+COPY ./app /ui-service
 
-ENV PATH /pixelgram-ui/node_modules/.bin:$PATH
-
-COPY . ./
+WORKDIR /ui-service
 
 RUN npm install --silent
+
+ENV PATH ./node_modules/.bin:$PATH
 
 CMD ["npm", "start"]
 

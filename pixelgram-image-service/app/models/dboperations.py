@@ -3,7 +3,7 @@ import sqlite3
 def runqueryindb(query = None, lambdafun = None, dbparms = None, readquery = True):
     print("DBparameters: {}".format(dbparms))
     try:
-        connection = sqlite3.connect('data.db')
+        connection = sqlite3.connect('database.db')
         if query == None:
             raise Exception('No query to execute')
         if not lambdafun == None:

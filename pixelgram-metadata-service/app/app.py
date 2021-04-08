@@ -19,4 +19,4 @@ api = Api(app)
 if __name__ == "__main__":
     imagedetailsproducermq = producerMQ(IMAGE_DETAILS_QUEUE)
     metadataconsumermq = consumerMQ(METADATA_QUEUE)
-    app.run(port = 5006, debug = True, host='0.0.0.0')
+    app.run(debug = True)

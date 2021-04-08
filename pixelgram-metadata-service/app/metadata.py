@@ -1,4 +1,4 @@
-from PIL import Image
+import PIL
 from PIL.ExifTags import GPSTAGS
 from geopy.geocoders import Here
 from flask_restful import Api
@@ -31,7 +31,7 @@ class MetaDataExtractor:
 
 
     def get_exif(self,):
-        image = Image.open(self.filename)
+        image = PIL.Image.open(self.filename)
         image.verify()
         self.exif = image._getexif()
 
@@ -90,13 +90,13 @@ class MetaDataExtractor:
 
 
     def make_thumbnail(filename):
-        img = Image.open(filename)
+        img = PIL.Image.open(filename)
         (width, height) = img.size
         if width > height:
             ratio = 50.0 / width
         else:
             ratio = 50.0 / height
 
-        img.thumbnail((round(width * ratio), round(height * ratio)), Image.LANCZOS)
+        img.thumbnail((round(width * ratio), round(height * ratio)), PIL.Image.LANCZOS)
         img.save('thumb_' + filename)
     
