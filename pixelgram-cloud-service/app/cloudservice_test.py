@@ -39,5 +39,3 @@ def test_download():
     input={"imageids":imageidlist}
     response = requests.post("http://localhost:5004/gdrive/download",json=input)
     assert response.status_code == 200
-
-

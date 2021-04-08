@@ -37,8 +37,3 @@ def test_updatepassword():
     input={'userid':userid,'username':username,'password':newpassword,}
     response = requests.put("http://localhost:5003/user",json=input)
     assert response.status_code == 200
-
-
-
-
-

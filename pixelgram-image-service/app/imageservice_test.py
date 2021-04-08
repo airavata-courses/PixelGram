@@ -46,8 +46,3 @@ def test_shareimage():
     input={'userid':userid,"imageids":imageids,"sharedtoids":sharedtoids}
     response = requests.put("http://localhost:5005/shareimage",data=input)
     assert response.status_code == 200
-
-
-
-
-

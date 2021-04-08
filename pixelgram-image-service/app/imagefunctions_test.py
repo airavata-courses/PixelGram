@@ -39,4 +39,3 @@ if __name__ == "__main__":
     test_getimagedetails()
     test_shareddetails()
     print("Everything passed")
-
