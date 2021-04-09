@@ -15,6 +15,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.get('/', (req, res) => {
+    console.log("API UP");
     res.send('API gateway');
 });
 

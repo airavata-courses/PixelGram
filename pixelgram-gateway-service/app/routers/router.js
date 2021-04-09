@@ -7,7 +7,7 @@ var cloudRouter = require('./cloudService');
 
 router.use((req, res, next) => {
     console.log("Called: ", req.path);
-    next()
+    next();
 });
 
 router.use(userRouter);
