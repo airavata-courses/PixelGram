@@ -18,7 +18,7 @@ app.get('/', (req, res) => {
     res.send('API gateway');
 });
 
-app.use(router)
+app.use(router);
 
 console.log('API gateway is running on port 5000');
 
