@@ -23,13 +23,14 @@ COPY ./app /image-service
 
 # Create a non-root user
 RUN adduser -D pixelgram
-# It needs ownership of the workdir to update the sqlite database
-RUN chown pixelgram /image-service
+
 USER pixelgram
 
 WORKDIR /image-service
 
 RUN touch database.db
+# It needs ownership of the workdir to update the sqlite database
+RUN chown pixelgram /image-service
 RUN python setup.py
 
 EXPOSE 5005
