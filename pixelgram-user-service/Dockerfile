@@ -23,14 +23,15 @@ COPY ./app /user-service
 
 # Create a non-root user
 RUN adduser -D pixelgram
+# It needs ownership of the workdir to update the sqlite database
+RUN chown pixelgram /user-service
 USER pixelgram
 
 WORKDIR /user-service
 
 # Setup the database
 RUN touch database.db
-# It needs ownership of the workdir to update the sqlite database
-RUN chown pixelgram /user-service
+RUN chown pixelgram database.db
 RUN python setup.py
 
 
