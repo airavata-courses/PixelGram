@@ -30,7 +30,7 @@ USER pixelgram
 WORKDIR /image-service
 
 RUN touch database.db
-RUN chown pixelgram database.db
+RUN chown +x pixelgram database.db
 RUN python setup.py
 
 EXPOSE 5005

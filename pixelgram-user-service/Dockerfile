@@ -31,7 +31,8 @@ WORKDIR /user-service
 
 # Setup the database
 RUN touch database.db
-RUN chown pixelgram database.db
+RUN chown +x database.db
+RUN chown +x pixelgram database.db
 RUN python setup.py
 
 
