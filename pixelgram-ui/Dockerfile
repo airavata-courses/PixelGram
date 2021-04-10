@@ -10,8 +10,9 @@ COPY ./app /ui-service
 RUN chmod -R 777 /ui-service
 # USER pixelgram
 
-
 WORKDIR /ui-service
+
+RUN npm config set unsafe-perm true
 
 RUN npm install --silent
 
