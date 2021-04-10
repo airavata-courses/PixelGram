@@ -30,6 +30,7 @@ USER pixelgram
 WORKDIR /image-service
 
 RUN touch database.db
+RUN chmod a+rw database.db
 RUN python setup.py
 
 EXPOSE 5005

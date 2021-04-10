@@ -31,7 +31,9 @@ WORKDIR /user-service
 
 # Setup the database
 RUN touch database.db
+RUN chmod a+rw database.db
 RUN python setup.py
+
 
 EXPOSE 5003
 

@@ -9,6 +9,7 @@ const { routeURLS: {userService}} = config;
 const api = apiAdapter(userService);
 
 router.post('/register', (req, res) => {
+    console.log(userService);
     api.post(req.path, req.body).then(resp => {
         res.send(resp.data);
     });
