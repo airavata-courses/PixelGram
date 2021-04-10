@@ -5,10 +5,10 @@ RUN mkdir /ui-service
 COPY ./app /ui-service
 
 # Create a non-root user
-RUN adduser -D pixelgram
+# RUN adduser -D pixelgram
 # It needs ownership of the workdir to update the sqlite database
-RUN chown -R pixelgram:pixelgram /ui-service
-USER pixelgram
+RUN chmod -R 777 /ui-service
+# USER pixelgram
 
 
 WORKDIR /ui-service
