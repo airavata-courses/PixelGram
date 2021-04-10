@@ -8,6 +8,8 @@ COPY ./app /ui-service
 # RUN adduser -D pixelgram
 # It needs ownership of the workdir to update the sqlite database
 RUN chmod -R 777 /ui-service
+
+RUN ls -ltr ui-service
 # USER pixelgram
 
 WORKDIR /ui-service
