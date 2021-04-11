@@ -7,10 +7,12 @@
     "@material-ui/icons": "^4.11.2",
     "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.5",
     "history": "^4.10.1",
-    "react": "^17.0.1",
+    "react": "^16.13.1",
     "react-bootstrap": "^1.5.1",
-    "react-dom": "^17.0.1",
+    "react-dom": "^16.13.1",
     "react-image-file-resizer": "^0.4.2",
     "react-image-magnify": "^2.7.4",
     "react-redux": "^7.2.2",
@@ -19,6 +21,7 @@
     "react-scripts": "^4.0.3",
     "react-toggle": "^4.0.2",
     "redux": "^4.0.5",
+    "redux-mock-store": "^1.5.4",
     "semantic-ui-css": "^2.3.1",
     "semantic-ui-react": "^0.80.0",
     "yarn": "^1.6.0"
@@ -26,7 +29,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "jest --watchAll",
     "eject": "react-scripts eject"
   },
   "browserslist": {
@@ -40,5 +43,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.13.0",
+    "babel-preset-env": "^1.6.1",
+    "jest": "^26.4.3",
+    "parcel-bundler": "^1.7.0"
   }
 }
