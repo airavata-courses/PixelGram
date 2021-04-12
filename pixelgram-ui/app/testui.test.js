@@ -10,6 +10,7 @@ import { BrowserRouter } from "react-router-dom";
 /* Components */
 import LearnMore from "./src/components/pages/LearnMore"
 import LoginSignup from "./src/components/pages/LoginSignup"
+import HomePage from "./src/components/pages/HomePage"
 
 // Configure enzyme for react 16
 Enzyme.configure({ adapter: new Adapter() })
@@ -51,5 +52,12 @@ describe('LoginSignup Component', () => {
      expect(itembuttons.at(1).text()).toEqual('New User ? Signup')
    });
 });
+
+
+
+
+
+
+
 
 
