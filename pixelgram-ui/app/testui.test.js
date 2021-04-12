@@ -11,6 +11,9 @@ import { BrowserRouter } from "react-router-dom";
 import LearnMore from "./src/components/pages/LearnMore"
 import LoginSignup from "./src/components/pages/LoginSignup"
 import HomePage from "./src/components/pages/HomePage"
+import UpdateUserPassword from "./src/components/pages/UpdateUserPassword"
+import UploadImageButton from "./src/components/pages/UploadImageButton"
+import ShareImage from "./src/components/pages/ShareImage"
 
 // Configure enzyme for react 16
 Enzyme.configure({ adapter: new Adapter() })
@@ -74,6 +77,56 @@ describe('HomePage Component', () => {
      expect(item2.at(1).text()).toEqual(' Login / Signup ')
    });
 });
+
+describe('UpdateUserPassword Component', () => {
+  let store;
+  store = mockStore({
+    myState: 'sample text',
+  });
+  it('checking buttons', () => {
+    const wrapper = mount(<BrowserRouter><Provider store={store}> <UpdateUserPassword/> </Provider></BrowserRouter>)
+    const itembuttons = wrapper.find('button');
+    //console.log(item.at(0).text())
+    expect(itembuttons).toHaveLength(1);
+    expect(itembuttons.text()).toEqual('Update')
+  });
+
+  it('checking textFields', () => {
+    const wrapper = mount(<BrowserRouter><Provider store={store}> <UpdateUserPassword/> </Provider></BrowserRouter>)
+    const itemtextfields = wrapper.find('input');
+    expect(itemtextfields).toHaveLength(2);
+    //console.log(item.at(0).text())
+  });
+});
+
+describe('UploadImagebutton Component', () => {
+  let store;
+  store = mockStore({
+    myState: 'sample text',
+  });
+  it('checking buttons', () => {
+    const wrapper = mount(<BrowserRouter><Provider store={store}> <UploadImageButton/> </Provider></BrowserRouter>)
+    const itembuttons = wrapper.find('button');
+    //console.log(item.at(0).text())
+    expect(itembuttons).toHaveLength(1);
+    expect(itembuttons.text()).toEqual('Upload')
+  });
+});
+
+// describe('ShareImage Component', () => {
+//   let store;
+//   store = mockStore({
+//     myState: 'sample text',
+//   });
+//   it('checking buttons', () => {
+//     const wrapper = mount(<BrowserRouter><Provider store={store}> <ShareImage/> </Provider></BrowserRouter>)
+//     const itembuttons = wrapper.find('button');
+//     //console.log(item.at(0).text())
+//     expect(itembuttons).toHaveLength(1);
+//     expect(itembuttons.text()).toEqual('Share')
+//   });
+// });
+
 
 
 
