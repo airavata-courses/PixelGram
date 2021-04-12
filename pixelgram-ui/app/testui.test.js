@@ -53,9 +53,27 @@ describe('LoginSignup Component', () => {
    });
 });
 
-
-
-
+describe('HomePage Component', () => {
+    let store;
+    store = mockStore({
+      myState: 'sample text',
+    });
+   it('checking heading', () => {
+     const wrapper = mount(<BrowserRouter><Provider store={store}> <HomePage/> </Provider></BrowserRouter>)
+     const item1 = wrapper.find('h1');
+     expect(item1).toHaveLength(1);
+     expect(item1.text()).toEqual('PixelGram')
+     //console.log(item.at(0).text())
+   });
+   it('checking link buttons', () => {
+     const wrapper = mount(<BrowserRouter><Provider store={store}> <HomePage/> </Provider></BrowserRouter>)
+     const item2 = wrapper.find('Link');
+     //console.log(item.at(0).text())
+     expect(item2).toHaveLength(2);
+     expect(item2.at(0).text()).toEqual(' About PixelGram ')
+     expect(item2.at(1).text()).toEqual(' Login / Signup ')
+   });
+});
 
 
 
