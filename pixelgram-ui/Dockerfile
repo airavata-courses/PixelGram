@@ -7,7 +7,7 @@ RUN npm install react-scripts@3.4.1 -g --silent
 ENV PATH ./node_modules/.bin:$PATH
 RUN npm run build
 
-FROM nginx:stable-alpine
+FROM nginxinc/nginx-unprivileged
 WORKDIR /usr/share/nginx
 RUN rm -rf /usr/share/nginx/html/* 
 RUN rm -rf /etc/nginx/conf.d/default.conf
