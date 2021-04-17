@@ -20,7 +20,7 @@
     "react-toggle": "^4.0.2",
     "redux": "^4.0.5",
     "semantic-ui-css": "^2.3.1",
-    "semantic-ui-react": "^0.80.0",
+    "semantic-ui-react": "^2.0.3",
     "yarn": "^1.6.0"
   },
   "scripts": {

@@ -100,8 +100,6 @@ pipeline {
                                         cp -f kube.yaml ../k8-${APP_NAME}.yaml;
                                         cd ..;
                                         kubectl apply -f k8-${APP_NAME}.yaml;
-                                        oc delete routes -l app=${APP_NAME}-service;
-                                        oc expose svc/${APP_NAME}-service;
                                         """
                                     )
                                 ]

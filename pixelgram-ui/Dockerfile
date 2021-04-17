@@ -1,20 +1,13 @@
-FROM node:13.12.0-alpine
-
+FROM node:13.12.0-alpine as build
 RUN mkdir /ui-service
-
 COPY ./app /ui-service
-
 WORKDIR /ui-service
-
-RUN mkdir /node_modules
-RUN chmod -R a+rw .
-
-RUN npm config set unsafe-perm true
-
 RUN npm install --unsafe-perm=true --allow-root
-
+RUN npm install react-scripts@3.4.1 -g --silent
 ENV PATH ./node_modules/.bin:$PATH
+RUN npm run build
 
-CMD ["npm", "start"]
-
-EXPOSE 3000
+FROM nginx:stable-alpine
+COPY --from=build /ui-service/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
