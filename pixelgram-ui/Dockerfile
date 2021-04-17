@@ -9,5 +9,11 @@ RUN npm run build
 
 FROM nginx:stable-alpine
 COPY --from=build /ui-service/build /usr/share/nginx/html
+# Create a non-root user
+RUN adduser -D pixelgram
+# It needs ownership of the workdir to update the sqlite database
+RUN chgrp -R pixelgram /var/cache/nginx /var/run /var/log/nginx && \
+    chmod -R 777 /var/cache/nginx /var/run /var/log/nginx
+USER pixelgram
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
