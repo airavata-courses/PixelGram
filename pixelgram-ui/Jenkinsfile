@@ -33,6 +33,7 @@ pipeline {
                     env.SERVICE_TYPE = getEnvVar('SERVICE_TYPE')
                     env.SERVICE_PATH = getEnvVar('SERVICE_PATH')
                     env.RELEASE_TAG = getEnvVar('RELEASE_TAG')
+                    env.HOST_NAME = getEnvVar('HOST_NAME')
                     env.DOCKER_PROJECT_NAMESPACE = getEnvVar('DOCKER_PROJECT_NAMESPACE')
                     env.JENKINS_DOCKER_CREDENTIALS_ID = getEnvVar('JENKINS_DOCKER_CREDENTIALS_ID')
                     env.PROJECT_PATH = getEnvVar('PROJECT_PATH')
@@ -101,7 +102,7 @@ pipeline {
                                         cd ..;
                                         kubectl apply -f k8-${APP_NAME}.yaml;
                                         oc delete routes -l app=${APP_NAME};
-                                        oc expose svc/${APP_NAME}-service;
+                                        oc expose svc/${APP_NAME}-service --hostname=${HOST_NAME};
                                         """
                                     )
                                 ]

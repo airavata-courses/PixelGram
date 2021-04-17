@@ -9,11 +9,9 @@ RUN npm run build
 
 FROM nginx:stable-alpine
 WORKDIR /usr/share/nginx
+RUN chmod -R 777 /logs /var/log/nginx /var/cache/nginx/ /etc/nginx/
 RUN rm -rf /usr/share/nginx/html/* 
 RUN rm -rf /etc/nginx/conf.d/default.conf
-RUN touch logs/error.log
-RUN touch logs/nginx.pid
-RUN chmod -R 777 /logs /var/log/nginx /var/cache/nginx/ /etc/nginx/
 COPY nginx.conf /etc/nginx/nginx.conf 
 COPY --from=build /ui-service/build /usr/share/nginx/html
 EXPOSE 80
