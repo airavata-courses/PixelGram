@@ -14,5 +14,5 @@ RUN rm -rf /usr/share/nginx/html/*
 RUN rm -rf /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/nginx.conf 
 COPY --from=build /ui-service/build /usr/share/nginx/html
-EXPOSE 80
+EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]
