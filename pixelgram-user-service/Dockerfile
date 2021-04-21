@@ -30,9 +30,9 @@ COPY ./app /user-service
 WORKDIR /user-service
 
 # Setup the database
-RUN sudo touch database.db
-RUN sudo chmod o+w database.db
-RUN sudo python setup.py
+RUN touch database.db
+RUN chmod o+w database.db
+RUN python setup.py
 
 
 EXPOSE 5003
