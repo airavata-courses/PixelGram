@@ -31,7 +31,7 @@ WORKDIR /user-service
 
 # Setup the database
 RUN touch database.db
-RUN chmod o+w database.db
+RUN chmod 777 database.db
 RUN python setup.py
 
 
