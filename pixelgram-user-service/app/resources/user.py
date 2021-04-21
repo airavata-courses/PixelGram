@@ -32,7 +32,7 @@ class UserRegister(Resource):
         try:
             user.create_new_user()
         except:
-            return {'message': 'An error occured while creating the new user'}, 500
+            return {'message': 'An error occured while creating the new user'}, 205
 
         return {'message': "User created successfully."}, 201
 
@@ -56,7 +56,7 @@ class User(Resource):
         try:
             user.delete()
         except:
-            return {'message': 'An error occured while deleting the user'}, 500
+            return {'message': 'An error occured while deleting the user'}, 205
         return {'message': 'User Deleted'}
 
     def put(self):
@@ -68,6 +68,6 @@ class User(Resource):
         try:
             user.update_password(data['password'])
         except:
-            return {"message": "An error occured while updating the user"}, 500
+            return {"message": "An error occured while updating the user"}, 205
         
         return json.dumps(user.__dict__)

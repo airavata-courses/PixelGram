@@ -10,6 +10,10 @@ pipeline {
 
     agent any
 
+    triggers {
+        pollSCM '* * * * *'
+    }
+
     environment {
         GIT_COMMIT_SHORT_HASH = sh (script: "git rev-parse --short HEAD", returnStdout: true)
     }
