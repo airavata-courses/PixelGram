@@ -21,21 +21,18 @@ COPY --from=builder /install /usr/local
 # Copy my flask code
 COPY ./app /user-service
 
-# It needs ownership of the workdir to update the sqlite database
-RUN chown - R root:root /user-service
-USER root
+# # Create a non-root user
+# RUN adduser -D pixelgram
+# # It needs ownership of the workdir to update the sqlite database
+# RUN chown pixelgram /user-service
+# USER pixelgram
 
 WORKDIR /user-service
 
 # Setup the database
-RUN touch database.db
-RUN chown - R root:root /user-service
-RUN chmod a+rw database.db
-RUN python setup.py
-
-
-
-
+RUN sudo touch database.db
+RUN sudo chmod o+w database.db
+RUN sudo python setup.py
 
 
 EXPOSE 5003
