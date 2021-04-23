@@ -15,6 +15,7 @@ class consumerMQ:
     internal_lock = threading.Lock()
 
     def __init__(self, queue):
+        print('consumer')
         self.queue = queue
         self.connection = None
         self.channel = None
@@ -67,6 +68,7 @@ class consumerMQ:
 
 class producerMQ:
     def __init__(self, queue):
+        print('producer')
         self.queue = queue
         self.connection = None
         self.channel = None

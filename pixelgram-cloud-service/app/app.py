@@ -14,6 +14,10 @@ CORS(app)
 
 api = Api(app)
 
+drive_api = gdrive.getDriveService()
+userproducermq = producerMQ(USER_TO_IMAGE_QUEUE)
+metadataproducermq = producerMQ(METADATA_QUEUE)
+
 
 @app.route('/gdrive/upload/<user_id>', methods=['POST'])
 def upload_file(user_id):

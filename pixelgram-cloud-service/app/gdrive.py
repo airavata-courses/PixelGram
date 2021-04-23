@@ -52,6 +52,7 @@ def drive_auth_creds():
 
 
 def getDriveService():
+    print('Drive')
     try:
         credentials = drive_auth_creds()
         http = credentials.authorize(httplib2.Http())
