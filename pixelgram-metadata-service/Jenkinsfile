@@ -10,7 +10,7 @@ pipeline {
 
     agent any
 	triggers {
-        pollSCM '* * * * *'
+        pollSCM '*/15 * * * *'
     }
 
     environment {
