@@ -29,6 +29,8 @@ USER pixelgram
 
 WORKDIR /cloud-service
 
+RUN rm -r .credentials
+
 EXPOSE 5004
 
 CMD ["uwsgi", "--ini", "conf.ini"]
