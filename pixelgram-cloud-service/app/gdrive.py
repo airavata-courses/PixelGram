@@ -93,6 +93,7 @@ def files_to_be_uploaded(files, user_id, userproducermq, metadataproducermq):
         try:
             image_id = save_image(drive_api, user_id+'_'+filename, mimetype, file_data)
             image_ids.append(image_id['id'])
+            print('connection metadata is {}'.format(metadataproducermq.connection.is_closed))
             # Publish image data and image id to rabbitmq 
             metadataproducermq.publish_message(
                 body= json.dumps({
@@ -108,6 +109,7 @@ def files_to_be_uploaded(files, user_id, userproducermq, metadataproducermq):
     
     # Send this information to image service to store the user-image mapping
     # Pushing to rabbitmq 
+    print('connection user is {}'.format(userproducermq.connection.is_closed))
     userproducermq.publish_message(
         body= json.dumps({
             "user_id": user_id,

@@ -35,7 +35,6 @@ class consumerMQ:
 
 
     def _process_data_events(self):
-        self.create_connection()
         self.channel.basic_consume(
             queue=self.queue,
             on_message_callback=self.callback
@@ -107,7 +106,7 @@ class producerMQ:
 
     def publish_message(self, body):
         print(body)
-        self.create_connection()
+        # self.create_connection()
         if self.channel.is_open:
             try:
                 self.channel.basic_publish(
