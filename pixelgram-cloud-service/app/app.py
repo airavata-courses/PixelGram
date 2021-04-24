@@ -4,6 +4,7 @@ from flask_restful import Api
 import gdrive
 from config import USER_TO_IMAGE_QUEUE, METADATA_QUEUE
 from rabbitmq import producerMQ, consumerMQ
+import json
 
 
 app = Flask(__name__)
