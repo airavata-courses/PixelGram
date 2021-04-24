@@ -35,6 +35,7 @@ class consumerMQ:
 
 
     def _process_data_events(self):
+        self.create_connection()
         self.channel.basic_consume(
             queue=self.queue,
             on_message_callback=self.callback
@@ -54,7 +55,8 @@ class consumerMQ:
             self.connection = pika.BlockingConnection(
                 pika.ConnectionParameters(
                     host=RABBITMQ_HOST,
-                    port=RABBITMQ_PORT
+                    port=RABBITMQ_PORT,
+                    heartbeat=5
                 )
             )
             sleep(0.1)
@@ -90,7 +92,8 @@ class producerMQ:
             self.connection = pika.BlockingConnection(
                 pika.ConnectionParameters(
                     host=RABBITMQ_HOST,
-                    port=RABBITMQ_PORT
+                    port=RABBITMQ_PORT,
+                    heartbeat=5
                 )
             )
             sleep(0.1)
@@ -104,6 +107,7 @@ class producerMQ:
 
     def publish_message(self, body):
         print(body)
+        self.create_connection()
         if self.channel.is_open:
             try:
                 self.channel.basic_publish(
