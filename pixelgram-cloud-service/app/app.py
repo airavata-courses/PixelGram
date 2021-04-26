@@ -6,6 +6,8 @@ from config import USER_TO_IMAGE_QUEUE, METADATA_QUEUE
 from rabbitmq import producerMQ, consumerMQ
 import json
 
+import logging
+
 
 app = Flask(__name__)
 
