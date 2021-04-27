@@ -31,7 +31,8 @@ function ViewImages({ openSnackbar, imageUploadCount }) {
 
             axios.all(allRequests).then(axios.spread((...responses) => {
                 for (const response of responses) {
-                    let imgId = response.config.url.split('/')[5];
+                    let urlarray = response.config.url.split('/');
+                    let imgId = urlarray[urlarray.length - 1];
                     let type = response.data.type.split('/')[1]
                     oldImages.push({ image: URL.createObjectURL(response.data), imageId: imgId, isSelected: false, imageType: type })
                 }
