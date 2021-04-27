@@ -25,8 +25,8 @@ WORKDIR /cloud-service
 
 EXPOSE 5004
 
-# ENTRYPOINT [ "python" ]
+ENTRYPOINT [ "python" ]
 
-CMD [ "python", "-u", "app.py" ]
+CMD [ "app.py" ]
 
 # CMD ["uwsgi", "--ini", "conf.ini"]

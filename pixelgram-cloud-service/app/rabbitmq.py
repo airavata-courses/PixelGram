@@ -54,8 +54,7 @@ class consumerMQ:
             self.connection = pika.BlockingConnection(
                 pika.ConnectionParameters(
                     host=RABBITMQ_HOST,
-                    port=RABBITMQ_PORT,
-                    heartbeat=5
+                    port=RABBITMQ_PORT
                 )
             )
             sleep(0.1)

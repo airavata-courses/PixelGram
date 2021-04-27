@@ -121,17 +121,17 @@ def files_to_be_uploaded(files, user_id, userproducermq, metadataproducermq):
     
     # REST API, Need to add Try catch block
 
-    # response = requests.put(
-    #     IMAGE_SERVICE_URL, 
-    #     data=json.dumps({
-    #         "userid": user_id,
-    #         "imageids": image_ids
-    #     }), 
-    #     headers=HEADERS
-    # )
+    response = requests.put(
+        IMAGE_SERVICE_URL, 
+        data=json.dumps({
+            "userid": user_id,
+            "imageids": image_ids
+        }), 
+        headers=HEADERS
+    )
 
-    # if response.status_code == 200:
-    #     print('Details posted successfully to image service')
+    if response.status_code == 200:
+        print('Details posted successfully to image service')
     
     return jsonify(
         userid= user_id,
