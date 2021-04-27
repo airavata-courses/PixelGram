@@ -20,7 +20,7 @@ function ViewImages({ openSnackbar, imageUploadCount }) {
 
         const userid = getUserIdFromLocalStorage();
         axios.post(GET_USER_IMAGES, { userid }).then(result => {
-            const userImageData = JSON.parse(result.data);
+            const userImageData = result.data;
             console.log('user images ', userImageData)
             const imageIds = userImageData.imageids;
 

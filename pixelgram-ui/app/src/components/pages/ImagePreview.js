@@ -28,8 +28,8 @@ function ImagePreview({ dialogDetails, closeDialog }) {
 
     useEffect(() => {
         axios.post(GET_IMAGE_DETAILS, { imageid: dialogDetails.imageId }).then(result => {
-            console.log('image details ', JSON.parse(result.data));
-            setImageDetails(JSON.parse(result.data))
+            console.log('image details ', result.data);
+            setImageDetails(result.data)
         }).catch(err => {
             console.log(err);
         }) //get image details

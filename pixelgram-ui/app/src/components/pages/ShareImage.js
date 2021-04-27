@@ -48,7 +48,7 @@ function ShareImage({ dialogDetails, closeDialog, openSnackbar }) {
                 }
                 axios.put(SHARE_IMAGES, { userid: userId, sharedtoids: [toUserId], imageids: dialogDetails.imageIds }).then(result => {
                     console.log('share image result ', result)
-                    openSnackbar(JSON.parse(result.data).message)
+                    openSnackbar(result.data.message)
                     setIsLoading(false)
                     closeDialog()
                 }).catch(err => {

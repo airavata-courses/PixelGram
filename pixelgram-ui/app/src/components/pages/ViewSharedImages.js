@@ -20,7 +20,7 @@ function ViewSharedImages({ openSnackbar }) {
 
         const userid = getUserIdFromLocalStorage();
         axios.post(SHARE_IMAGES, { userid }).then(result => {
-            const userImageData = JSON.parse(result.data);
+            const userImageData = result.data;
             console.log('shared images ', userImageData)
             let imageIds = []
             for (const sharedDetails of userImageData.shareddetails) {
