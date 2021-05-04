@@ -70,5 +70,39 @@ pipeline {
                 }
             }
         }
+
+        stage('Deploy on IU ') {
+            steps {
+                script {
+                    sshPublisher(
+                        continueOnError: false, failOnError: true,
+                        publishers: [
+                            sshPublisherDesc(
+                                configName: 'ssh_k8_master_iu',
+                                verbose: true,
+                                transfers: [
+                                    sshTransfer(
+                                        execCommand: """
+                                        [ ! -d "deployment_files" ] && mkdir deployment_files;
+                                        cd deployment_files;
+                                        rm -rf kube.yaml process_file.sh;
+                                        wget ${GITHUB_URL_YAML}
+                                        wget ${GITHUB_URL_SH}
+                                        kubectl delete deployment,services,ingresses,horizontalpodautoscalers -l app=${APP_NAME};
+                                        chmod +x process_file.sh;                           
+                                        ./process_file.sh /home/centos/deployment_files ${APP_NAME} ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG} ${TIMESTAMP} ${PORT} ${TARGET_PORT} ${CONTAINER_PORT} ${REPLICA} ${MAX_REPLICA} ${SERVICE_TYPE} ${SERVICE_PATH};
+                                        rm -rf *.bak*;
+                                        cp -f kube.yaml ../k8-${APP_NAME}.yaml;
+                                        cd ..;
+                                        kubectl apply -f k8-${APP_NAME}.yaml;
+                                        """
+                                    )
+                                ]
+                            )
+                        ]
+                    )
+                }
+            }
+        }
     }
 }
