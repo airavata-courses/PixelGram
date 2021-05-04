@@ -17,6 +17,7 @@ REPLICA=$8
 MAX_REPLICA=$9
 SERVICE_TYPE=${10}
 SERVICE_PATH=${11}
+NODE_PORT=${12}
 
 echo "APP_NAME: $WORK_DIR, APP_NAME: $APP_NAME, IMAGE: $IMAGE, TIMESTAMP: $TIMESTAMP, PORT: $PORT, TARGET_PORT: $TARGET_PORT, CONTAINER_PORT: $CONTAINER_PORT, REPLICA: $REPLICA, MAX_REPLICA: $MAX_REPLICA, SERVICE_TYPE: $SERVICE_TYPE, SERVICE_PATH: $SERVICE_PATH"
 
@@ -31,5 +32,6 @@ find $WORK_DIR -name "kube.yaml" -type f -exec sed -i.bak7 's#__REPLICA__#'$REPL
 find $WORK_DIR -name "kube.yaml" -type f -exec sed -i.bak8 's#__MAX_REPLICA__#'$MAX_REPLICA'#' {} \;
 find $WORK_DIR -name "kube.yaml" -type f -exec sed -i.bak9 's#__SERVICE_TYPE__#'$SERVICE_TYPE'#' {} \;
 find $WORK_DIR -name "kube.yaml" -type f -exec sed -i.bak10 's#__SERVICE_PATH__#'$SERVICE_PATH'#' {} \;
+find $WORK_DIR -name "kube.yaml" -type f -exec sed -i.bak11 's#__NODE_PORT__#'$NODE_PORT'#' {} \;
 }
 main
