@@ -1,0 +1,10 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: __APP_NAME__-route
+spec:
+  to:
+    kind: Service
+    name: __APP_NAME__-svc
+  port:
+    targetPort: __TARGET_PORT__

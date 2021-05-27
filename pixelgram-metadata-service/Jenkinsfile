@@ -1,0 +1,148 @@
+def getEnvVar(String paramName){
+    return sh (script: "grep -w '${paramName}' pixelgram-metadata-service/project.properties|cut -d'=' -f2", returnStdout: true).trim();
+}
+
+def getTimeStamp(){
+    return sh (script: "date +'%Y%m%d%H%M%S%N' | sed 's/[0-9][0-9][0-9][0-9][0-9][0-9]\$//g'", returnStdout: true).trim();
+}
+
+pipeline {
+
+    agent any
+	triggers {
+        pollSCM '*/15 * * * *'
+    }
+
+    environment {
+        GIT_COMMIT_SHORT_HASH = sh (script: "git rev-parse --short HEAD", returnStdout: true)
+    }
+
+    stages {
+        stage('Init') {
+            steps {
+                script {
+                    env.APP_NAME = getEnvVar('APP_NAME')
+                    env.CURRENT_BRANCH = env.BRANCH_NAME
+                    env.TIMESTAMP = getTimeStamp()
+                    env.IMAGE_NAME = getEnvVar('IMAGE_NAME')
+                    env.PORT = getEnvVar('PORT')
+                    env.TARGET_PORT = getEnvVar('TARGET_PORT')
+                    env.CONTAINER_PORT = getEnvVar('CONTAINER_PORT')
+                    env.REPLICA = getEnvVar('REPLICA')
+                    env.MAX_REPLICA = getEnvVar('MAX_REPLICA')
+                    env.SERVICE_TYPE = getEnvVar('SERVICE_TYPE')
+                    env.SERVICE_PATH = getEnvVar('SERVICE_PATH')
+                    env.RELEASE_TAG = getEnvVar('RELEASE_TAG')
+                    env.NODE_PORT = getEnvVar('NODE_PORT')
+                    env.DOCKER_PROJECT_NAMESPACE = getEnvVar('DOCKER_PROJECT_NAMESPACE')
+                    env.JENKINS_DOCKER_CREDENTIALS_ID = getEnvVar('JENKINS_DOCKER_CREDENTIALS_ID')
+                    env.PROJECT_PATH = getEnvVar('PROJECT_PATH')
+                    env.GITHUB_URL_YAML = "https://raw.githubusercontent.com/airavata-courses/PixelGram/${CURRENT_BRANCH}/k8s/kube.yaml"
+                    env.GITHUB_URL_SH = "https://raw.githubusercontent.com/airavata-courses/PixelGram/${CURRENT_BRANCH}/k8s/process_file.sh"
+                }
+            }
+        }
+
+        stage('CleanUp') {
+            steps {
+                script{
+                    sh '''
+                    docker rmi $(docker images -f 'dangling=true' -q) || true
+                    docker rmi $(docker images | sed 1,2d | awk '{print $3}') || true
+                    ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG} || true
+                    '''
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                script{
+                    sh '''docker build -t ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG} -f ${PROJECT_PATH}/Dockerfile ${PROJECT_PATH}/.'''
+                }
+            }
+        }
+
+        stage('Publish') {
+            steps {
+                script{
+                    withCredentials([usernamePassword(credentialsId: "${JENKINS_DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWD')]){
+                        sh '''
+                        echo $DOCKER_PASSWD | docker login --username ${DOCKER_USERNAME} --password-stdin
+                        docker push ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}
+                        docker logout
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {
+                    sshPublisher(
+                        continueOnError: false, failOnError: true,
+                        publishers: [
+                            sshPublisherDesc(
+                                configName: 'ssh_k8_master',
+                                verbose: true,
+                                transfers: [
+                                    sshTransfer(
+                                        execCommand: """
+                                        [ ! -d "deployment_files" ] && mkdir deployment_files;
+                                        cd deployment_files;
+                                        rm -rf kube.yaml process_file.sh;
+                                        wget ${GITHUB_URL_YAML}
+                                        wget ${GITHUB_URL_SH}
+                                        kubectl delete deployment,services,ingresses,horizontalpodautoscalers -l app=${APP_NAME};
+                                        chmod +x process_file.sh;                           
+                                        ./process_file.sh /home/centos/deployment_files ${APP_NAME} ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG} ${TIMESTAMP} ${PORT} ${TARGET_PORT} ${CONTAINER_PORT} ${REPLICA} ${MAX_REPLICA} ${SERVICE_TYPE} ${SERVICE_PATH} ${NODE_PORT};
+                                        rm -rf *.bak*;
+                                        cp -f kube.yaml ../k8-${APP_NAME}.yaml;
+                                        cd ..;
+                                        kubectl apply -f k8-${APP_NAME}.yaml;
+                                        """
+                                    )
+                                ]
+                            )
+                        ]
+                    )
+                }
+            }
+        }
+
+        stage('Deploy on IU ') {
+            steps {
+                script {
+                    sshPublisher(
+                        continueOnError: false, failOnError: true,
+                        publishers: [
+                            sshPublisherDesc(
+                                configName: 'ssh_k8_master_iu',
+                                verbose: true,
+                                transfers: [
+                                    sshTransfer(
+                                        execCommand: """
+                                        [ ! -d "deployment_files" ] && mkdir deployment_files;
+                                        cd deployment_files;
+                                        rm -rf kube.yaml process_file.sh;
+                                        wget ${GITHUB_URL_YAML}
+                                        wget ${GITHUB_URL_SH}
+                                        kubectl delete deployment,services,ingresses,horizontalpodautoscalers -l app=${APP_NAME};
+                                        chmod +x process_file.sh;                           
+                                        ./process_file.sh /home/centos/deployment_files ${APP_NAME} ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG} ${TIMESTAMP} ${PORT} ${TARGET_PORT} ${CONTAINER_PORT} ${REPLICA} ${MAX_REPLICA} ${SERVICE_TYPE} ${SERVICE_PATH} ${NODE_PORT};
+                                        rm -rf *.bak*;
+                                        cp -f kube.yaml ../k8-${APP_NAME}.yaml;
+                                        cd ..;
+                                        kubectl apply -f k8-${APP_NAME}.yaml;
+                                        """
+                                    )
+                                ]
+                            )
+                        ]
+                    )
+                }
+            }
+        }
+    }
+}

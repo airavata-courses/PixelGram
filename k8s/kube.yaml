@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: __APP_NAME__-deploy
+  labels:
+    app: __APP_NAME__
+spec:
+  replicas: __REPLICA__
+  selector:
+    matchLabels:
+      app: __APP_NAME__
+  template:
+    metadata:
+      labels:
+        app: __APP_NAME__
+        updateTimestamp: "__TIMESTAMP__"
+    spec:
+      containers:
+      - name: __APP_NAME__
+        image: __IMAGE__
+        imagePullPolicy: Always
+        ports:
+        - containerPort: __CONTAINER_PORT__
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+            memory: 2Gi
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: __APP_NAME__
+  name: __APP_NAME__-service
+spec:
+  selector:
+    app: __APP_NAME__
+  ports:
+    - protocol: TCP
+      port: __PORT__
+      targetPort: __TARGET_PORT__
+      nodePort: __NODE_PORT__
+  type: __SERVICE_TYPE__
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  labels:
+    app: __APP_NAME__
+  name: __APP_NAME__-ingress
+spec:
+  backend:
+    serviceName: __APP_NAME__-service
+    servicePort: __PORT__
+---
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  labels:
+    app: __APP_NAME__
+  name: __APP_NAME__-scaler
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: __APP_NAME__-deploy
+  minReplicas: __REPLICA__
+  maxReplicas: __MAX_REPLICA__
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      targetAverageUtilization: 60

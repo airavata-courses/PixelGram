@@ -1,0 +1,113 @@
+version: '3.7'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    hostname: rabbitmq-service
+    container_name: rabbitmq
+    # volumes:
+      # - /.docker/rabbitmq/etc/:/etc/rabbitmq/
+      # - /.docker/rabbitmq/data/:/var/lib/rabbitmq/
+      # - /.docker/rabbitmq/logs/:/var/log/rabbitmq/
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    restart: on-failure
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "5672" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    networks:
+      - pixelgram
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    
+  cloudservice:
+    image: ${REPO}/pixelgram_cloud_service:${TAG}
+    hostname: cloud-service
+    ports:
+      - "5004:5004"
+    tty: true
+    restart: on-failure
+    networks:
+      - pixelgram
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    
+  userservice:
+    image: ${REPO}/pixelgram_user_service:${TAG}
+    hostname: cloud-service
+    ports:
+      - "5003:5003"
+    tty: true
+    restart: on-failure
+    networks:
+      - pixelgram
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    
+  gatewayservice:
+    image: ${REPO}/pixelgram_gateway_service:${TAG}
+    hostname: gateway-service
+    ports:
+      - "5000:5000"
+    tty: true
+    restart: on-failure
+    networks:
+      - pixelgram
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+  metadataservice:
+    image: ${REPO}/pixelgram_metadata_service:${TAG}
+    hostname: metadata-service
+    ports:
+      - "5006:5006"
+    tty: true
+    restart: on-failure
+    networks:
+      - pixelgram
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+  imageservice:
+    image: ${REPO}/pixelgram_image_service:${TAG}
+    hostname: image-service
+    ports:
+      - "5005:5005"
+    tty: true
+    restart: on-failure
+    networks:
+      - pixelgram
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+  ui:
+    image: ${REPO}/pixelgram_ui_service:${TAG}
+    hostname: pixelgramui
+    ports:
+      - "3000:3000"
+    tty: true
+    restart: on-failure
+    networks:
+      - pixelgram
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+networks:
+  pixelgram:

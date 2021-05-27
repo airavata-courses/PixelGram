@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: __NAME_SPACE__
+  name: __APP_NAME__-dc
+  labels:
+    app: __APP_NAME__
+    version: __VERSION__
+spec:
+  replicas: __REPLICA__
+  template:
+    metadata:
+      labels:
+        app: __APP_NAME__
+        updateTimestamp: "__TIMESTAMP__"
+        version: __VERSION__
+    spec:
+      containers:
+        - name: __APP_NAME__-ctr
+          image: __IMAGE__
+          imagePullPolicy: Always
+          ports:
+            - containerPort: __PORT__
+              protocol: TCP
+          env:
+            - name: DEPLOY_TIMESTAMP
+              value: "__TIMESTAMP__"
+          resources:
+            limits:
+              cpu: 500m
+              memory: 2GiB
+            requests:
+              cpu: 250m
+              memory: 1GiB
+      restartPolicy: Always

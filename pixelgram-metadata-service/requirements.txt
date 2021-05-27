@@ -5,5 +5,7 @@ Flask==1.1.2
 Flask_JWT==0.3.2
 geopy==2.1.0
 asposestorage==1.0.2
-Pillow==8.1.2
+Pillow==8.2.0
 resources==0.0.1
+pika==1.2.0
+uwsgi
