@@ -4,6 +4,9 @@ from flask_restful import Api
 import gdrive
 from config import USER_TO_IMAGE_QUEUE, METADATA_QUEUE
 from rabbitmq import producerMQ, consumerMQ
+import json
+
+import logging
 
 
 app = Flask(__name__)
@@ -13,6 +16,16 @@ app.secret_key =  'hello'
 CORS(app)
 
 api = Api(app)
+
+# drive_api = gdrive.getDriveService()
+# userproducermq = producerMQ(USER_TO_IMAGE_QUEUE)
+# userproducermq.publish_message(
+#         body= json.dumps({
+#             "user_id": "8823714f-9a93-4901-89cd-0ea298b60ce0",
+#             "imageids": ["1rE-2eNcHe6ndYiZXbIki-plFDJSjyX7y"]
+#         })
+#     )
+# metadataproducermq = producerMQ(METADATA_QUEUE)
 
 
 @app.route('/gdrive/upload/<user_id>', methods=['POST'])
@@ -38,4 +51,4 @@ if __name__ == "__main__":
     drive_api = gdrive.getDriveService()
     userproducermq = producerMQ(USER_TO_IMAGE_QUEUE)
     metadataproducermq = producerMQ(METADATA_QUEUE)
-    app.run(debug = True)
+    app.run(debug = True, host='0.0.0.0', port=5004)

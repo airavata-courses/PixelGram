@@ -15,6 +15,7 @@ class consumerMQ:
     internal_lock = threading.Lock()
 
     def __init__(self, queue):
+        print('consumer')
         self.queue = queue
         self.connection = None
         self.channel = None
@@ -67,6 +68,7 @@ class consumerMQ:
 
 class producerMQ:
     def __init__(self, queue):
+        print('producer')
         self.queue = queue
         self.connection = None
         self.channel = None
@@ -88,7 +90,8 @@ class producerMQ:
             self.connection = pika.BlockingConnection(
                 pika.ConnectionParameters(
                     host=RABBITMQ_HOST,
-                    port=RABBITMQ_PORT
+                    port=RABBITMQ_PORT,
+                    heartbeat=5
                 )
             )
             sleep(0.1)
@@ -102,6 +105,7 @@ class producerMQ:
 
     def publish_message(self, body):
         print(body)
+        # self.create_connection()
         if self.channel.is_open:
             try:
                 self.channel.basic_publish(

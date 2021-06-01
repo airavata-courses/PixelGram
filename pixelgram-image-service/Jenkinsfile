@@ -10,7 +10,7 @@ pipeline {
 
     agent any
 	triggers {
-        pollSCM '* * * * *'
+        pollSCM '*/15 * * * *'
     }
 
     environment {
@@ -33,6 +33,7 @@ pipeline {
                     env.SERVICE_TYPE = getEnvVar('SERVICE_TYPE')
                     env.SERVICE_PATH = getEnvVar('SERVICE_PATH')
                     env.RELEASE_TAG = getEnvVar('RELEASE_TAG')
+                    env.NODE_PORT = getEnvVar('NODE_PORT')
                     env.DOCKER_PROJECT_NAMESPACE = getEnvVar('DOCKER_PROJECT_NAMESPACE')
                     env.JENKINS_DOCKER_CREDENTIALS_ID = getEnvVar('JENKINS_DOCKER_CREDENTIALS_ID')
                     env.PROJECT_PATH = getEnvVar('PROJECT_PATH')
@@ -95,7 +96,41 @@ pipeline {
                                         wget ${GITHUB_URL_SH}
                                         kubectl delete deployment,services,ingresses,horizontalpodautoscalers -l app=${APP_NAME};
                                         chmod +x process_file.sh;                           
-                                        ./process_file.sh /home/centos/deployment_files ${APP_NAME} ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG} ${TIMESTAMP} ${PORT} ${TARGET_PORT} ${CONTAINER_PORT} ${REPLICA} ${MAX_REPLICA} ${SERVICE_TYPE} ${SERVICE_PATH};
+                                        ./process_file.sh /home/centos/deployment_files ${APP_NAME} ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG} ${TIMESTAMP} ${PORT} ${TARGET_PORT} ${CONTAINER_PORT} ${REPLICA} ${MAX_REPLICA} ${SERVICE_TYPE} ${SERVICE_PATH} ${NODE_PORT};
+                                        rm -rf *.bak*;
+                                        cp -f kube.yaml ../k8-${APP_NAME}.yaml;
+                                        cd ..;
+                                        kubectl apply -f k8-${APP_NAME}.yaml;
+                                        """
+                                    )
+                                ]
+                            )
+                        ]
+                    )
+                }
+            }
+        }
+
+        stage('Deploy on IU ') {
+            steps {
+                script {
+                    sshPublisher(
+                        continueOnError: false, failOnError: true,
+                        publishers: [
+                            sshPublisherDesc(
+                                configName: 'ssh_k8_master_iu',
+                                verbose: true,
+                                transfers: [
+                                    sshTransfer(
+                                        execCommand: """
+                                        [ ! -d "deployment_files" ] && mkdir deployment_files;
+                                        cd deployment_files;
+                                        rm -rf kube.yaml process_file.sh;
+                                        wget ${GITHUB_URL_YAML}
+                                        wget ${GITHUB_URL_SH}
+                                        kubectl delete deployment,services,ingresses,horizontalpodautoscalers -l app=${APP_NAME};
+                                        chmod +x process_file.sh;                           
+                                        ./process_file.sh /home/centos/deployment_files ${APP_NAME} ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG} ${TIMESTAMP} ${PORT} ${TARGET_PORT} ${CONTAINER_PORT} ${REPLICA} ${MAX_REPLICA} ${SERVICE_TYPE} ${SERVICE_PATH} ${NODE_PORT};
                                         rm -rf *.bak*;
                                         cp -f kube.yaml ../k8-${APP_NAME}.yaml;
                                         cd ..;

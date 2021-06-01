@@ -42,6 +42,7 @@ spec:
     - protocol: TCP
       port: __PORT__
       targetPort: __TARGET_PORT__
+      nodePort: __NODE_PORT__
   type: __SERVICE_TYPE__
 ---
 apiVersion: extensions/v1beta1

@@ -1,23 +1,23 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
 # dependencies
-./app/node_modules
-./app/package-lock.json
+/app/node_modules
+/app/package-lock.json
 
 # testing
-./app/coverage
+/app/coverage
 
 # production
-./app/build
+/app/build
 
 # misc
 .DS_Store
-./app/DS_Store
-./app/.env.local
-./app/.env.development.local
-./app/.env.test.local
-./app/.env.production.local
+/app/DS_Store
+/app/.env.local
+/app/.env.development.local
+/app/.env.test.local
+/app/.env.production.local
 
-./app/npm-debug.log*
-./app/yarn-debug.log*
-./app/yarn-error.log*
+/app/npm-debug.log*
+/app/yarn-debug.log*
+/app/yarn-error.log*

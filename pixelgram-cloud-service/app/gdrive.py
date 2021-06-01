@@ -52,6 +52,7 @@ def drive_auth_creds():
 
 
 def getDriveService():
+    print('Drive')
     try:
         credentials = drive_auth_creds()
         http = credentials.authorize(httplib2.Http())
@@ -92,6 +93,8 @@ def files_to_be_uploaded(files, user_id, userproducermq, metadataproducermq):
         try:
             image_id = save_image(drive_api, user_id+'_'+filename, mimetype, file_data)
             image_ids.append(image_id['id'])
+            print('image_id: {}'.format(image_id['id']))
+            print('connection metadata is {}'.format(metadataproducermq.connection.is_closed))
             # Publish image data and image id to rabbitmq 
             metadataproducermq.publish_message(
                 body= json.dumps({
@@ -102,11 +105,13 @@ def files_to_be_uploaded(files, user_id, userproducermq, metadataproducermq):
             )
             
         except Exception as e:
-            print(e)
+            app.logger.error(e)
             failed_uploads.append(filename)
     
     # Send this information to image service to store the user-image mapping
     # Pushing to rabbitmq 
+    print('connection user is {}'.format(userproducermq.connection.is_closed))
+    print('user_id: {}, image_ids: {}'.format(user_id, image_ids))
     userproducermq.publish_message(
         body= json.dumps({
             "user_id": user_id,
@@ -116,17 +121,17 @@ def files_to_be_uploaded(files, user_id, userproducermq, metadataproducermq):
     
     # REST API, Need to add Try catch block
 
-    # response = requests.put(
-    #     IMAGE_SERVICE_URL, 
-    #     data=json.dumps({
-    #         "userid": user_id,
-    #         "imageids": image_ids
-    #     }), 
-    #     headers=HEADERS
-    # )
+    response = requests.put(
+        IMAGE_SERVICE_URL, 
+        data=json.dumps({
+            "userid": user_id,
+            "imageids": image_ids
+        }), 
+        headers=HEADERS
+    )
 
-    # if response.status_code == 200:
-    #     print('Details posted successfully to image service')
+    if response.status_code == 200:
+        print('Details posted successfully to image service')
     
     return jsonify(
         userid= user_id,
